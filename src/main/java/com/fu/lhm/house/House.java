@@ -1,11 +1,8 @@
 package com.fu.lhm.house;
 
 
-import com.fu.lhm.room.Room;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Entity(name = "houses")
 @Getter
@@ -28,7 +25,5 @@ public class House {
     private int floor;
     private String emailUser;
 
-    @OneToMany(mappedBy = "houseId")
-    private List<Room> rooms;
 
 }

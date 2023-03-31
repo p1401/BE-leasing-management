@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface HouseRepository extends JpaRepository<House,Long> {
 
-    List<House> findByEmailUser(String userEmail);
+    List<House> findAllByEmailUserIgnoreCase(String emailUser);
 }

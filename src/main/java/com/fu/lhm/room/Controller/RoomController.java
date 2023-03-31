@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/room")
+@RequestMapping("api/v1/rooms")
 @RequiredArgsConstructor
 public class RoomController {
 
-    RoomService roomService;
+    private final RoomService roomService;
+
     private final Roomrepository roomrepository;
 
     @GetMapping("/{houseId}")
@@ -33,11 +34,12 @@ public class RoomController {
         return ResponseEntity.ok(roomService.createroom(houseId, room));
     }
 
-    @PutMapping({"/{roomId}"})
+    @PutMapping({"/updateRoom/{roomId}"})
     public ResponseEntity<Room> updateRoom(@PathVariable("roomId") Long id, @RequestBody Room room) {
 //        houseValidate.validateCreateUpdateHouse(house);
         return ResponseEntity.ok(roomService.updateRoom(id,room));
     }
+
 
 
 

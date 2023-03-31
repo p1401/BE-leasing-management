@@ -1,11 +1,12 @@
 package com.fu.lhm.room.Service;
 
-import com.fu.lhm.exception.BadRequestException;
+import com.fu.lhm.room.Room;
+import com.fu.lhm.house.House;
 import com.fu.lhm.house.Repository.HouseRepository;
 import com.fu.lhm.room.Repository.Roomrepository;
-import com.fu.lhm.room.Room;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,22 +15,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoomService {
 
-    Roomrepository roomrepository;
+    private final Roomrepository roomrepository;
 
-    HouseRepository houseRepository;
-    public List<Room> getListRoom(Long houseId){
-        return roomrepository.findByHouseId(houseId);
+    private final HouseRepository houseRepository;
+
+    public List<Room> getListRoom(Long houseid){
+
+        return roomrepository.findAllByHouse_Id(houseid);
     }
 
     public Room createroom(Long houseId, Room room) {
 
+        House house = houseRepository.findById(houseId).orElseThrow(() -> new EntityNotFoundException("Nha không tồn tại!"));
+        room.setHouse(house);
 
-        houseRepository.findById(houseId).map(house->{
-            room.setHouseId(house);
-            return roomrepository.save(room);
-        }).orElseThrow(() -> new BadRequestException("Not found house with id"+houseId));
-
-        return null;
+        return roomrepository.save(room);
 
     }
 
@@ -42,6 +42,7 @@ public class RoomService {
         oldRoom.setName(updateRoom.getName());
         oldRoom.setElectricNumber(updateRoom.getElectricNumber());
         oldRoom.setWaterNumber(updateRoom.getWaterNumber());
+        House house = houseRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Nha không tồn tại!"));
         return roomrepository.save(oldRoom);
     }
 

@@ -27,7 +27,14 @@ public class HouseController {
 
     @PostMapping({""})
     public ResponseEntity<House> addHouse(@RequestBody House house) {
+
+
+        User user = jwtService.getUser(httpServletRequest);
+
+        house.setEmailUser(user.getEmail());
+
         houseValidate.validateCreateUpdateHouse(house);
+
         return ResponseEntity.ok(houseService.createHouse(house));
     }
 
@@ -37,20 +44,12 @@ public class HouseController {
         return ResponseEntity.ok(houseService.updateHouse(id, house));
     }
 
-//    @GetMapping({""})
-//    public ResponseEntity<List<House>> getListHouse(@RequestHeader("Authorization") String token) {
-//
-//        List<House> listHouse = houseService.getListHouse(token);
-//
-//        return ResponseEntity.ok(listHouse);
-//    }
-
     @GetMapping({""})
     public ResponseEntity<List<House>> getListHouse() {
 
         User user = jwtService.getUser(httpServletRequest);
 
-        List<House> listHouse = houseService.getListHouse();
+        List<House> listHouse = houseService.getListHouse(user.getEmail());
 
         return ResponseEntity.ok(listHouse);
     }

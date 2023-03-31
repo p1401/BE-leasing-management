@@ -24,10 +24,11 @@ public class HouseValidate {
     }
 
 
-    private void checkNameExist(String houseName, String username, String errorMsg) {
-        List<House> listHouse = houseRepository.findAll();
+    private void checkNameExist(String houseName, String emailUser, String errorMsg) {
+        List<House> listHouse = houseRepository.findAllByEmailUserIgnoreCase(emailUser);
+
         for(House house : listHouse){
-            if(houseName.equals(house.getName()) && username.equals(house.getEmailUser())){
+            if(houseName.equalsIgnoreCase(house.getName())){
                 throw new BadRequestException(errorMsg);
             }
         }

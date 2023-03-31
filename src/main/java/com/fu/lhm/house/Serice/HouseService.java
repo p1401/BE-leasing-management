@@ -13,10 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HouseService {
 
-    @Autowired
     HouseRepository houseRepository;
-
-//    JwtService jwtService;
 
     public House createHouse(House house) {
         return houseRepository.save(house);
@@ -43,8 +40,8 @@ public class HouseService {
 //
 //    }
 
-    public List<House> getListHouse(){
-        return houseRepository.findByEmailUser("test@gmail.com");
+    public List<House> getListHouse(String userEmail){
+        return houseRepository.findAllByEmailUserIgnoreCase(userEmail);
     }
 
     public void deleteHouse(Long houseId) {
