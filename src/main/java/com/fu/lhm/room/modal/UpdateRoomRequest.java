@@ -1,6 +1,5 @@
-package com.fu.lhm.room;
+package com.fu.lhm.room.modal;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 
@@ -10,7 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class updateRoomRequest {
+public class UpdateRoomRequest {
 
     private Long roomId;
 

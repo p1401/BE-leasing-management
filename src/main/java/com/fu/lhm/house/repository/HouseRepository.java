@@ -1,4 +1,4 @@
-package com.fu.lhm.house.Repository;
+package com.fu.lhm.house.repository;
 
 import com.fu.lhm.house.House;
 import com.fu.lhm.user.User;

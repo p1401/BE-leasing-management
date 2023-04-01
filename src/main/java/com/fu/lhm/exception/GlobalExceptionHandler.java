@@ -13,7 +13,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
-
 //    @ExceptionHandler({AuthenticationException.class})
 //    public ResponseEntity<String> entityNotFoundException(AuthenticationException authException) {
 //        if (authException.getMessage().contains("User is disabled")) {

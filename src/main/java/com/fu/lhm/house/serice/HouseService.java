@@ -1,7 +1,7 @@
-package com.fu.lhm.house.Serice;
+package com.fu.lhm.house.serice;
 
 import com.fu.lhm.house.House;
-import com.fu.lhm.house.Repository.HouseRepository;
+import com.fu.lhm.house.repository.HouseRepository;
 import com.fu.lhm.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

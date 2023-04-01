@@ -1,4 +1,4 @@
-package com.fu.lhm.auth.Validate;
+package com.fu.lhm.auth.validate;
 
 public class RegisterValidate {
 }

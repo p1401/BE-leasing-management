@@ -2,7 +2,7 @@ package com.fu.lhm.tenant.service;
 
 import com.fu.lhm.tenant.CreateContractFromBooking;
 import com.fu.lhm.tenant.CreateContractRequest;
-import com.fu.lhm.room.Repository.Roomrepository;
+import com.fu.lhm.room.repository.Roomrepository;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.Tenant;

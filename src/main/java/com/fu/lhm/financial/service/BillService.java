@@ -27,7 +27,7 @@ public class BillService {
 
     private final BillRepository billRepository;
 
-    public List<Bill> createAllTienPhong(){
+    public List<Bill> createAllBill(){
 
         List<Contract> listContract = contractRepository.findAll();
 
@@ -46,9 +46,11 @@ public class BillService {
             //check bill tien phong da tao thang nay chua
             boolean isCreate = false;
             for(Bill bill : listBill){
-                if(bill.getDateCreate().getMonth().toString().equals(month+"")
-                        && bill.getBillContent().toString().equalsIgnoreCase("TIENPHONG")
-                        && bill.getBillType().toString().equalsIgnoreCase("RECEIVE")){
+                String bil = bill.getBillContent().name();
+                if(bill.getDateCreate().getMonth().name().equals(month+"")
+                        && bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")
+                        && bill.getBillType().toString().equalsIgnoreCase("RECEIVE")
+                        && bill.getRoom()==contract.getRoom()){
                     isCreate=true;
                 }
             }
@@ -81,7 +83,10 @@ public class BillService {
         return newListBill;
     }
 
+    public Bill createBill(Long roomId, Bill bill){
 
+        return billRepository.save(bill);
+    }
 
 
 

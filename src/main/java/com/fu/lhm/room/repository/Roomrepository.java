@@ -1,4 +1,4 @@
-package com.fu.lhm.room.Repository;
+package com.fu.lhm.room.repository;
 
 import com.fu.lhm.room.Room;
 import org.springframework.data.jpa.repository.JpaRepository;

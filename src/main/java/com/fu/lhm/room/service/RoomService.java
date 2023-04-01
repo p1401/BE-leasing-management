@@ -1,19 +1,18 @@
-package com.fu.lhm.room.Service;
+package com.fu.lhm.room.service;
 
 import com.fu.lhm.financial.Bill;
 import com.fu.lhm.financial.repository.BillRepository;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.house.House;
-import com.fu.lhm.house.Repository.HouseRepository;
-import com.fu.lhm.room.Repository.Roomrepository;
-import com.fu.lhm.room.SendListRoomAndInforRequest;
+import com.fu.lhm.house.repository.HouseRepository;
+import com.fu.lhm.room.repository.Roomrepository;
+import com.fu.lhm.room.modal.SendListRoomAndInforRequest;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.Tenant;
 import com.fu.lhm.tenant.repository.ContractRepository;
 import com.fu.lhm.tenant.repository.TenantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

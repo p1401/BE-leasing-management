@@ -1,8 +1,8 @@
-package com.fu.lhm.house.Validate;
+package com.fu.lhm.house.validate;
 
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.house.House;
-import com.fu.lhm.house.Repository.HouseRepository;
+import com.fu.lhm.house.repository.HouseRepository;
 import com.fu.lhm.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

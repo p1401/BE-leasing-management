@@ -1,8 +1,8 @@
-package com.fu.lhm.room.Controller;
+package com.fu.lhm.room.controller;
 
 import com.fu.lhm.room.Room;
-import com.fu.lhm.room.SendListRoomAndInforRequest;
-import com.fu.lhm.room.Service.RoomService;
+import com.fu.lhm.room.modal.SendListRoomAndInforRequest;
+import com.fu.lhm.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

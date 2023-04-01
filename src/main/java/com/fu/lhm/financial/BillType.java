@@ -4,9 +4,4 @@ public enum BillType {
     RECEIVE,
     SPEND
 
-
-
-
-
-
 }

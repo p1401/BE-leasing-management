@@ -1,9 +1,9 @@
-package com.fu.lhm.house.Controller;
+package com.fu.lhm.house.controller;
 
 
 import com.fu.lhm.house.House;
-import com.fu.lhm.house.Serice.HouseService;
-import com.fu.lhm.house.Validate.HouseValidate;
+import com.fu.lhm.house.serice.HouseService;
+import com.fu.lhm.house.validate.HouseValidate;
 import com.fu.lhm.jwt.JwtService;
 import com.fu.lhm.user.User;
 import jakarta.servlet.http.HttpServletRequest;
