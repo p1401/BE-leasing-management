@@ -44,6 +44,10 @@ public class HouseService {
         return houseRepository.findAllByUser(user, pageable);
     }
 
+    public House getHouseById(Long houseId){
+
+        return houseRepository.findById(houseId).orElseThrow(() -> new EntityNotFoundException("Nhà không tồn tại!"));
+    }
     public void deleteHouse(Long houseId) {
         houseRepository.deleteById(houseId);
     }

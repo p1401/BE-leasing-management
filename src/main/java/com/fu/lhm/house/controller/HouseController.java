@@ -49,6 +49,18 @@ public class HouseController {
         return ResponseEntity.ok(listHouse);
     }
 
+    @PostMapping({"/{id}"})
+    public ResponseEntity<House> getHouseById(@PathVariable("id") Long id){
+
+        return ResponseEntity.ok(houseService.getHouseById(id));
+    }
+
+    @DeleteMapping ({"/{id}"})
+    public void deleteHouse(@PathVariable("id") Long id){
+
+        houseService.deleteHouse(id);
+    }
+
     private User getUserToken() {
         return jwtService.getUser(httpServletRequest);
     }
