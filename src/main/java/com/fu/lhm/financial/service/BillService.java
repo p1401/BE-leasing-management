@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,10 +47,9 @@ public class BillService {
             //check bill tien phong da tao thang nay chua
             boolean isCreate = false;
             for(Bill bill : listBill){
-                String bil = bill.getBillContent().name();
-                if(bill.getDateCreate().getMonth().name().equals(month+"")
+                if(bill.getDateCreate().getMonthValue()==month
                         && bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")
-                        && bill.getBillType().toString().equalsIgnoreCase("RECEIVE")
+                        && bill.getBillType().name().equalsIgnoreCase("RECEIVE")
                         && bill.getRoom()==contract.getRoom()){
                     isCreate=true;
                 }
