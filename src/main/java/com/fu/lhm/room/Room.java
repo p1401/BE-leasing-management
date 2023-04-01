@@ -22,7 +22,7 @@ public class Room {
     @Column(nullable = false)
     private String name;
 
-    private int roomMoney;
+    private Integer roomMoney;
 
     //So nguoi toi da
     private int maxTenant;
@@ -42,7 +42,7 @@ public class Room {
 
     private int floor;
 
-    private boolean haveBookRoom;
+    private Boolean haveBookRoom;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "house_id")

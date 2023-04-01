@@ -1,6 +1,5 @@
 package com.fu.lhm.room.Controller;
 
-import com.fu.lhm.room.Repository.Roomrepository;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.room.SendListRoomAndInforRequest;
 import com.fu.lhm.room.Service.RoomService;
@@ -16,8 +15,6 @@ import java.util.List;
 public class RoomController {
 
     private final RoomService roomService;
-
-    private final Roomrepository roomrepository;
 
     @GetMapping("/{houseId}")
     public ResponseEntity<List<SendListRoomAndInforRequest>> getListRoom(
@@ -35,14 +32,11 @@ public class RoomController {
         return ResponseEntity.ok(roomService.createroom(houseId, room));
     }
 
-    @PutMapping({"/updateRoom/{roomId}"})
+    @PutMapping({"/{roomId}"})
     public ResponseEntity<Room> updateRoom(@PathVariable("roomId") Long id, @RequestBody Room room) {
 //        houseValidate.validateCreateUpdateHouse(house);
-        return ResponseEntity.ok(roomService.updateRoom(id,room));
+        return ResponseEntity.ok(roomService.updateRoom(id, room));
     }
-
-
-
 
 
 //    public void deleteRoom(Long roomId) {
