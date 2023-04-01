@@ -6,8 +6,6 @@ import com.fu.lhm.house.House;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serializable;
-
 @Entity(name = "rooms")
 @Getter
 @Setter
@@ -15,7 +13,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Room implements Serializable {
+public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
