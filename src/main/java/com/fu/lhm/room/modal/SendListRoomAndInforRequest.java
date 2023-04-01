@@ -32,4 +32,6 @@ public class SendListRoomAndInforRequest {
 
     private String tenantBooking;
 
+    private int floor;
+
 }

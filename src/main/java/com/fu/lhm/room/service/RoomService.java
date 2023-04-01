@@ -31,7 +31,7 @@ public class RoomService {
 
     private final BillRepository billRepository;
 
-    public List<SendListRoomAndInforRequest> getListRoomAndInfor(Long houseid){
+    public List<SendListRoomAndInforRequest> getListRoomAndInfor(Long houseid, int floor){
 
         List<Room> listRoom = roomrepository.findAllByHouse_Id(houseid);
 
@@ -43,52 +43,55 @@ public class RoomService {
 
         List<SendListRoomAndInforRequest> list = new ArrayList<>();
 
-        for(Room room : listRoom){
-            SendListRoomAndInforRequest sendListRoomAndInforRequest = new SendListRoomAndInforRequest();
+        for(Room room : listRoom) {
+            if (room.getFloor() == floor) {
 
-            sendListRoomAndInforRequest.setRoomId(room.getId());
-            sendListRoomAndInforRequest.setRoomName(room.getName());
-            sendListRoomAndInforRequest.setPrice(room.getRoomMoney());
-            sendListRoomAndInforRequest.setArea((room.getArea()));
-            sendListRoomAndInforRequest.setMaxTenant(room.getMaxTenant());
 
-            int curentTenant =0;
-            for(Tenant tenant : tenantList){
-                if(tenant.getRoom().getId()==room.getId()&&tenant.isBookRoom()==false){
-                    curentTenant=curentTenant+1;
+                SendListRoomAndInforRequest sendListRoomAndInforRequest = new SendListRoomAndInforRequest();
+
+                sendListRoomAndInforRequest.setRoomId(room.getId());
+                sendListRoomAndInforRequest.setRoomName(room.getName());
+                sendListRoomAndInforRequest.setPrice(room.getRoomMoney());
+                sendListRoomAndInforRequest.setArea((room.getArea()));
+                sendListRoomAndInforRequest.setMaxTenant(room.getMaxTenant());
+
+                int curentTenant = 0;
+                for (Tenant tenant : tenantList) {
+                    if (tenant.getRoom().getId() == room.getId() && tenant.isBookRoom() == false) {
+                        curentTenant = curentTenant + 1;
+                    }
                 }
-            }
-            sendListRoomAndInforRequest.setCurrenTenant(curentTenant);
+                sendListRoomAndInforRequest.setCurrenTenant(curentTenant);
 
-            //Nếu đã có người ký hợp đồng thì thay
-            String currentContract ="Chưa có";
-            for(Contract contract : contractList){
-                if(contract.getRoom().getId() == room.getId() && contract.isActive()==true){
-                    currentContract = contract.getTenant().getName();
+                //Nếu đã có người ký hợp đồng thì thay
+                String currentContract = "Chưa có";
+                for (Contract contract : contractList) {
+                    if (contract.getRoom().getId() == room.getId() && contract.isActive() == true) {
+                        currentContract = contract.getTenant().getName();
+                    }
                 }
-            }
-            sendListRoomAndInforRequest.setCurrentContract(currentContract);
+                sendListRoomAndInforRequest.setCurrentContract(currentContract);
 
-            //Set tien chua thanh toan
-            int moneyNotPay=0;
-            for(Bill bill : billList){
-                if(bill.getRoom().getId()==room.getId() && bill.isPay()==false){
-                    moneyNotPay=moneyNotPay+bill.getTotalMoney();
+                //Set tien chua thanh toan
+                int moneyNotPay = 0;
+                for (Bill bill : billList) {
+                    if (bill.getRoom().getId() == room.getId() && bill.isPay() == false) {
+                        moneyNotPay = moneyNotPay + bill.getTotalMoney();
+                    }
                 }
-            }
-            sendListRoomAndInforRequest.setMoneyNotPay(moneyNotPay);
+                sendListRoomAndInforRequest.setMoneyNotPay(moneyNotPay);
 
-            String tenantBooking = "Chua co";
-            for(Tenant tenant : tenantList){
-                if(tenant.getRoom().getId()==room.getId()&&tenant.isBookRoom()==true){
-                    tenantBooking = tenant.getName();
+                String tenantBooking = "Chua co";
+                for (Tenant tenant : tenantList) {
+                    if (tenant.getRoom().getId() == room.getId() && tenant.isBookRoom() == true) {
+                        tenantBooking = tenant.getName();
+                    }
                 }
-            }
-            sendListRoomAndInforRequest.setTenantBooking(tenantBooking);
+                sendListRoomAndInforRequest.setTenantBooking(tenantBooking);
 
-            list.add(sendListRoomAndInforRequest);
+                list.add(sendListRoomAndInforRequest);
+            }
         }
-
         return list;
     }
 
@@ -119,6 +122,11 @@ public class RoomService {
         oldRoom.setChiSoCuoiNuoc(updateRoom.getChiSoCuoiNuoc());
 
         return roomrepository.save(oldRoom);
+    }
+
+    public Room getRoomById(Long roomId){
+
+        return roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
     }
 
 

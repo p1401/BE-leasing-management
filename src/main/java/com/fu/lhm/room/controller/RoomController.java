@@ -1,9 +1,12 @@
 package com.fu.lhm.room.controller;
 
+import com.fu.lhm.house.House;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.room.modal.SendListRoomAndInforRequest;
 import com.fu.lhm.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,11 +19,11 @@ public class RoomController {
 
     private final RoomService roomService;
 
-    @GetMapping("/{houseId}")
+    @GetMapping("/{houseId}/{floor}")
     public ResponseEntity<List<SendListRoomAndInforRequest>> getListRoom(
-            @PathVariable("houseId") Long houseId) {
+            @PathVariable("houseId") Long houseId,@PathVariable("floor") int floor) {
 
-        List<SendListRoomAndInforRequest> listRoom = roomService.getListRoomAndInfor(houseId);
+        List<SendListRoomAndInforRequest> listRoom = roomService.getListRoomAndInfor(houseId, floor);
         return ResponseEntity.ok(listRoom);
     }
 
@@ -38,9 +41,16 @@ public class RoomController {
         return ResponseEntity.ok(roomService.updateRoom(id, room));
     }
 
+    @GetMapping({"/{roomId}"})
+    public ResponseEntity<Room> getRoomById(@PathVariable("roomId") Long id) {
+//        houseValidate.validateCreateUpdateHouse(house);
+        return ResponseEntity.ok(roomService.getRoomById(id));
+    }
 
-//    public void deleteRoom(Long roomId) {
-//        roomrepository.deleteById(roomId);
-//    }
+
+    @DeleteMapping("/{roomId}")
+    public void deleteRoom(@PathVariable("roomId") Long id) {
+        roomService.deleteRoom(id);
+    }
 
 }
