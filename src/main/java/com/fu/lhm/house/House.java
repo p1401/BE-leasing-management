@@ -1,7 +1,10 @@
 package com.fu.lhm.house;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fu.lhm.room.Room;
+import com.fu.lhm.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,12 +29,14 @@ public class House {
     private int electricPrice;
     private int waterPrice;
     private int floor;
-    private String emailUser;
 
-//    @OneToMany(mappedBy = "house", cascade = CascadeType.ALL)
-//    @EqualsAndHashCode.Exclude // không sử dụng trường này trong equals và hashcode
-//    @ToString.Exclude
-//    @JoinColumn(name = "house")
-//    List<Room> rooms;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    User user;
+
+    @OneToMany(mappedBy = "house_id", fetch = FetchType.EAGER)
+    @JsonManagedReference
+    List<Room> rooms;
 
 }

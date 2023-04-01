@@ -1,10 +1,12 @@
 package com.fu.lhm.room;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fu.lhm.house.House;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.io.Serializable;
 
 @Entity(name = "rooms")
 @Getter
@@ -13,13 +15,13 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Room {
+public class Room implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String name;
 
     private int roomMoney;
@@ -44,8 +46,8 @@ public class Room {
 
     private boolean haveBookRoom;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = "", allowGetters = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "house_id")
+    @JsonBackReference
     private House house;
-
 }

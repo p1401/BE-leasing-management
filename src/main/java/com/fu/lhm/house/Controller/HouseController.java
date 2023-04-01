@@ -2,17 +2,16 @@ package com.fu.lhm.house.Controller;
 
 
 import com.fu.lhm.house.House;
-import com.fu.lhm.house.Repository.HouseRepository;
 import com.fu.lhm.house.Serice.HouseService;
 import com.fu.lhm.house.Validate.HouseValidate;
 import com.fu.lhm.jwt.JwtService;
 import com.fu.lhm.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/houses")
@@ -20,7 +19,6 @@ import java.util.List;
 public class HouseController {
     private final HouseService houseService;
     private final HouseValidate houseValidate;
-    private final HouseRepository houseRepository;
     private final HttpServletRequest httpServletRequest;
     private final JwtService jwtService;
 
@@ -28,29 +26,30 @@ public class HouseController {
     @PostMapping({""})
     public ResponseEntity<House> addHouse(@RequestBody House house) {
 
+        houseValidate.validateCreateUpdateHouse(house, getUserToken());
 
-        User user = jwtService.getUser(httpServletRequest);
-
-        house.setEmailUser(user.getEmail());
-
-        houseValidate.validateCreateUpdateHouse(house);
+        house.setUser(getUserToken());
 
         return ResponseEntity.ok(houseService.createHouse(house));
     }
 
     @PutMapping({"/{id}"})
     public ResponseEntity<House> updateHouse(@PathVariable("id") Long id, @RequestBody House house) {
-        houseValidate.validateCreateUpdateHouse(house);
+        houseValidate.validateCreateUpdateHouse(house, getUserToken());
         return ResponseEntity.ok(houseService.updateHouse(id, house));
     }
 
     @GetMapping({""})
-    public ResponseEntity<List<House>> getListHouse() {
-
-        User user = jwtService.getUser(httpServletRequest);
-
-        List<House> listHouse = houseService.getListHouse(user.getEmail());
+    public ResponseEntity<Page<House>> getListHouse(
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
+        Page<House> listHouse = houseService.getListHouse(getUserToken(), PageRequest.of(page, pageSize));
 
         return ResponseEntity.ok(listHouse);
+    }
+
+    private User getUserToken() {
+        return jwtService.getUser(httpServletRequest);
     }
 }

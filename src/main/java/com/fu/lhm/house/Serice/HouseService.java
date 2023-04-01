@@ -2,12 +2,12 @@ package com.fu.lhm.house.Serice;
 
 import com.fu.lhm.house.House;
 import com.fu.lhm.house.Repository.HouseRepository;
+import com.fu.lhm.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,12 +40,12 @@ public class HouseService {
 //
 //    }
 
-    public List<House> getListHouse(String userEmail){
-        return houseRepository.findAllByEmailUserIgnoreCase(userEmail);
+    public Page<House> getListHouse(User user, Pageable pageable) {
+        return houseRepository.findAllByUser(user, pageable);
     }
 
     public void deleteHouse(Long houseId) {
-         houseRepository.deleteById(houseId);
+        houseRepository.deleteById(houseId);
     }
 
 }

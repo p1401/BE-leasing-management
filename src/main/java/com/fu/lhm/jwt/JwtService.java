@@ -1,7 +1,9 @@
 package com.fu.lhm.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.user.User;
+import com.fu.lhm.user.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,6 +11,7 @@ import io.jsonwebtoken.impl.DefaultClaims;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +21,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
-
+    private final UserRepository userRepository;
     private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
     private static final String USER_ID = "userId";
     private static final String EMAIL = "email";
@@ -37,11 +41,9 @@ public class JwtService {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        return User.builder()
-                .id(objectMapper.convertValue(claims.get(USER_ID), Long.class))
-                .email((String) claims.get(EMAIL))
-                .firstname((String) claims.get(FIRST_NAME))
-                .build();
+        Long userId = objectMapper.convertValue(claims.get(USER_ID), Long.class);
+
+        return userRepository.findById(userId).orElseThrow(() -> new BadRequestException("User không tồn tại!"));
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
