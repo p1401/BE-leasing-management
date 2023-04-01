@@ -1,11 +1,13 @@
 package com.fu.lhm.financial;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fu.lhm.house.House;
+import com.fu.lhm.room.Room;
+import com.fu.lhm.tenant.Contract;
+import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity(name = "bills")
@@ -22,30 +24,44 @@ public class Bill {
 
     private String billCode;
 
-    private int electricMoney;
-
-    private int waterMoney;
+    private int roomMoney;
 
     private int electricNumber;
 
     private int waterNumber;
 
-    private String houseName;
+    private int electricMoney;
 
-    private String roomName;
+    private int waterMoney;
 
     private String payer;
 
-    private String billType;
+    private boolean isPay;
 
-    private String billContent;
+    private LocalDate dateCreate;
 
     private String description;
 
-    private boolean isPay;
-
-    private Date fromDate;
-
     private int totalMoney;
+
+    //Phieu thu, phieu chi
+    @Enumerated(EnumType.STRING)
+    private BillType billType;
+
+    //Tien phong hoac tien thu them
+    @Enumerated(EnumType.STRING)
+    private BillContent billContent;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = "", allowGetters = true)
+    private Room room;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = "", allowGetters = true)
+    private House house;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = "", allowGetters = true)
+    private Contract contract;
 
 }

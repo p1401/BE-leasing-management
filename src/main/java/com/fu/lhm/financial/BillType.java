@@ -1,6 +1,6 @@
 package com.fu.lhm.financial;
 
-public enum billType {
+public enum BillType {
     RECEIVE,
     SPEND
 

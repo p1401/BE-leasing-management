@@ -22,9 +22,19 @@ public class Room {
     @Column(nullable=false)
     private String name;
 
-    private int bedroomNumber;
+    private int roomMoney;
+
+    //So nguoi toi da
+    private int maxTenant;
+
+    //So nguoi hien tai
+    private int currentTenant;
 
     private int area;
+
+    private int chiSoCuoiDien;
+
+    private int chiSoCuoiNuoc;
 
     private int electricNumber;
 
@@ -34,9 +44,8 @@ public class Room {
 
     private boolean haveBookRoom;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = "", allowGetters = true)
-    @JoinColumn(name = "house_id")
     private House house;
 
 }

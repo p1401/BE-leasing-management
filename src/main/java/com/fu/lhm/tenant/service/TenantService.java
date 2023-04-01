@@ -47,6 +47,7 @@ public class TenantService {
 
         Room room = roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
 
+        tenantBookRoom.setName(tenantBookRoom.getName());
         tenantBookRoom.setRoom(room);
         tenantBookRoom.setHouse(room.getHouse());
         tenantBookRoom.setBookRoom(true);

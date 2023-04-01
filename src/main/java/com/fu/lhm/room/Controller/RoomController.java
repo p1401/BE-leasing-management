@@ -2,6 +2,7 @@ package com.fu.lhm.room.Controller;
 
 import com.fu.lhm.room.Repository.Roomrepository;
 import com.fu.lhm.room.Room;
+import com.fu.lhm.room.SendListRoomAndInforRequest;
 import com.fu.lhm.room.Service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,10 @@ public class RoomController {
     private final Roomrepository roomrepository;
 
     @GetMapping("/{houseId}")
-    public ResponseEntity<List<Room>> getListRoom(
+    public ResponseEntity<List<SendListRoomAndInforRequest>> getListRoom(
             @PathVariable("houseId") Long houseId) {
 
-        List<Room> listRoom = roomService.getListRoom(houseId);
+        List<SendListRoomAndInforRequest> listRoom = roomService.getListRoomAndInfor(houseId);
         return ResponseEntity.ok(listRoom);
     }
 

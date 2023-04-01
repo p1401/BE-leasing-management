@@ -46,9 +46,7 @@ public class ContractService {
         contract.setFromDate(createContractRequest.getFromDate());
         contract.setToDate(createContractRequest.getFromDate());
         contract.setTenant(tenantRepository.save(tenant));
-        contract.setRoomName(room.getName());
-        contract.setHouseName(room.getHouse().getName());
-
+        contract.setRoom(room);
 
         return contractRepository.save(contract);
     }
@@ -74,8 +72,7 @@ public class ContractService {
         contract.setFromDate(createContractFromBooking.getFromDate());
         contract.setToDate(createContractFromBooking.getFromDate());
         contract.setTenant(tenant);
-        contract.setRoomName(room.getName());
-        contract.setHouseName(room.getHouse().getName());
+        contract.setRoom(room);
 
         return contractRepository.save(contract);
     }

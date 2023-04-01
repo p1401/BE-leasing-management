@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HouseService {
 
-    HouseRepository houseRepository;
+    private final HouseRepository houseRepository;
 
     public House createHouse(House house) {
         return houseRepository.save(house);

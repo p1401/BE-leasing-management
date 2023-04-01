@@ -1,8 +1,11 @@
 package com.fu.lhm.house;
 
 
+import com.fu.lhm.room.Room;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity(name = "houses")
 @Getter
@@ -25,5 +28,10 @@ public class House {
     private int floor;
     private String emailUser;
 
+//    @OneToMany(mappedBy = "house", cascade = CascadeType.ALL)
+//    @EqualsAndHashCode.Exclude // không sử dụng trường này trong equals và hashcode
+//    @ToString.Exclude
+//    @JoinColumn(name = "house")
+//    List<Room> rooms;
 
 }

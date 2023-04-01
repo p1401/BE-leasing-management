@@ -2,6 +2,7 @@ package com.fu.lhm.tenant;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fu.lhm.room.Room;
 import com.fu.lhm.tenant.Tenant;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,8 +23,6 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String contractCode;
-    private String houseName;
-    private String roomName;
     private Date fromDate;
     private Date toDate;
     private boolean isActive;
@@ -33,6 +32,11 @@ public class Contract {
     @JsonIgnoreProperties(value = "", allowGetters = true)
     @JoinColumn(name = "tenantId")
     private Tenant tenant;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = "", allowGetters = true)
+    @JoinColumn(name = "roomId")
+    private Room room;
 
 
 }
