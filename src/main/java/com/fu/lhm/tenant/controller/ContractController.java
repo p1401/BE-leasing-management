@@ -9,19 +9,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/rooms/{roomId}/contracts")
+@RequestMapping("api/v1/contracts")
 @RequiredArgsConstructor
 public class ContractController {
 
     private final ContractService contractService;
 
-    @PostMapping("")
+    @PostMapping("/rooms/{roomId}")
     public ResponseEntity<Contract> createContract(@PathVariable("roomId") Long roomId, @RequestBody CreateContractRequest createContractRequest) {
 
         return ResponseEntity.ok(contractService.createContract(roomId,createContractRequest));
     }
 
-    @PostMapping("/createFromBooking")
+    @PostMapping("/rooms/{roomId}/createFromBooking")
     public ResponseEntity<Contract> createContractFromBooking(@PathVariable("roomId") Long roomId, @RequestBody CreateContractFromBooking createContractFromBooking) {
         return ResponseEntity.ok(contractService.createContractFromBooking(roomId,createContractFromBooking));
     }

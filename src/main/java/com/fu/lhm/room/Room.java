@@ -46,6 +46,8 @@ public class Room {
 
     private int floor;
 
+    private int moneyNotPay;
+
     private Boolean haveBookRoom;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -7,6 +7,8 @@ import com.fu.lhm.tenant.Tenant;
 import com.fu.lhm.tenant.repository.TenantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,9 +56,14 @@ public class TenantService {
         return tenantRepository.save(tenantBookRoom);
     }
 
-    public List<Tenant> getListTenantByRoomId(Long id){
+    public Page<Tenant> getListTenantByRoomId(Long id, Pageable page){
 
-            return tenantRepository.findAllByRoom_Id(id);
+            return tenantRepository.findAllByRoom_Id(id, page);
+    }
+
+    public Page<Tenant> getListTenantByHouseId(Long id, Pageable page){
+
+        return tenantRepository.findAllByRoom_House_Id(id, page);
     }
 
     public Tenant getTenantById(Long id){

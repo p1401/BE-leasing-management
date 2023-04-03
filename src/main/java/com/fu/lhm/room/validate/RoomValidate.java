@@ -19,7 +19,7 @@ public class RoomValidate {
 
     public void validateCreateRoom(Room room, Long houseid) {
         House house = houseRepository.findById(houseid).orElseThrow(() -> new EntityNotFoundException("Nha không tồn tại!"));
-        this.validateForNameExistInFloor(room.getName(), room.getFloor(), room.getHouse().getId());
+        this.validateForNameExistInFloor(room.getName(), room.getFloor(), house.getId());
         this.validateFloor(room.getFloor(), house.getFloor());
         this.validateRoomMoney(room.getRoomMoney());
         this.validateMaxTenant(room.getMaxTenant());

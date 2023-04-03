@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class TenantValidate {
 
-    RoomRepository roomRepository;
+    private final RoomRepository roomRepository;
 
     public void validateForCreateTenant(Long roomId, Tenant tenant){
         checkCurrentNumberTenantInRoom(roomId);

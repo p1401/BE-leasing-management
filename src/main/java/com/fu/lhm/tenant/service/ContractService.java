@@ -10,7 +10,11 @@ import com.fu.lhm.tenant.repository.ContractRepository;
 import com.fu.lhm.tenant.repository.TenantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +29,12 @@ public class ContractService {
 
     public Contract createContract(Long roomId, CreateContractRequest createContractRequest){
         int randomNumber = (int)(Math.random()*(99999-10000+1)+10000);
+
+//        String from = createContractRequest.getFromDate();
+//        String to = createContractRequest.getToDate();
+//        DateTimeFormatter dt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//        LocalDate fromDate = LocalDate.parse(from, dt);
+//        LocalDate toDate = LocalDate.parse(to, dt);
 
         Room room = roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
 
@@ -44,17 +54,22 @@ public class ContractService {
         contract.setActive(true);
         contract.setDeposit(createContractRequest.getDeposit());
         contract.setFromDate(createContractRequest.getFromDate());
-        contract.setToDate(createContractRequest.getFromDate());
+        contract.setToDate(createContractRequest.getToDate());
         contract.setTenant(tenantRepository.save(tenant));
 //        contract.setRoom(room);
 
         return contractRepository.save(contract);
     }
 
-    public Contract createContractFromBooking(Long roomId, CreateContractFromBooking createContractFromBooking){
+    public Contract createContractFromBooking(Long roomId, @NotNull CreateContractFromBooking createContractFromBooking){
         int randomNumber = (int)(Math.random()*(99999-10000+1)+10000);
+//
+//        String from = createContractFromBooking.getFromDate();
+//        String to = createContractFromBooking.getToDate();
+//        DateTimeFormatter dt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//        LocalDate fromDate = LocalDate.parse(from, dt);
+//        LocalDate toDate = LocalDate.parse(to, dt);
 
-        //get room and change status book
         Room room = roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
         room.setHaveBookRoom(false);
         roomrepository.save(room);
@@ -62,6 +77,7 @@ public class ContractService {
         //create tenant
         Tenant tenant = tenantRepository.findById(createContractFromBooking.getTenantId()).orElseThrow(() -> new EntityNotFoundException("Khách hàng không tồn tại!"));
         tenant.setBookRoom(false);
+        tenant.setContractHolder(true);
         tenantRepository.save(tenant);
 
         //create contract
@@ -69,8 +85,8 @@ public class ContractService {
         contract.setContractCode("HĐ"+randomNumber);
         contract.setActive(true);
         contract.setDeposit(createContractFromBooking.getDeposit());
-        contract.setFromDate(createContractFromBooking.getFromDate());
-        contract.setToDate(createContractFromBooking.getFromDate());
+        contract.setFromDate(contract.getFromDate());
+        contract.setToDate(createContractFromBooking.getToDate());
         contract.setTenant(tenant);
 //        contract.setRoom(room);
 

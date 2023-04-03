@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 @Data
 @Builder
@@ -16,8 +17,8 @@ public class CreateContractRequest {
     private String contractCode;
     private String houseName;
     private String roomName;
-    private Date fromDate;
-    private Date toDate;
+    private String fromDate;
+    private String toDate;
     private boolean isActive;
     private int deposit;
 

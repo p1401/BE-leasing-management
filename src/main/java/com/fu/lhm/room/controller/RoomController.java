@@ -22,13 +22,14 @@ public class RoomController {
 
     private final RoomValidate roomValidate;
 
-    @GetMapping("/{houseId}/{floor}")
-    public ResponseEntity<Page<SendListRoomAndInforRequest>> getListRoom(
-            @PathVariable("houseId") Long houseId,@PathVariable("floor") int floor,
+    @GetMapping("/{houseId}/floor/{floor}")
+    public ResponseEntity<Page<Room>> getListRoom(
+            @PathVariable("houseId") Long houseId,
+            @PathVariable("floor") int floor,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        Page<SendListRoomAndInforRequest> listRoom = (Page<SendListRoomAndInforRequest>) roomService.getListRoomAndInfor(houseId, floor);
+        Page<Room> listRoom =  roomService.getListRoomByHouseIdAndFloor(houseId ,floor, PageRequest.of(page, pageSize));
         return ResponseEntity.ok(listRoom);
     }
 

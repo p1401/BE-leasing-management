@@ -1,11 +1,7 @@
-package com.fu.lhm.house.serice;
+package com.fu.lhm.house.service;
 
-import com.fu.lhm.financial.repository.BillRepository;
 import com.fu.lhm.house.House;
 import com.fu.lhm.house.repository.HouseRepository;
-import com.fu.lhm.room.repository.RoomRepository;
-import com.fu.lhm.tenant.repository.ContractRepository;
-import com.fu.lhm.tenant.repository.TenantRepository;
 import com.fu.lhm.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

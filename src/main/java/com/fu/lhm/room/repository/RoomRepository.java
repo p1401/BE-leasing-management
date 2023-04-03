@@ -1,13 +1,16 @@
 package com.fu.lhm.room.repository;
 
 import com.fu.lhm.room.Room;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    List<Room> findAllByHouse_Id(Long houseId);
+
+    Page<Room> findAllByHouse_IdAndFloor(Long houseId, int floor, Pageable pageable);
 
     boolean existsByNameAndFloorAndHouse_Id(String roomName, int floor, Long houseId);
 }

@@ -7,13 +7,14 @@ import com.fu.lhm.tenant.service.TenantService;
 import com.fu.lhm.tenant.validate.TenantValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/rooms/{roomId}/tenants")
+@RequestMapping("api/v1/tenants")
 @RequiredArgsConstructor
 public class TenantController {
 
@@ -21,9 +22,7 @@ public class TenantController {
 
     private final TenantValidate tenantValidate;
 
-    private final TenantRepository tenantRepository;
-
-    @PostMapping("")
+    @PostMapping("/rooms/{roomId}")
     public ResponseEntity<Tenant> createTenant(@PathVariable("roomId") Long roomId, @RequestBody Tenant tenant) {
         tenantValidate.validateForCreateTenant(roomId,tenant);
         return ResponseEntity.ok(tenantService.createTenant(roomId, tenant));
@@ -35,21 +34,8 @@ public class TenantController {
         return ResponseEntity.ok(tenantService.updateTenant(id,tenant));
     }
 
-    @PostMapping({"/bookRoom"})
-    public ResponseEntity<Tenant> bookRoom(@PathVariable("roomId") Long id, @RequestBody Tenant tenant) {
-
-        return ResponseEntity.ok(tenantService.bookRoom(id,tenant));
-    }
-
-    @GetMapping("")
-    public ResponseEntity<Page<Tenant>> getListTenantByRoomId(@PathVariable("roomId") Long id){
-
-        Page<Tenant> listTenant = (Page<Tenant>) tenantRepository.getReferenceById(id);
-
-        return ResponseEntity.ok(listTenant);
-    }
     @GetMapping("/{tenantId}")
-    public ResponseEntity<Tenant> getListTenantById(@PathVariable("tenantId") Long id){
+    public ResponseEntity<Tenant> getTenantById(@PathVariable("tenantId") Long id){
 
         return ResponseEntity.ok(tenantService.getTenantById(id));
     }
@@ -60,6 +46,29 @@ public class TenantController {
          tenantService.deleteTenant(id);
     }
 
+    @PostMapping({"/bookRoom/{roomId}"})
+    public ResponseEntity<Tenant> bookRoom(@PathVariable("roomId") Long id, @RequestBody Tenant tenant) {
 
+        return ResponseEntity.ok(tenantService.bookRoom(id,tenant));
+    }
+
+    @GetMapping("/rooms/{roomId}")
+    public ResponseEntity<Page<Tenant>> getListTenantByRoomId(@PathVariable("roomId") Long id,
+                                                              @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                              @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
+
+        Page<Tenant> listTenant = tenantService.getListTenantByRoomId(id, PageRequest.of(page, pageSize));
+
+        return ResponseEntity.ok(listTenant);
+    }
+    @GetMapping("/houses/{houseId}")
+    public ResponseEntity<Page<Tenant>> getListTenantByHouseId(@PathVariable("houseId") Long id,
+                                                               @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                               @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
+
+        Page<Tenant> listTenant = tenantService.getListTenantByHouseId(id, PageRequest.of(page, pageSize));
+
+        return ResponseEntity.ok(listTenant);
+    }
 
 }
