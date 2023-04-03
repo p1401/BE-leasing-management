@@ -1,5 +1,6 @@
 package com.fu.lhm.financial;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fu.lhm.house.House;
 import com.fu.lhm.room.Room;
@@ -52,16 +53,10 @@ public class Bill {
     @Enumerated(EnumType.STRING)
     private BillContent billContent;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = "", allowGetters = true)
-    private Room room;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = "", allowGetters = true)
-    private House house;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = "", allowGetters = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "contractId")
+    @JsonBackReference
     private Contract contract;
 
 }

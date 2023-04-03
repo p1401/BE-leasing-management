@@ -20,10 +20,12 @@ public class RoomController {
     private final RoomService roomService;
 
     @GetMapping("/{houseId}/{floor}")
-    public ResponseEntity<List<SendListRoomAndInforRequest>> getListRoom(
-            @PathVariable("houseId") Long houseId,@PathVariable("floor") int floor) {
+    public ResponseEntity<Page<SendListRoomAndInforRequest>> getListRoom(
+            @PathVariable("houseId") Long houseId,@PathVariable("floor") int floor,
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        List<SendListRoomAndInforRequest> listRoom = roomService.getListRoomAndInfor(houseId, floor);
+        Page<SendListRoomAndInforRequest> listRoom = (Page<SendListRoomAndInforRequest>) roomService.getListRoomAndInfor(houseId, floor);
         return ResponseEntity.ok(listRoom);
     }
 

@@ -1,9 +1,10 @@
 package com.fu.lhm.tenant;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fu.lhm.room.Room;
-import com.fu.lhm.tenant.Tenant;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fu.lhm.financial.Bill;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -28,15 +30,12 @@ public class Contract {
     private boolean isActive;
     private int deposit;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "", allowGetters = true)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tenantId")
-    private Tenant tenant;
+    @JsonBackReference
+    Tenant tenant;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "", allowGetters = true)
-    @JoinColumn(name = "roomId")
-    private Room room;
-
-
+    @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    List<Bill> bills;
 }

@@ -35,7 +35,7 @@ public class House {
     @JsonBackReference
     User user;
 
-    @OneToMany(mappedBy = "house", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "house", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     List<Room> rooms;
 

@@ -5,7 +5,7 @@ import com.fu.lhm.financial.repository.BillRepository;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.house.House;
 import com.fu.lhm.house.repository.HouseRepository;
-import com.fu.lhm.room.repository.Roomrepository;
+import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.room.modal.SendListRoomAndInforRequest;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.Tenant;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoomService {
 
-    private final Roomrepository roomrepository;
+    private final RoomRepository roomrepository;
 
     private final HouseRepository houseRepository;
 
@@ -66,7 +66,7 @@ public class RoomService {
                 //Nếu đã có người ký hợp đồng thì thay
                 String currentContract = "Chưa có";
                 for (Contract contract : contractList) {
-                    if (contract.getRoom().getId() == room.getId() && contract.isActive() == true) {
+                    if (contract.getTenant().getRoom().getId() == room.getId() && contract.isActive() == true) {
                         currentContract = contract.getTenant().getName();
                     }
                 }
@@ -75,7 +75,7 @@ public class RoomService {
                 //Set tien chua thanh toan
                 int moneyNotPay = 0;
                 for (Bill bill : billList) {
-                    if (bill.getRoom().getId() == room.getId() && bill.isPay() == false) {
+                    if (bill.getContract().getTenant().getRoom().getId() == room.getId() && bill.isPay() == false) {
                         moneyNotPay = moneyNotPay + bill.getTotalMoney();
                     }
                 }

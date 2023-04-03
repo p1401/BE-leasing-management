@@ -42,15 +42,15 @@ public class BillService {
         //check xem từng hợp đồng đã tạo hóa đơn tháng này chưa
         for(Contract contract : listContract){
 
-            Room room = contract.getRoom();
-            House house = contract.getTenant().getHouse();
+            Room room = contract.getTenant().getRoom();
+            House house = contract.getTenant().getRoom().getHouse();
             //check bill tien phong da tao thang nay chua
             boolean isCreate = false;
             for(Bill bill : listBill){
                 if(bill.getDateCreate().getMonthValue()==month
                         && bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")
                         && bill.getBillType().name().equalsIgnoreCase("RECEIVE")
-                        && bill.getRoom()==contract.getRoom()){
+                        && bill.getContract().getTenant().getRoom()==contract.getTenant().getRoom()){
                     isCreate=true;
                 }
             }
@@ -67,12 +67,10 @@ public class BillService {
                 bill.setPayer(contract.getTenant().getName());
                 bill.setPay(false);
                 bill.setDateCreate(LocalDate.now());
-                bill.setDescription("Tiền phòng "+contract.getRoom().getName()+" tháng " +month);
+                bill.setDescription("Tiền phòng "+contract.getTenant().getRoom().getName()+" tháng " +month);
                 bill.setTotalMoney(room.getRoomMoney()+room.getElectricNumber()*house.getElectricPrice()+room.getWaterNumber()*house.getWaterPrice());
                 bill.setBillContent(BillContent.TIENPHONG);
                 bill.setBillType(BillType.RECEIVE);
-                bill.setRoom(room);
-                bill.setHouse(house);
                 bill.setContract(contract);
 
                 billRepository.save(bill);

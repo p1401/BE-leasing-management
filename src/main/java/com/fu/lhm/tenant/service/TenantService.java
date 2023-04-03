@@ -1,6 +1,6 @@
 package com.fu.lhm.tenant.service;
 
-import com.fu.lhm.room.repository.Roomrepository;
+import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.room.Room;
 
 import com.fu.lhm.tenant.Tenant;
@@ -17,14 +17,14 @@ public class TenantService {
 
         private final TenantRepository tenantRepository;
 
-        private final Roomrepository roomrepository;
+        private final RoomRepository roomrepository;
 
         public Tenant createTenant(Long roomId, Tenant tenant){
 
             Room room = roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
 
+            room.setCurrentTenant(room.getCurrentTenant()+1);
             tenant.setRoom(room);
-            tenant.setHouse(room.getHouse());
             tenant.setContractHolder(false);
 
             return tenantRepository.save(tenant);
@@ -49,7 +49,6 @@ public class TenantService {
 
         tenantBookRoom.setName(tenantBookRoom.getName());
         tenantBookRoom.setRoom(room);
-        tenantBookRoom.setHouse(room.getHouse());
         tenantBookRoom.setBookRoom(true);
 
         return tenantRepository.save(tenantBookRoom);
@@ -59,6 +58,12 @@ public class TenantService {
 
             return tenantRepository.findAllByRoom_Id(id);
     }
+
+    public Tenant getTenantById(Long id){
+
+            return tenantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Người thuê không tồn tại!"));
+    }
+
 
     public void deleteTenant(Long tenantId) {
         tenantRepository.deleteById(tenantId);

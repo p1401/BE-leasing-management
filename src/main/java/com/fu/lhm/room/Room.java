@@ -2,9 +2,13 @@ package com.fu.lhm.room;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fu.lhm.house.House;
+import com.fu.lhm.tenant.Tenant;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity(name = "rooms")
 @Getter
@@ -45,7 +49,11 @@ public class Room {
     private Boolean haveBookRoom;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "house_id")
+    @JoinColumn(name = "houseId")
     @JsonBackReference
-    private House house;
+     House house;
+
+    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    List<Tenant> tenants;
 }

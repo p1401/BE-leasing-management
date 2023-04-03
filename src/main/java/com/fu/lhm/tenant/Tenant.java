@@ -1,6 +1,8 @@
 package com.fu.lhm.tenant;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fu.lhm.house.House;
 import com.fu.lhm.room.Room;
 import jakarta.persistence.*;
@@ -8,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -22,20 +26,19 @@ public class Tenant {
 
     private String name;
     private String email;
-    private int phone;
+    private String phone;
     private String address;
     private boolean isContractHolder;
     private boolean isBookRoom;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "", allowGetters = true)
-    @JoinColumn(name = "room_id")
-    private Room room;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "roomId")
+    @JsonBackReference
+     Room room;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "", allowGetters = true)
-    @JoinColumn(name = "house_id")
-    private House house;
+    @OneToMany(mappedBy = "tenant", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    List<Contract> contracts;
 
 
 }

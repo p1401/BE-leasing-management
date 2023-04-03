@@ -1,7 +1,11 @@
 package com.fu.lhm.house.serice;
 
+import com.fu.lhm.financial.repository.BillRepository;
 import com.fu.lhm.house.House;
 import com.fu.lhm.house.repository.HouseRepository;
+import com.fu.lhm.room.repository.RoomRepository;
+import com.fu.lhm.tenant.repository.ContractRepository;
+import com.fu.lhm.tenant.repository.TenantRepository;
 import com.fu.lhm.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class HouseService {
 
     private final HouseRepository houseRepository;
+
 
     public House createHouse(House house) {
         return houseRepository.save(house);
@@ -32,14 +37,6 @@ public class HouseService {
         return houseRepository.save(oldHouse);
     }
 
-//    public List<House> getListHouse(String token){
-//
-//        String useremail = jwtService.extractUsername(token);
-//
-//        return houseRepository.findByEmailUser("xxx1x@gmail.com");
-//
-//    }
-
     public Page<House> getListHouse(User user, Pageable pageable) {
         return houseRepository.findAllByUser(user, pageable);
     }
@@ -49,6 +46,7 @@ public class HouseService {
         return houseRepository.findById(houseId).orElseThrow(() -> new EntityNotFoundException("Nhà không tồn tại!"));
     }
     public void deleteHouse(Long houseId) {
+
         houseRepository.deleteById(houseId);
     }
 

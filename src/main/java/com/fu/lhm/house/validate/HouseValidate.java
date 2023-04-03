@@ -28,7 +28,6 @@ public class HouseValidate {
         }
 
         throw new BadRequestException("Tên nhà đã được sử dụng!");
-
     }
 
     private void checkFloorInput(int floor, String errorMsg) {

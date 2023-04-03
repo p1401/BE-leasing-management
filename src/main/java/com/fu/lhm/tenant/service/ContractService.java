@@ -1,8 +1,8 @@
 package com.fu.lhm.tenant.service;
 
-import com.fu.lhm.tenant.CreateContractFromBooking;
-import com.fu.lhm.tenant.CreateContractRequest;
-import com.fu.lhm.room.repository.Roomrepository;
+import com.fu.lhm.tenant.modal.CreateContractFromBooking;
+import com.fu.lhm.tenant.modal.CreateContractRequest;
+import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.Tenant;
@@ -20,7 +20,7 @@ public class ContractService {
 
     private final ContractRepository contractRepository;
 
-    private final Roomrepository roomrepository;
+    private final RoomRepository roomrepository;
 
 
     public Contract createContract(Long roomId, CreateContractRequest createContractRequest){
@@ -32,11 +32,11 @@ public class ContractService {
         Tenant tenant = new Tenant();
         tenant.setName(createContractRequest.getTenantName());
         tenant.setEmail(createContractRequest.getEmail());
-        tenant.setPhone(createContractRequest.getPhone());
+        tenant.setPhone(createContractRequest.getPhone()+"");
         tenant.setAddress(createContractRequest.getAddress());
         tenant.setContractHolder(true);
         tenant.setRoom(room);
-        tenant.setHouse(room.getHouse());
+//        tenant.setHouse(room.getHouse());
 
         //create contract
         Contract contract = new Contract();
@@ -46,7 +46,7 @@ public class ContractService {
         contract.setFromDate(createContractRequest.getFromDate());
         contract.setToDate(createContractRequest.getFromDate());
         contract.setTenant(tenantRepository.save(tenant));
-        contract.setRoom(room);
+//        contract.setRoom(room);
 
         return contractRepository.save(contract);
     }
@@ -72,11 +72,30 @@ public class ContractService {
         contract.setFromDate(createContractFromBooking.getFromDate());
         contract.setToDate(createContractFromBooking.getFromDate());
         contract.setTenant(tenant);
-        contract.setRoom(room);
+//        contract.setRoom(room);
 
         return contractRepository.save(contract);
     }
 
+    public Contract changeHolder(Long contractid, Long oldTenantId, Long newTenantId){
+        Contract contract = contractRepository.findById(contractid).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
+        Tenant oldTenant = tenantRepository.findById(oldTenantId).orElseThrow(() -> new EntityNotFoundException("Khách hàng không tồn tại!"));
+        Tenant newTenant = tenantRepository.findById(newTenantId).orElseThrow(() -> new EntityNotFoundException("Khách hàng không tồn tại!"));
+
+        oldTenant.setContractHolder(false);
+        newTenant.setContractHolder(true);
+
+        contract.setTenant(newTenant);
+
+        return contract;
+    }
+
+    public Contract updateContract(Long contractId, Contract newContract){
+        Contract oldContract = contractRepository.findById(contractId).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
+        oldContract.setToDate(newContract.getToDate());
+        contractRepository.save(oldContract);
+        return oldContract;
+    }
 
 
 

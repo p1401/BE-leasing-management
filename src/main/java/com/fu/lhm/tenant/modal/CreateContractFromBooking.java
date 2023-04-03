@@ -1,4 +1,4 @@
-package com.fu.lhm.tenant;
+package com.fu.lhm.tenant.modal;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

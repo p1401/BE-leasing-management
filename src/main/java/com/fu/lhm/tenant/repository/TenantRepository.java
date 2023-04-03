@@ -10,4 +10,5 @@ import java.util.List;
 public interface TenantRepository extends JpaRepository<Tenant,Long> {
 
     List<Tenant> findAllByRoom_Id(Long id);
+
 }
