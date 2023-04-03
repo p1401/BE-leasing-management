@@ -8,13 +8,17 @@ import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.Tenant;
 import com.fu.lhm.tenant.repository.ContractRepository;
 import com.fu.lhm.tenant.repository.TenantRepository;
+import com.fu.lhm.tenant.validate.ContractValidate;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -26,15 +30,14 @@ public class ContractService {
 
     private final RoomRepository roomrepository;
 
+    private final ContractValidate contractValidate;
 
-    public Contract createContract(Long roomId, CreateContractRequest createContractRequest){
+    public Contract createContract(Long roomId, CreateContractRequest createContractRequest) throws ParseException {
         int randomNumber = (int)(Math.random()*(99999-10000+1)+10000);
 
-//        String from = createContractRequest.getFromDate();
-//        String to = createContractRequest.getToDate();
-//        DateTimeFormatter dt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//        LocalDate fromDate = LocalDate.parse(from, dt);
-//        LocalDate toDate = LocalDate.parse(to, dt);
+        SimpleDateFormat sdformat = new SimpleDateFormat("dd-MM-yyyy");
+        Date fromDate = sdformat.parse(createContractRequest.getFromDate());
+        Date toDate = sdformat.parse(createContractRequest.getToDate());
 
         Room room = roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
 
@@ -53,22 +56,18 @@ public class ContractService {
         contract.setContractCode("HĐ"+randomNumber);
         contract.setActive(true);
         contract.setDeposit(createContractRequest.getDeposit());
-        contract.setFromDate(createContractRequest.getFromDate());
-        contract.setToDate(createContractRequest.getToDate());
+        contract.setFromDate(fromDate);
+        contract.setToDate(toDate);
         contract.setTenant(tenantRepository.save(tenant));
-//        contract.setRoom(room);
-
         return contractRepository.save(contract);
     }
 
-    public Contract createContractFromBooking(Long roomId, @NotNull CreateContractFromBooking createContractFromBooking){
+    public Contract createContractFromBooking(Long roomId, @NotNull CreateContractFromBooking createContractFromBooking) throws ParseException {
         int randomNumber = (int)(Math.random()*(99999-10000+1)+10000);
 //
-//        String from = createContractFromBooking.getFromDate();
-//        String to = createContractFromBooking.getToDate();
-//        DateTimeFormatter dt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//        LocalDate fromDate = LocalDate.parse(from, dt);
-//        LocalDate toDate = LocalDate.parse(to, dt);
+        SimpleDateFormat sdformat = new SimpleDateFormat("dd-MM-yyyy");
+        Date fromDate = sdformat.parse(createContractFromBooking.getFromDate());
+        Date toDate = sdformat.parse(createContractFromBooking.getToDate());
 
         Room room = roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
         room.setHaveBookRoom(false);
@@ -85,11 +84,9 @@ public class ContractService {
         contract.setContractCode("HĐ"+randomNumber);
         contract.setActive(true);
         contract.setDeposit(createContractFromBooking.getDeposit());
-        contract.setFromDate(contract.getFromDate());
-        contract.setToDate(createContractFromBooking.getToDate());
+        contract.setFromDate(fromDate);
+        contract.setToDate(toDate);
         contract.setTenant(tenant);
-//        contract.setRoom(room);
-
         return contractRepository.save(contract);
     }
 

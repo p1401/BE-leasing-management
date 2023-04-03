@@ -26,8 +26,8 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String contractCode;
-    private String fromDate;
-    private String toDate;
+    private Date fromDate;
+    private Date toDate;
     private boolean isActive;
     private int deposit;
 

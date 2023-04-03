@@ -16,9 +16,23 @@ public class HouseValidate {
 
         validateForNameExist(house.getName(), user);
 
+        isNotPopulated(house.getName(),"Vui lòng nhập tên nhà");
+        isNotPopulated(house.getCity(),"Vui lòng nhập tên Thành Phố");
+        isNotPopulated(house.getDistrict(),"Vui lòng nhập tên Quận");
+        isNotPopulated(house.getAddress(),"Vui lòng nhập địa chỉ");
+        isNotPopulated(house.getFloor()+"","Vui lòng nhập số tầng tối đa");
+        isNotPopulated(house.getElectricPrice()+"","Vui lòng nhập giá Điện");
+        isNotPopulated(house.getWaterPrice()+"","Vui lòng nhập giá nước");
+
         checkFloorInput(house.getFloor(), "Tầng phải lớn hơn 0");
         checkElectricPriceInput(house.getElectricPrice(), "Tiền điện phải lớn hơn hoặc bằng 0");
         checkWaterPriceInput(house.getWaterPrice(), "Tiền nước phải lớn hơn hoặc bằng 0");
+    }
+
+    private void isNotPopulated(String value, String errorMsg) {
+        if (null == value || value.trim().isEmpty()) {
+            throw new BadRequestException(errorMsg);
+        }
     }
 
 

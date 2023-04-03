@@ -18,16 +18,22 @@ public class TenantValidate {
 
     public void validateForCreateTenant(Long roomId, Tenant tenant){
         checkCurrentNumberTenantInRoom(roomId);
+
+
         this.isNotPopulated(tenant.getName(),"Vui lòng nhập họ tên");
+        isNotPopulated(tenant.getPhone()+"","Vui lòng nhập số điện thoại để liên hệ");
+        isNotPopulated(tenant.getEmail(),"Vui lòng nhập email để liên hệ");
+        isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
+
         this.validateForValidEmail(tenant.getEmail());
-        this.validateForValidPhone(tenant.getPhone());
+        this.validateForValidPhone(tenant.getPhone()+"");
         this.isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
     }
 
     public void validateForUpdateTenant(Tenant tenant){
         this.isNotPopulated(tenant.getName(),"Vui lòng nhập họ tên");
         this.validateForValidEmail(tenant.getEmail());
-        this.validateForValidPhone(tenant.getPhone());
+        this.validateForValidPhone(tenant.getPhone()+"");
         this.isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
     }
 
@@ -38,9 +44,8 @@ public class TenantValidate {
         }
     }
 
-
     private void isNotPopulated(String value, String errorMsg) {
-        if (null == value || value.trim().isEmpty()) {
+        if (null == value || value.trim().isEmpty() || value.equalsIgnoreCase("")) {
             throw new BadRequestException(errorMsg);
         }
     }

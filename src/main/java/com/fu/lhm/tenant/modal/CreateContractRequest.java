@@ -23,10 +23,9 @@ public class CreateContractRequest {
     private int deposit;
 
     //tenant
-
     private String tenantName;
-    private String Email;
-    private int Phone;
-    private String Address;
+    private String email;
+    private int phone;
+    private String address;
 
 }

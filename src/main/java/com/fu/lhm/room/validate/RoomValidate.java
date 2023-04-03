@@ -19,11 +19,23 @@ public class RoomValidate {
 
     public void validateCreateRoom(Room room, Long houseid) {
         House house = houseRepository.findById(houseid).orElseThrow(() -> new EntityNotFoundException("Nha không tồn tại!"));
+        isNotPopulated(room.getName(),"Vui lòng nhập tên phòng");
+        isNotPopulated(room.getRoomMoney()+"","Vui lòng nhập giá thuê phòng");
+        isNotPopulated(room.getMaxTenant()+"","Vui lòng nhập số lượng người ở tối đa");
+        isNotPopulated(room.getArea()+"","Vui lòng nhập diện tích");
+        isNotPopulated(room.getFloor()+"","Vui lòng nhập tầng");
+
         this.validateForNameExistInFloor(room.getName(), room.getFloor(), house.getId());
         this.validateFloor(room.getFloor(), house.getFloor());
         this.validateRoomMoney(room.getRoomMoney());
         this.validateMaxTenant(room.getMaxTenant());
         this.validateCurrentTenant(room.getMaxTenant(), room.getCurrentTenant());
+    }
+
+    private void isNotPopulated(String value, String errorMsg) {
+        if (null == value || value.trim().isEmpty()) {
+            throw new BadRequestException(errorMsg);
+        }
     }
 
     private void validateForNameExistInFloor(String roomName, int floor, Long houseId) {

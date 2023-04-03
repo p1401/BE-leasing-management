@@ -4,9 +4,12 @@ import com.fu.lhm.tenant.service.ContractService;
 import com.fu.lhm.tenant.modal.CreateContractFromBooking;
 import com.fu.lhm.tenant.modal.CreateContractRequest;
 import com.fu.lhm.tenant.Contract;
+import com.fu.lhm.tenant.validate.ContractValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
 
 @RestController
 @RequestMapping("api/v1/contracts")
@@ -15,14 +18,17 @@ public class ContractController {
 
     private final ContractService contractService;
 
-    @PostMapping("/rooms/{roomId}")
-    public ResponseEntity<Contract> createContract(@PathVariable("roomId") Long roomId, @RequestBody CreateContractRequest createContractRequest) {
+    private final ContractValidate contractValidate;
 
+    @PostMapping("/rooms/{roomId}")
+    public ResponseEntity<Contract> createContract(@PathVariable("roomId") Long roomId, @RequestBody CreateContractRequest createContractRequest) throws ParseException {
+
+        contractValidate.validateForCreateContract(createContractRequest);
         return ResponseEntity.ok(contractService.createContract(roomId,createContractRequest));
     }
 
     @PostMapping("/rooms/{roomId}/createFromBooking")
-    public ResponseEntity<Contract> createContractFromBooking(@PathVariable("roomId") Long roomId, @RequestBody CreateContractFromBooking createContractFromBooking) {
+    public ResponseEntity<Contract> createContractFromBooking(@PathVariable("roomId") Long roomId, @RequestBody CreateContractFromBooking createContractFromBooking) throws ParseException {
         return ResponseEntity.ok(contractService.createContractFromBooking(roomId,createContractFromBooking));
     }
 
