@@ -4,6 +4,7 @@ import com.fu.lhm.house.House;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.room.modal.SendListRoomAndInforRequest;
 import com.fu.lhm.room.service.RoomService;
+import com.fu.lhm.room.validate.RoomValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,8 @@ public class RoomController {
 
     private final RoomService roomService;
 
+    private final RoomValidate roomValidate;
+
     @GetMapping("/{houseId}/{floor}")
     public ResponseEntity<Page<SendListRoomAndInforRequest>> getListRoom(
             @PathVariable("houseId") Long houseId,@PathVariable("floor") int floor,
@@ -33,6 +36,7 @@ public class RoomController {
     public ResponseEntity<Room> createRoom(
             @PathVariable("houseId") Long houseId,
             @RequestBody Room room) {
+        roomValidate.validateCreateRoom(room, houseId);
 
         return ResponseEntity.ok(roomService.createroom(houseId, room));
     }

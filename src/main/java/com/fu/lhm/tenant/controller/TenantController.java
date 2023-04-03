@@ -25,15 +25,13 @@ public class TenantController {
 
     @PostMapping("")
     public ResponseEntity<Tenant> createTenant(@PathVariable("roomId") Long roomId, @RequestBody Tenant tenant) {
-
         tenantValidate.validateForCreateTenant(roomId,tenant);
-
         return ResponseEntity.ok(tenantService.createTenant(roomId, tenant));
     }
 
     @PutMapping({"/{tenantId}"})
     public ResponseEntity<Tenant> updateTenant(@PathVariable("tenantId") Long id, @RequestBody Tenant tenant) {
-
+        tenantValidate.validateForUpdateTenant(tenant);
         return ResponseEntity.ok(tenantService.updateTenant(id,tenant));
     }
 

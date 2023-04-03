@@ -5,6 +5,7 @@ import com.fu.lhm.house.House;
 import com.fu.lhm.house.repository.HouseRepository;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.room.repository.RoomRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +17,10 @@ public class RoomValidate {
 
     private final RoomRepository roomRepository;
 
-    public void validateCreateRoom(Room room, House id) {
+    public void validateCreateRoom(Room room, Long houseid) {
+        House house = houseRepository.findById(houseid).orElseThrow(() -> new EntityNotFoundException("Nha không tồn tại!"));
         this.validateForNameExistInFloor(room.getName(), room.getFloor(), room.getHouse().getId());
-        this.validateFloor(room.getFloor(), room.getHouse().getFloor());
+        this.validateFloor(room.getFloor(), house.getFloor());
         this.validateRoomMoney(room.getRoomMoney());
         this.validateMaxTenant(room.getMaxTenant());
         this.validateCurrentTenant(room.getMaxTenant(), room.getCurrentTenant());

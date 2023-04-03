@@ -17,11 +17,18 @@ public class TenantValidate {
     RoomRepository roomRepository;
 
     public void validateForCreateTenant(Long roomId, Tenant tenant){
+        checkCurrentNumberTenantInRoom(roomId);
         this.isNotPopulated(tenant.getName(),"Vui lòng nhập họ tên");
         this.validateForValidEmail(tenant.getEmail());
         this.validateForValidPhone(tenant.getPhone());
         this.isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
+    }
 
+    public void validateForUpdateTenant(Tenant tenant){
+        this.isNotPopulated(tenant.getName(),"Vui lòng nhập họ tên");
+        this.validateForValidEmail(tenant.getEmail());
+        this.validateForValidPhone(tenant.getPhone());
+        this.isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
     }
 
     private void checkCurrentNumberTenantInRoom(Long roomId){
@@ -29,7 +36,6 @@ public class TenantValidate {
         if(room.getMaxTenant()==room.getCurrentTenant()){
             throw new BadRequestException("Phòng đã hết chỗ");
         }
-
     }
 
 
