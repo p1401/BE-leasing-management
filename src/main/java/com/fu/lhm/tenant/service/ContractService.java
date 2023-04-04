@@ -32,6 +32,11 @@ public class ContractService {
 
     private final ContractValidate contractValidate;
 
+    public Contract getContractById(Long contractId){
+
+        return contractRepository.findById(contractId).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
+    }
+
     public Contract createContract(Long roomId, CreateContractRequest createContractRequest) throws ParseException {
         int randomNumber = (int)(Math.random()*(99999-10000+1)+10000);
 

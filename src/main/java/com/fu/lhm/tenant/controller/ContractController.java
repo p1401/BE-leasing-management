@@ -20,10 +20,18 @@ public class ContractController {
 
     private final ContractValidate contractValidate;
 
+    @GetMapping("/{contractId}")
+    public ResponseEntity<Contract> getContractById(@PathVariable("contractId") Long contractId){
+
+
+        return ResponseEntity.ok(contractService.getContractById(contractId));
+    }
+
+
     @PostMapping("/rooms/{roomId}")
     public ResponseEntity<Contract> createContract(@PathVariable("roomId") Long roomId, @RequestBody CreateContractRequest createContractRequest) throws ParseException {
 
-        contractValidate.validateForCreateContract(createContractRequest);
+        contractValidate.validateForCreateContract(roomId,createContractRequest);
         return ResponseEntity.ok(contractService.createContract(roomId,createContractRequest));
     }
 

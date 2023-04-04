@@ -14,4 +14,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     List<Room> findAllByHouse_Id(Long id);
     boolean existsByNameAndFloorAndHouse_Id(String roomName, int floor, Long houseId);
+
+
 }

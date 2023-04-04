@@ -1,6 +1,6 @@
-package com.fu.lhm.Statistic.Service;
+package com.fu.lhm.statistic.Service;
 
-import com.fu.lhm.Statistic.Entity.RoomStatistic;
+import com.fu.lhm.statistic.Entity.RoomStatistic;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;

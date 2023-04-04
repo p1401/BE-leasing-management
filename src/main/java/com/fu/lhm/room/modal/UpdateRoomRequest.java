@@ -19,13 +19,7 @@ public class UpdateRoomRequest {
 
     private int area;
 
-    private int chiSoDauDien;
-
-    private int chiSoDauNuoc;
-
-    private int chiSoCuoiDien;
-
-    private int chiSoCuoiNuoc;
+    private int roomMoney;
 
     private int floor;
 

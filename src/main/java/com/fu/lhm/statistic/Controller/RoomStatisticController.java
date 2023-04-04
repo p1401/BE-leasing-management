@@ -1,7 +1,7 @@
-package com.fu.lhm.Statistic.Controller;
+package com.fu.lhm.statistic.Controller;
 
-import com.fu.lhm.Statistic.Entity.RoomStatistic;
-import com.fu.lhm.Statistic.Service.RoomStatisticService;
+import com.fu.lhm.statistic.Entity.RoomStatistic;
+import com.fu.lhm.statistic.Service.RoomStatisticService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

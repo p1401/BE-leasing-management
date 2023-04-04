@@ -16,7 +16,7 @@ public class SendListRoomAndInforRequest {
 
     private String roomName;
 
-    private int price;
+    private int roomMoney;
 
     private int maxTenant;
 

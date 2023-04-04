@@ -44,7 +44,9 @@ public class RoomController {
 
     @PutMapping({"/{roomId}"})
     public ResponseEntity<Room> updateRoom(@PathVariable("roomId") Long id, @RequestBody Room room) {
-//        houseValidate.validateCreateUpdateHouse(house);
+
+        roomValidate.validateUpdateRoom(room, id);
+
         return ResponseEntity.ok(roomService.updateRoom(id, room));
     }
 

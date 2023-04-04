@@ -32,8 +32,24 @@ public class RoomValidate {
         this.validateCurrentTenant(room.getMaxTenant(), room.getCurrentTenant());
     }
 
+    public void validateUpdateRoom(Room room, Long roomId) {
+        Room oldRoom = roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Nha không tồn tại!"));
+        isNotPopulated(room.getName(),"Vui lòng nhập tên phòng");
+        isNotPopulated(room.getRoomMoney()+"","Vui lòng nhập giá thuê phòng");
+        isNotPopulated(room.getMaxTenant()+"","Vui lòng nhập số lượng người ở tối đa");
+        isNotPopulated(room.getArea()+"","Vui lòng nhập diện tích");
+        isNotPopulated(room.getFloor()+"","Vui lòng nhập tầng");
+
+        this.validateForNameExistInFloor(room.getName(), room.getFloor(), oldRoom.getHouse().getId());
+        this.validateFloor(room.getFloor(), oldRoom.getHouse().getFloor());
+        this.validateRoomMoney(room.getRoomMoney());
+        this.validateMaxTenant(room.getMaxTenant());
+        this.validateCurrentTenant(room.getMaxTenant(), room.getCurrentTenant());
+    }
+
+
     private void isNotPopulated(String value, String errorMsg) {
-        if (null == value || value.trim().isEmpty()) {
+        if (null == value || value.trim().isEmpty() || value.equalsIgnoreCase("")) {
             throw new BadRequestException(errorMsg);
         }
     }

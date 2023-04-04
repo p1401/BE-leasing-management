@@ -27,6 +27,14 @@ public class Bill {
 
     private int roomMoney;
 
+    private int chiSoDauDien;
+
+    private int chiSoDauNuoc;
+
+    private int chiSoCuoiDien;
+
+    private int chiSoCuoiNuoc;
+
     private int electricNumber;
 
     private int waterNumber;
@@ -52,7 +60,6 @@ public class Bill {
     //Tien phong hoac tien thu them
     @Enumerated(EnumType.STRING)
     private BillContent billContent;
-
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contractId")

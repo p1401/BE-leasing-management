@@ -36,14 +36,6 @@ public class Room {
 
     private int area;
 
-    private int chiSoCuoiDien;
-
-    private int chiSoCuoiNuoc;
-
-    private int electricNumber;
-
-    private int waterNumber;
-
     private int floor;
 
     private int moneyNotPay;
@@ -58,4 +50,8 @@ public class Room {
     @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     List<Tenant> tenants;
+
+    @OneToOne(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    WaterElectric waterElectric;
 }

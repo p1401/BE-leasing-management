@@ -30,7 +30,7 @@ public class Tenant {
     private String address;
     private boolean isContractHolder;
     private boolean isBookRoom;
-    private boolean deposit;
+    private int deposit;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roomId")

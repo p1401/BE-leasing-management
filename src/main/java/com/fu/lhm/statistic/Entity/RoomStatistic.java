@@ -1,6 +1,5 @@
-package com.fu.lhm.Statistic.Entity;
+package com.fu.lhm.statistic.Entity;
 
-import jakarta.persistence.Entity;
 import lombok.*;
 
 @Getter
