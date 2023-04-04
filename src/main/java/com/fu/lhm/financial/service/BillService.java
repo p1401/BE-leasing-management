@@ -30,8 +30,10 @@ public class BillService {
     public Bill createBillTienPhong(Long roomId,Bill bill){
 
         Contract contract = contractRepository.findByTenant_Room_Id(roomId);
+        Room room = contract.getTenant().getRoom();
         bill.setContract(contract);
-
+        room.setMoneyNotPay(room.getMoneyNotPay()+bill.getTotalMoney());
+        roomRepository.save(room);
         return billRepository.save(bill);
     }
 
@@ -53,9 +55,8 @@ public class BillService {
 
         //check xem từng hợp đồng đã tạo hóa đơn tháng này chưa
         for(Contract contract : listContract){
-
-            Room room = contract.getTenant().getRoom();
             House house = contract.getTenant().getRoom().getHouse();
+            Room room = contract.getTenant().getRoom();
             //check bill tien phong da tao thang nay chua
             boolean isCreate = false;
             for(Bill bill : listBill){
@@ -69,6 +70,7 @@ public class BillService {
 
             //Neu isCreate==false thi tao tien phong thang nay cho tung hop dong
             if(contract.isActive()==true && isCreate==false){
+
                 int randomNumber = (int)(Math.random()*(99999-10000+1)+10000);
                 Bill bill = new Bill();
                 bill.setBillCode("PT"+randomNumber);
@@ -86,7 +88,13 @@ public class BillService {
                 bill.setBillType(BillType.RECEIVE);
                 bill.setContract(contract);
 
+
+
                 billRepository.save(bill);
+                //luu tien chua dong vao room
+                room.setMoneyNotPay(room.getMoneyNotPay()+bill.getTotalMoney());
+                roomRepository.save(room);
+
                 newListBill.add(bill);
             }
         }

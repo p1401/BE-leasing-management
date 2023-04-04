@@ -14,18 +14,16 @@ import java.util.Date;
 public class CreateContractRequest {
 
     //contract
-    private String contractCode;
-    private String houseName;
-    private String roomName;
-    private String fromDate;
-    private String toDate;
-    private boolean isActive;
+    private LocalDate fromDate;
+    private LocalDate toDate;
     private int deposit;
 
     //tenant
     private String tenantName;
     private String email;
-    private int phone;
+    private String phone;
+    private LocalDate birth;
+    private String identityNumber;
     private String address;
 
 }

@@ -1,7 +1,6 @@
 package com.fu.lhm.tenant.controller;
 
 import com.fu.lhm.tenant.service.ContractService;
-import com.fu.lhm.tenant.modal.CreateContractFromBooking;
 import com.fu.lhm.tenant.modal.CreateContractRequest;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.validate.ContractValidate;
@@ -35,10 +34,6 @@ public class ContractController {
         return ResponseEntity.ok(contractService.createContract(roomId,createContractRequest));
     }
 
-    @PostMapping("/rooms/{roomId}/createFromBooking")
-    public ResponseEntity<Contract> createContractFromBooking(@PathVariable("roomId") Long roomId, @RequestBody CreateContractFromBooking createContractFromBooking) throws ParseException {
-        return ResponseEntity.ok(contractService.createContractFromBooking(roomId,createContractFromBooking));
-    }
 
     @PutMapping("{contractId}/changeHolder/{oldTenantId}/{newTenantId}")
     public ResponseEntity<Contract> changeHolder(@PathVariable("contractId") Long contractId, @PathVariable("oldTenantId") Long oldTenantId,@PathVariable("newTenantId") Long newTenantId ) {

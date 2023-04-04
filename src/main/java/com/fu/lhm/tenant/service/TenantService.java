@@ -45,17 +45,6 @@ public class TenantService {
         return tenantRepository.save(oldTenant);
     }
 
-    public Tenant bookRoom(Long roomId, Tenant tenantBookRoom){
-
-        Room room = roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
-
-        tenantBookRoom.setName(tenantBookRoom.getName());
-        tenantBookRoom.setRoom(room);
-        tenantBookRoom.setBookRoom(true);
-
-        return tenantRepository.save(tenantBookRoom);
-    }
-
     public Page<Tenant> getListTenantByRoomId(Long id, Pageable page){
 
             return tenantRepository.findAllByRoom_Id(id, page);

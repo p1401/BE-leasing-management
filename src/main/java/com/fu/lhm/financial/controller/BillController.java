@@ -27,7 +27,7 @@ public class BillController {
         return ResponseEntity.ok(billService.createAllBill());
     }
 
-    @PostMapping("/{roomId}")
+    @PostMapping("/receive/{roomId}")
     public ResponseEntity<Bill> createBill(@PathVariable("roomId") Long roomId, @RequestBody Bill bill){
 
         if(bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")){

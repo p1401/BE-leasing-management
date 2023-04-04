@@ -42,6 +42,8 @@ public class RoomService {
     public Room createroom(Long houseId, Room room) {
 
         House house = houseRepository.findById(houseId).orElseThrow(() -> new EntityNotFoundException("Nha không tồn tại!"));
+        house.setNumberRoom(house.getNumberRoom()+1);
+
         Room newRoom = new Room();
         newRoom.setName(room.getName());
         newRoom.setArea(room.getArea());

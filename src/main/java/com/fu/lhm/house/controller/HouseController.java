@@ -26,17 +26,17 @@ public class HouseController {
     @PostMapping({""})
     public ResponseEntity<House> addHouse(@RequestBody House house) {
 
-        houseValidate.validateCreateUpdateHouse(house, getUserToken());
+        houseValidate.validateCreateHouse(house, getUserToken());
 
         house.setUser(getUserToken());
 
         return ResponseEntity.ok(houseService.createHouse(house));
     }
 
-    @PutMapping({"/{id}"})
-    public ResponseEntity<House> updateHouse(@PathVariable("id") Long id, @RequestBody House house) {
-        houseValidate.validateCreateUpdateHouse(house, getUserToken());
-        return ResponseEntity.ok(houseService.updateHouse(id, house));
+    @PutMapping({"/{houseId}"})
+    public ResponseEntity<House> updateHouse(@PathVariable("houseId") Long houseId, @RequestBody House house) {
+        houseValidate.validateUpdateHouse(houseId, house, getUserToken());
+        return ResponseEntity.ok(houseService.updateHouse(houseId, house));
     }
 
     @GetMapping({""})

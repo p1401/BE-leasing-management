@@ -1,8 +1,6 @@
 package com.fu.lhm.room.controller;
 
-import com.fu.lhm.house.House;
 import com.fu.lhm.room.Room;
-import com.fu.lhm.room.modal.SendListRoomAndInforRequest;
 import com.fu.lhm.room.service.RoomService;
 import com.fu.lhm.room.validate.RoomValidate;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/rooms")

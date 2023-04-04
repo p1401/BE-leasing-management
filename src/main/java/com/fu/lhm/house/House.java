@@ -28,6 +28,7 @@ public class House {
     private String address;
     private int electricPrice;
     private int waterPrice;
+    private int numberRoom;
     private int floor;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -40,7 +40,6 @@ public class Room {
 
     private int moneyNotPay;
 
-    private Boolean haveBookRoom;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "houseId")

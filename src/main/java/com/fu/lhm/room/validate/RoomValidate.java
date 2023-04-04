@@ -25,7 +25,7 @@ public class RoomValidate {
         isNotPopulated(room.getArea()+"","Vui lòng nhập diện tích");
         isNotPopulated(room.getFloor()+"","Vui lòng nhập tầng");
 
-        this.validateForNameExistInFloor(room.getName(), room.getFloor(), house.getId());
+        this.validateForCreateRoomNameExistInFloor(room.getName(), room.getFloor(), house.getId());
         this.validateFloor(room.getFloor(), house.getFloor());
         this.validateRoomMoney(room.getRoomMoney());
         this.validateMaxTenant(room.getMaxTenant());
@@ -40,7 +40,7 @@ public class RoomValidate {
         isNotPopulated(room.getArea()+"","Vui lòng nhập diện tích");
         isNotPopulated(room.getFloor()+"","Vui lòng nhập tầng");
 
-        this.validateForNameExistInFloor(room.getName(), room.getFloor(), oldRoom.getHouse().getId());
+        this.validateForUpdateRoomNameExistInFloor(roomId, room.getName(), room.getFloor(), oldRoom.getHouse().getId());
         this.validateFloor(room.getFloor(), oldRoom.getHouse().getFloor());
         this.validateRoomMoney(room.getRoomMoney());
         this.validateMaxTenant(room.getMaxTenant());
@@ -54,11 +54,20 @@ public class RoomValidate {
         }
     }
 
-    private void validateForNameExistInFloor(String roomName, int floor, Long houseId) {
+    private void validateForCreateRoomNameExistInFloor(String roomName, int floor, Long houseId) {
         if (!roomRepository.existsByNameAndFloorAndHouse_Id(roomName, floor, houseId)) {
             return;
         }
         throw new BadRequestException("Tên Phòng ở tầng" +floor+" đã được sử dụng!");
+    }
+
+    private void validateForUpdateRoomNameExistInFloor(Long roomId,String roomName, int floor, Long houseId) {
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
+        if(room.getName().equalsIgnoreCase(roomName)){
+
+        } else if (roomRepository.existsByNameAndFloorAndHouse_Id(roomName, floor, houseId)) {
+            throw new BadRequestException("Tên Phòng ở tầng " +floor+" đã được sử dụng!");
+        }
     }
 
     private void validateFloor(int roomFloor, int houseFloor) {
