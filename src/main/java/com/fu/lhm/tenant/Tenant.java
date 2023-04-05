@@ -30,8 +30,6 @@ public class Tenant {
     private LocalDate birth;
     private String address;
     private boolean isContractHolder;
-    private int deposit;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roomId")
     @JsonBackReference
