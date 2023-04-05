@@ -45,15 +45,17 @@ public class Bill {
 
     private String payer;
 
-    private boolean pay;
+    private boolean isPay;
 
-    //yyyy-MM-dd
     private LocalDate dateCreate;
 
     private String description;
 
     private int totalMoney;
 
+    //Phieu thu, phieu chi
+    @Enumerated(EnumType.STRING)
+    private BillType billType;
 
     //Tien phong hoac tien thu them
     @Enumerated(EnumType.STRING)

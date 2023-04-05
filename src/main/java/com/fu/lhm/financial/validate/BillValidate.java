@@ -10,6 +10,8 @@ import com.fu.lhm.tenant.Tenant;
 import com.fu.lhm.tenant.repository.ContractRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -29,11 +31,11 @@ public class BillValidate {
 
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
 
-        List<Bill> listBill = billRepository.findAllByContract_Tenant_Room_Id(roomId);
+        Page<Bill> listBill = billRepository.findAllByContract_Tenant_Room_Id(roomId, Pageable.unpaged());
 
         Contract contract = contractRepository.findByTenant_Room_Id(roomId);
 
-        checkIsCreateTienPhongThisMonth(listBill, contract);
+        checkIsCreateTienPhongThisMonth(listBill.getContent(), contract);
 
         isNotPopulated(bill.getRoomMoney()+"","Nhập tiền phòng");
         isNotPopulated(bill.getChiSoDauDien()+"","Nhập chỉ số đầu điện");
@@ -44,6 +46,7 @@ public class BillValidate {
         isNotPopulated(bill.getElectricNumber()+"","Nhập số lượng điện");
 
         isNotPopulated(bill.getBillContent().name(),"Nhập nội dung hóa đơn");
+        isNotPopulated(bill.getBillType().name(),"Nhập kiểu hóa đơn");
         isNotPopulated(bill.isPay()+"","Tích đã nộp hay chưa nộp");
         isNotPopulated(bill.getDateCreate()+"","Nhập ngày tạo");
         isNotPopulated(bill.getDescription(),"Nhập mô tả");
@@ -67,6 +70,7 @@ public class BillValidate {
         isNotPopulated(bill.getElectricNumber()+"","Nhập số lượng điện");
 
         isNotPopulated(bill.getBillContent().name(),"Nhập nội dung hóa đơn");
+        isNotPopulated(bill.getBillType().name(),"Nhập kiểu hóa đơn");
         isNotPopulated(bill.isPay()+"","Tích đã nộp hay chưa nộp");
         isNotPopulated(bill.getDateCreate()+"","Nhập ngày tạo");
         isNotPopulated(bill.getDescription(),"Nhập mô tả");
@@ -88,6 +92,7 @@ public class BillValidate {
         for(Bill bill : listBill){
             if(bill.getDateCreate().getMonthValue()==month
                     && bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")
+                    && bill.getBillType().name().equalsIgnoreCase("RECEIVE")
                     && bill.getContract().getTenant().getRoom()==contract.getTenant().getRoom()){
                 isCreate=true;
             }

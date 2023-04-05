@@ -28,6 +28,6 @@ public class BillRequest {
 
     private String description;
 
-    private String billContent;
+    private String billType;
 
 }

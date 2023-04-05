@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -17,31 +17,28 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tenants")
+@Table(name = "tenant")
 public class Tenant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String name;
     private String email;
     private String phone;
-    private String identityNumber;
-    private LocalDate birth;
+    private String identifyNumber;
+    private Date identifyDate;
+    private Date birth;
     private String address;
-    private String houseName;
-    private String roomName;
-    private boolean isContractHolder;
-    @ManyToOne(fetch = FetchType.EAGER)
+    private Boolean isContractHolder;
+    private Boolean isBookRoom;
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Room.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "roomId")
     @JsonBackReference
-     Room room;
+    Room room;
 
-    @OneToMany(mappedBy = "tenant", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "tenant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     List<Contract> contracts;
-
-
-
-
 }

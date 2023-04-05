@@ -26,17 +26,17 @@ public class HouseController {
     @PostMapping({""})
     public ResponseEntity<House> addHouse(@RequestBody House house) {
 
-        houseValidate.validateCreateHouse(house, getUserToken());
+        houseValidate.validateCreateUpdateHouse(house, getUserToken());
 
         house.setUser(getUserToken());
 
         return ResponseEntity.ok(houseService.createHouse(house));
     }
 
-    @PutMapping({"/{houseId}"})
-    public ResponseEntity<House> updateHouse(@PathVariable("houseId") Long houseId, @RequestBody House house) {
-        houseValidate.validateUpdateHouse(houseId, house, getUserToken());
-        return ResponseEntity.ok(houseService.updateHouse(houseId, house));
+    @PutMapping({"/{id}"})
+    public ResponseEntity<House> updateHouse(@PathVariable("id") Long id, @RequestBody House house) {
+        houseValidate.validateCreateUpdateHouse(house, getUserToken());
+        return ResponseEntity.ok(houseService.updateHouse(id, house));
     }
 
     @GetMapping({""})
@@ -49,14 +49,14 @@ public class HouseController {
         return ResponseEntity.ok(listHouse);
     }
 
-    @PostMapping({"/{id}"})
-    public ResponseEntity<House> getHouseById(@PathVariable("id") Long id){
+    @GetMapping({"/{id}"})
+    public ResponseEntity<House> getHouseById(@PathVariable("id") Long id) {
 
         return ResponseEntity.ok(houseService.getHouseById(id));
     }
 
-    @DeleteMapping ({"/{id}"})
-    public void deleteHouse(@PathVariable("id") Long id){
+    @DeleteMapping({"/{id}"})
+    public void deleteHouse(@PathVariable("id") Long id) {
 
         houseService.deleteHouse(id);
     }
