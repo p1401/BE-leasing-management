@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface BillRepository extends JpaRepository<Bill,Long> {
 
-    List<Bill> findAllByContract_Tenant_Room_Id(Long roomId);
+    List<Bill> findAllByContract_Tenant_Room_IdAAndBillTypeReceive(Long roomId);
 
     Page<Bill> findAllByContract_Tenant_Room_Id(Long roomId, Pageable page);
     Page<Bill> findByPayFalseAndContract_Tenant_Room_id( Long roomId, Pageable page);

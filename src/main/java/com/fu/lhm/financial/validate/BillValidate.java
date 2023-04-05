@@ -29,7 +29,7 @@ public class BillValidate {
 
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
 
-        List<Bill> listBill = billRepository.findAllByContract_Tenant_Room_Id(roomId);
+        List<Bill> listBill = billRepository.findAllByContract_Tenant_Room_IdAAndBillTypeReceive(roomId);
 
         Contract contract = contractRepository.findByTenant_Room_Id(roomId);
 
