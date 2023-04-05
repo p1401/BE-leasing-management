@@ -5,6 +5,8 @@ import com.fu.lhm.tenant.modal.CreateContractRequest;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.validate.ContractValidate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,15 @@ public class ContractController {
 
 
         return ResponseEntity.ok(contractService.getContractById(contractId));
+    }
+
+    @GetMapping("/houses/{houseId}")
+    public ResponseEntity<Page<Contract>> getContractByHouseId(@PathVariable("houseId") Long houseId,
+                                                               @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                               @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
+
+
+        return ResponseEntity.ok(contractService.getListContractByHouseId(houseId, PageRequest.of(page, pageSize)));
     }
 
 

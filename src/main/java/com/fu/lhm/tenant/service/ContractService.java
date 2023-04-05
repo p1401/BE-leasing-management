@@ -1,5 +1,6 @@
 package com.fu.lhm.tenant.service;
 
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.tenant.modal.CreateContractRequest;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.room.Room;
@@ -11,6 +12,8 @@ import com.fu.lhm.tenant.validate.ContractValidate;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -31,22 +34,18 @@ public class ContractService {
 
     public Contract getContractById(Long contractId){
 
-        return contractRepository.findById(contractId).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
+        return contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
+    }
+
+    public Page<Contract> getListContractByHouseId(Long houseId, Pageable pageable){
+
+        return contractRepository.findAllByTenant_Room_House_Id(houseId, pageable);
     }
 
     public Contract createContract(Long roomId, CreateContractRequest createContractRequest){
         int randomNumber = (int)(Math.random()*(99999-10000+1)+10000);
 
-//        SimpleDateFormat sdformat = new SimpleDateFormat("dd-MM-yyyy");
-//        Date fromDate = sdformat.parse(createContractRequest.getFromDate());
-//        Date toDate = sdformat.parse(createContractRequest.getToDate());
-
-//        LocalDate fromDate = LocalDate.parse(createContractRequest.getFromDate(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-//        LocalDate toDate = LocalDate.parse(createContractRequest.getToDate(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-
-//        LocalDate birth = LocalDate.parse(createContractRequest.getBirth(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-
-        Room room = roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
+        Room room = roomrepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
 
         //create tenant
         Tenant tenant = new Tenant();

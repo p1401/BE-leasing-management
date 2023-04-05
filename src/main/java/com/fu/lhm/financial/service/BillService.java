@@ -1,5 +1,6 @@
 package com.fu.lhm.financial.service;
 
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.financial.Bill;
 import com.fu.lhm.financial.BillContent;
 import com.fu.lhm.financial.BillType;
@@ -12,6 +13,8 @@ import com.fu.lhm.tenant.Tenant;
 import com.fu.lhm.tenant.repository.ContractRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -37,9 +40,33 @@ public class BillService {
         return billRepository.save(bill);
     }
 
-    public List<Bill> getListBillByRoomId(Long roomId){
+    public Bill payBill(Long billId){
+        Bill bill = billRepository.findById(billId).orElseThrow(() -> new BadRequestException("Hóa đơn không tồn tại!"));
+        bill.setPay(true);
+        return billRepository.save(bill);
+    }
 
-        return billRepository.findAllByContract_Tenant_Room_Id(roomId);
+    public Bill getBillById(Long billId){
+        return billRepository.findById(billId).orElseThrow(() -> new BadRequestException("Hóa đơn không tồn tại!"));
+    }
+
+    public void deleteBill(Long billId){
+        billRepository.deleteById(billId);
+    }
+
+    public Page<Bill> getListBillByRoomId(Long roomId, Pageable page){
+
+        return billRepository.findAllByContract_Tenant_Room_Id(roomId,page);
+    }
+
+    public Page<Bill> getListBillByRoomIdNotPay(Long roomId, Pageable page){
+
+        return billRepository.findByPayFalseAndContract_Tenant_Room_id(roomId,page);
+    }
+
+    public Page<Bill> getListBillByHouseId(Long houseId, Pageable page){
+
+        return billRepository.findAllByContract_Tenant_Room_House_Id(houseId, page);
     }
 
     public List<Bill> createAllBill(){

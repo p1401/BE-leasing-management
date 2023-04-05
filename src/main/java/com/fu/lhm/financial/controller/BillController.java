@@ -7,6 +7,8 @@ import com.fu.lhm.house.House;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.repository.ContractRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,16 +37,50 @@ public class BillController {
         }else if(bill.getBillContent().name().equalsIgnoreCase("TIENPHUTROI")){
             billValidate.validateForCreateBillTienPhuTroi(roomId, bill);
         }
-
-
-
         return ResponseEntity.ok(billService.createBillTienPhong(roomId,bill));
     }
 
-    @GetMapping("/{roomId}")
-    public ResponseEntity<List<Bill>> getListBillByRoomId(@PathVariable("roomId") Long roomId){
+    @PutMapping("/pay/{billId}")
+    public ResponseEntity<Bill> payBill(@PathVariable("billId") Long billId){
 
-        return ResponseEntity.ok(billService.getListBillByRoomId(roomId));
+        return ResponseEntity.ok(billService.payBill(billId));
+    }
+
+    @GetMapping ("/{billId}")
+    public ResponseEntity<Bill> getBillById(@PathVariable("billId") Long billId){
+
+        return ResponseEntity.ok(billService.getBillById(billId));
+    }
+
+    @DeleteMapping ("/{billId}")
+    public void deleteBill(@PathVariable("billId") Long billId){
+        billService.deleteBill(billId);
+    }
+
+
+
+    @GetMapping("/rooms/{roomId}")
+    public ResponseEntity<Page<Bill>> getListBillByRoomId(@PathVariable("roomId") Long roomId,
+                                                          @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                          @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
+
+        return ResponseEntity.ok(billService.getListBillByRoomId(roomId, PageRequest.of(page, pageSize)));
+    }
+
+    @GetMapping("/rooms/{roomId}/notPay")
+    public ResponseEntity<Page<Bill>> getListBillByRoomIdNotPay(@PathVariable("roomId") Long roomId,
+                                                          @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                          @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
+
+        return ResponseEntity.ok(billService.getListBillByRoomIdNotPay(roomId, PageRequest.of(page, pageSize)));
+    }
+
+    @GetMapping("/houses/{houseId}")
+    public ResponseEntity<Page<Bill>> getListBillByHouseId(@PathVariable("houseId") Long roomId,
+                                                           @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
+
+        return ResponseEntity.ok(billService.getListBillByHouseId(roomId, PageRequest.of(page, pageSize)));
     }
 }
 
