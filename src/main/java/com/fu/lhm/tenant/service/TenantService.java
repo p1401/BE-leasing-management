@@ -39,6 +39,9 @@ public class TenantService {
 
         Tenant oldTenant = tenantRepository.findById(tenantId).orElseThrow(() -> new EntityNotFoundException("Người thuê không tồn tại!"));
 
+
+        oldTenant.setIdentityNumber(newTenant.getIdentityNumber());
+        oldTenant.setBirth(newTenant.getBirth());
         oldTenant.setName(newTenant.getName());
         oldTenant.setEmail(newTenant.getEmail());
         oldTenant.setAddress(newTenant.getEmail());

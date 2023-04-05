@@ -46,7 +46,7 @@ public class ContractService {
         int randomNumber = (int)(Math.random()*(99999-10000+1)+10000);
 
         Room room = roomrepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
-
+        room.setCurrentTenant(room.getCurrentTenant()+1);
         //create tenant
         Tenant tenant = new Tenant();
         tenant.setName(createContractRequest.getTenantName());
