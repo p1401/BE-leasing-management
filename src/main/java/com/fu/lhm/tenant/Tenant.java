@@ -42,4 +42,6 @@ public class Tenant {
     List<Contract> contracts;
 
 
+
+
 }
