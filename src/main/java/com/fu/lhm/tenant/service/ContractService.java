@@ -54,12 +54,16 @@ public class ContractService {
         tenant.setPhone(createContractRequest.getPhone()+"");
         tenant.setAddress(createContractRequest.getAddress());
         tenant.setBirth(createContractRequest.getBirth());
+        tenant.setIdentityNumber(createContractRequest.getIdentityNumber());
         tenant.setContractHolder(true);
         tenant.setRoom(room);
 
         //create contract
         Contract contract = new Contract();
         contract.setContractCode("HĐ"+randomNumber);
+        contract.setHouseName(createContractRequest.getHouseName());
+        contract.setRoomName(createContractRequest.getRoomName());
+        contract.setFloor(createContractRequest.getFloor());
         contract.setActive(true);
         contract.setDeposit(createContractRequest.getDeposit());
         contract.setFromDate(createContractRequest.getFromDate());

@@ -115,8 +115,6 @@ public class BillService {
                 bill.setBillType(BillType.RECEIVE);
                 bill.setContract(contract);
 
-
-
                 billRepository.save(bill);
                 //luu tien chua dong vao room
                 room.setMoneyNotPay(room.getMoneyNotPay()+bill.getTotalMoney());

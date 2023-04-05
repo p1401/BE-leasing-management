@@ -26,6 +26,9 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String contractCode;
+    private String houseName;
+    private String roomName;
+    private String floor;
     private LocalDate fromDate;
     private LocalDate toDate;
     private boolean isActive;
