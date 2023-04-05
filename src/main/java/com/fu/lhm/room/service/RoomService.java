@@ -5,14 +5,18 @@ import com.fu.lhm.financial.repository.BillRepository;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.house.House;
 import com.fu.lhm.house.repository.HouseRepository;
-import com.fu.lhm.room.repository.Roomrepository;
+import com.fu.lhm.room.WaterElectric;
+import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.room.modal.SendListRoomAndInforRequest;
+import com.fu.lhm.room.repository.WaterElectricRepositoy;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.Tenant;
 import com.fu.lhm.tenant.repository.ContractRepository;
 import com.fu.lhm.tenant.repository.TenantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,82 +26,39 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoomService {
 
-    private final Roomrepository roomrepository;
+    private final RoomRepository roomrepository;
 
     private final HouseRepository houseRepository;
 
-    private final TenantRepository tenantRepository;
-    private final ContractRepository contractRepository;
+    private final WaterElectricRepositoy waterElectricRepositoy;
 
-    private final BillRepository billRepository;
+    public Page<Room> getListRoomByHouseIdAndFloor(Long houseid, int floor, Pageable page){
 
-    public List<SendListRoomAndInforRequest> getListRoomAndInfor(Long houseid){
+        return roomrepository.findAllByHouse_IdAndFloor(houseid, floor, page);
 
-        List<Room> listRoom = roomrepository.findAllByHouse_Id(houseid);
 
-        List<Tenant> tenantList = tenantRepository.findAll();
-
-        List<Contract> contractList = contractRepository.findAll();
-
-        List<Bill> billList =billRepository.findAll();
-
-        List<SendListRoomAndInforRequest> list = new ArrayList<>();
-
-        for(Room room : listRoom){
-            SendListRoomAndInforRequest sendListRoomAndInforRequest = new SendListRoomAndInforRequest();
-
-            sendListRoomAndInforRequest.setRoomId(room.getId());
-            sendListRoomAndInforRequest.setRoomName(room.getName());
-            sendListRoomAndInforRequest.setPrice(room.getRoomMoney());
-            sendListRoomAndInforRequest.setArea((room.getArea()));
-            sendListRoomAndInforRequest.setMaxTenant(room.getMaxTenant());
-
-            int curentTenant =0;
-            for(Tenant tenant : tenantList){
-                if(tenant.getRoom().getId()==room.getId()&&tenant.isBookRoom()==false){
-                    curentTenant=curentTenant+1;
-                }
-            }
-            sendListRoomAndInforRequest.setCurrenTenant(curentTenant);
-
-            //Nếu đã có người ký hợp đồng thì thay
-            String currentContract ="Chưa có";
-            for(Contract contract : contractList){
-                if(contract.getRoom().getId() == room.getId() && contract.isActive()==true){
-                    currentContract = contract.getTenant().getName();
-                }
-            }
-            sendListRoomAndInforRequest.setCurrentContract(currentContract);
-
-            //Set tien chua thanh toan
-            int moneyNotPay=0;
-            for(Bill bill : billList){
-                if(bill.getRoom().getId()==room.getId() && bill.isPay()==false){
-                    moneyNotPay=moneyNotPay+bill.getTotalMoney();
-                }
-            }
-            sendListRoomAndInforRequest.setMoneyNotPay(moneyNotPay);
-
-            String tenantBooking = "Chua co";
-            for(Tenant tenant : tenantList){
-                if(tenant.getRoom().getId()==room.getId()&&tenant.isBookRoom()==true){
-                    tenantBooking = tenant.getName();
-                }
-            }
-            sendListRoomAndInforRequest.setTenantBooking(tenantBooking);
-
-            list.add(sendListRoomAndInforRequest);
-        }
-
-        return list;
     }
 
     public Room createroom(Long houseId, Room room) {
 
         House house = houseRepository.findById(houseId).orElseThrow(() -> new EntityNotFoundException("Nha không tồn tại!"));
-        room.setHouse(house);
+        Room newRoom = new Room();
+        newRoom.setName(room.getName());
+        newRoom.setArea(room.getArea());
+        newRoom.setRoomMoney(room.getRoomMoney());
+        newRoom.setMaxTenant(room.getMaxTenant());
+        newRoom.setHouse(house);
+        newRoom.setFloor(room.getFloor());
 
-        return roomrepository.save(room);
+        WaterElectric waterElectric = new WaterElectric();
+        waterElectric.setChiSoDauDien(0);
+        waterElectric.setChiSoDauNuoc(0);
+        waterElectric.setChiSoCuoiDien(0);
+        waterElectric.setChiSoCuoiNuoc(0);
+        waterElectric.setRoom(roomrepository.save(newRoom));
+        waterElectricRepositoy.save(waterElectric);
+
+        return newRoom;
 
     }
 
@@ -107,18 +68,16 @@ public class RoomService {
         Room oldRoom = roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
         oldRoom.setFloor(updateRoom.getFloor());
         oldRoom.setArea(updateRoom.getArea());
+        oldRoom.setRoomMoney(updateRoom.getRoomMoney());
         oldRoom.setMaxTenant(updateRoom.getMaxTenant());
         oldRoom.setName(updateRoom.getName());
 
-        //Cap nhat so dien nuoc co phong de tao hoa don thu tien
-        oldRoom.setElectricNumber(updateRoom.getChiSoCuoiDien()-oldRoom.getChiSoCuoiDien());
-        oldRoom.setWaterNumber(updateRoom.getChiSoCuoiNuoc()-oldRoom.getChiSoCuoiNuoc());
-
-        //Cap nhat lai chi so cuoi dien nuoc
-        oldRoom.setChiSoCuoiDien(updateRoom.getChiSoCuoiDien());
-        oldRoom.setChiSoCuoiNuoc(updateRoom.getChiSoCuoiNuoc());
-
         return roomrepository.save(oldRoom);
+    }
+
+    public Room getRoomById(Long roomId){
+
+        return roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
     }
 
 

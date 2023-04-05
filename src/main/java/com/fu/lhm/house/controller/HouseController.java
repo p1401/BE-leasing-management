@@ -2,7 +2,7 @@ package com.fu.lhm.house.controller;
 
 
 import com.fu.lhm.house.House;
-import com.fu.lhm.house.serice.HouseService;
+import com.fu.lhm.house.service.HouseService;
 import com.fu.lhm.house.validate.HouseValidate;
 import com.fu.lhm.jwt.JwtService;
 import com.fu.lhm.user.User;
@@ -47,6 +47,18 @@ public class HouseController {
         Page<House> listHouse = houseService.getListHouse(getUserToken(), PageRequest.of(page, pageSize));
 
         return ResponseEntity.ok(listHouse);
+    }
+
+    @PostMapping({"/{id}"})
+    public ResponseEntity<House> getHouseById(@PathVariable("id") Long id){
+
+        return ResponseEntity.ok(houseService.getHouseById(id));
+    }
+
+    @DeleteMapping ({"/{id}"})
+    public void deleteHouse(@PathVariable("id") Long id){
+
+        houseService.deleteHouse(id);
     }
 
     private User getUserToken() {
