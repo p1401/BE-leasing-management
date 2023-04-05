@@ -54,10 +54,6 @@ public class Bill {
 
     private int totalMoney;
 
-    //Phieu thu, phieu chi
-    @Enumerated(EnumType.STRING)
-    private BillType billType;
-
     //Tien phong hoac tien thu them
     @Enumerated(EnumType.STRING)
     private BillContent billContent;
