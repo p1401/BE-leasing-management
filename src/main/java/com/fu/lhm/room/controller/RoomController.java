@@ -12,20 +12,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/v1/rooms")
 @RequiredArgsConstructor
-public class RoomController {
+public class
+RoomController {
 
     private final RoomService roomService;
 
     private final RoomValidate roomValidate;
 
-    @GetMapping("/{houseId}/floor/{floor}")
+    @GetMapping("")
     public ResponseEntity<Page<Room>> getListRoom(
-            @PathVariable("houseId") Long houseId,
-            @PathVariable("floor") int floor,
+            @RequestParam(name = "houseId") Long houseId,
+            @RequestParam(name = "floor", defaultValue = "0") int floor,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        Page<Room> listRoom =  roomService.getListRoomByHouseIdAndFloor(houseId ,floor, PageRequest.of(page, pageSize));
+        Page<Room> listRoom = roomService.getListRoomByHouseIdAndFloor(houseId, floor, PageRequest.of(page, pageSize));
         return ResponseEntity.ok(listRoom);
     }
 
@@ -33,6 +34,7 @@ public class RoomController {
     public ResponseEntity<Room> createRoom(
             @PathVariable("houseId") Long houseId,
             @RequestBody Room room) {
+
         roomValidate.validateCreateRoom(room, houseId);
 
         return ResponseEntity.ok(roomService.createroom(houseId, room));
@@ -51,7 +53,6 @@ public class RoomController {
 //        houseValidate.validateCreateUpdateHouse(house);
         return ResponseEntity.ok(roomService.getRoomById(id));
     }
-
 
     @DeleteMapping("/{roomId}")
     public void deleteRoom(@PathVariable("roomId") Long id) {

@@ -2,7 +2,9 @@ package com.fu.lhm.house;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.user.User;
 import jakarta.persistence.*;
@@ -28,7 +30,6 @@ public class House {
     private String address;
     private int electricPrice;
     private int waterPrice;
-    private int numberRoom;
     private int floor;
 
     @ManyToOne(fetch = FetchType.EAGER)

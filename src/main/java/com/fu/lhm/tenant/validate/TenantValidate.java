@@ -20,29 +20,21 @@ public class TenantValidate {
         checkCurrentNumberTenantInRoom(roomId);
 
 
-        isNotPopulated(tenant.getName(),"Vui lòng nhập họ tên");
+        this.isNotPopulated(tenant.getName(),"Vui lòng nhập họ tên");
         isNotPopulated(tenant.getPhone()+"","Vui lòng nhập số điện thoại để liên hệ");
         isNotPopulated(tenant.getEmail(),"Vui lòng nhập email để liên hệ");
         isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
-        isNotPopulated(tenant.getBirth().toString(),"Vui lòng nhập ngày sinh");
 
-        validateForValidEmail(tenant.getEmail());
-        validateForValidPhone(tenant.getPhone()+"");
-        validateForValidIdentityNumber(tenant.getIdentityNumber());
-        isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
+        this.validateForValidEmail(tenant.getEmail());
+        this.validateForValidPhone(tenant.getPhone()+"");
+        this.isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
     }
 
     public void validateForUpdateTenant(Tenant tenant){
-        isNotPopulated(tenant.getName(),"Vui lòng nhập họ tên");
-        isNotPopulated(tenant.getPhone()+"","Vui lòng nhập số điện thoại để liên hệ");
-        isNotPopulated(tenant.getEmail(),"Vui lòng nhập email để liên hệ");
-        isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
-        isNotPopulated(tenant.getBirth().toString(),"Vui lòng nhập ngày sinh");
-
-        validateForValidEmail(tenant.getEmail());
-        validateForValidPhone(tenant.getPhone()+"");
-        validateForValidIdentityNumber(tenant.getIdentityNumber());
-        isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
+        this.isNotPopulated(tenant.getName(),"Vui lòng nhập họ tên");
+        this.validateForValidEmail(tenant.getEmail());
+        this.validateForValidPhone(tenant.getPhone()+"");
+        this.isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
     }
 
     private void checkCurrentNumberTenantInRoom(Long roomId){
@@ -67,12 +59,6 @@ public class TenantValidate {
     public void validateForValidPhone(String phone) {
         if (phone != null) {
             this.validatorRegexField(phone, "^[0-9]{10}$", "Số điện thoại không đúng định dạng!");
-        }
-    }
-
-    public void validateForValidIdentityNumber(String CMND) {
-        if (CMND != null) {
-            this.validatorRegexField(CMND, "^[0-9]$", "Số CMND không đúng định dạng!");
         }
     }
 

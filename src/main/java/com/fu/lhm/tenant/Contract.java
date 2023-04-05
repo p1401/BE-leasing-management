@@ -2,8 +2,9 @@ package com.fu.lhm.tenant;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fu.lhm.financial.Bill;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -20,19 +20,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "contracts")
+@Table(name = "contract")
 public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String contractCode;
-    private String houseName;
-    private String roomName;
-    private String floor;
-    private LocalDate fromDate;
-    private LocalDate toDate;
-    private boolean isActive;
-    private int deposit;
+    private Date fromDate;
+    private Date toDate;
+    private Boolean isActive;
+    private Long deposit;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tenantId")
