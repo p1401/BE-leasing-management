@@ -29,6 +29,8 @@ public class Tenant {
     private String identityNumber;
     private LocalDate birth;
     private String address;
+    private String houseName;
+    private String roomName;
     private boolean isContractHolder;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roomId")

@@ -56,6 +56,8 @@ public class ContractService {
         tenant.setBirth(createContractRequest.getBirth());
         tenant.setIdentityNumber(createContractRequest.getIdentityNumber());
         tenant.setContractHolder(true);
+        tenant.setRoomName(room.getName());
+        tenant.setHouseName(room.getHouse().getName());
         tenant.setRoom(room);
 
         //create contract
