@@ -44,7 +44,6 @@ public class BillValidate {
         isNotPopulated(bill.getElectricNumber()+"","Nhập số lượng điện");
 
         isNotPopulated(bill.getBillContent().name(),"Nhập nội dung hóa đơn");
-        isNotPopulated(bill.getBillType().name(),"Nhập kiểu hóa đơn");
         isNotPopulated(bill.isPay()+"","Tích đã nộp hay chưa nộp");
         isNotPopulated(bill.getDateCreate()+"","Nhập ngày tạo");
         isNotPopulated(bill.getDescription(),"Nhập mô tả");
@@ -68,7 +67,6 @@ public class BillValidate {
         isNotPopulated(bill.getElectricNumber()+"","Nhập số lượng điện");
 
         isNotPopulated(bill.getBillContent().name(),"Nhập nội dung hóa đơn");
-        isNotPopulated(bill.getBillType().name(),"Nhập kiểu hóa đơn");
         isNotPopulated(bill.isPay()+"","Tích đã nộp hay chưa nộp");
         isNotPopulated(bill.getDateCreate()+"","Nhập ngày tạo");
         isNotPopulated(bill.getDescription(),"Nhập mô tả");
@@ -90,7 +88,6 @@ public class BillValidate {
         for(Bill bill : listBill){
             if(bill.getDateCreate().getMonthValue()==month
                     && bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")
-                    && bill.getBillType().name().equalsIgnoreCase("RECEIVE")
                     && bill.getContract().getTenant().getRoom()==contract.getTenant().getRoom()){
                 isCreate=true;
             }

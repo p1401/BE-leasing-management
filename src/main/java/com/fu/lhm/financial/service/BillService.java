@@ -3,15 +3,12 @@ package com.fu.lhm.financial.service;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.financial.Bill;
 import com.fu.lhm.financial.BillContent;
-import com.fu.lhm.financial.BillType;
 import com.fu.lhm.financial.repository.BillRepository;
 import com.fu.lhm.house.House;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.tenant.Contract;
-import com.fu.lhm.tenant.Tenant;
 import com.fu.lhm.tenant.repository.ContractRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -89,7 +86,6 @@ public class BillService {
             for(Bill bill : listBill){
                 if(bill.getDateCreate().getMonthValue()==month
                         && bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")
-                        && bill.getBillType().name().equalsIgnoreCase("RECEIVE")
                         && bill.getContract().getTenant().getRoom()==contract.getTenant().getRoom()){
                     isCreate=true;
                 }
@@ -112,7 +108,6 @@ public class BillService {
                 bill.setDescription("Tiền phòng "+contract.getTenant().getRoom().getName()+" tháng " +month);
                 bill.setTotalMoney(room.getRoomMoney()+room.getWaterElectric().getNumberElectric()*house.getElectricPrice()+room.getWaterElectric().getNumberWater()*house.getWaterPrice());
                 bill.setBillContent(BillContent.TIENPHONG);
-                bill.setBillType(BillType.RECEIVE);
                 bill.setContract(contract);
 
                 billRepository.save(bill);
