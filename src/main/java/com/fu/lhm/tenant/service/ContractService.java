@@ -1,6 +1,8 @@
 package com.fu.lhm.tenant.service;
 
 import com.fu.lhm.exception.BadRequestException;
+import com.fu.lhm.notification.Notification;
+import com.fu.lhm.notification.repository.NotificationRepository;
 import com.fu.lhm.tenant.modal.CreateContractRequest;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.room.Room;
@@ -14,13 +16,16 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +37,10 @@ public class ContractService {
 
     private final RoomRepository roomrepository;
 
+    private NotificationRepository notificationRepository;
+
+    private static final int ALERT_THRESHOLD = 10;
+
     public Contract getContractById(Long contractId){
 
         return contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
@@ -40,6 +49,11 @@ public class ContractService {
     public Page<Contract> getListContractByHouseId(Long houseId, Pageable pageable){
 
         return contractRepository.findAllByTenant_Room_House_Id(houseId, pageable);
+    }
+
+    public List<Contract> getListContract(){
+
+        return contractRepository.findAll();
     }
 
     public Contract createContract(Long roomId, CreateContractRequest createContractRequest){
@@ -96,5 +110,31 @@ public class ContractService {
     }
 
 
+    @Scheduled(cron = "0/5 * * * * *") // run every 5 seconds
+    public void generateNotifications() {
+        List<Contract> contracts = this.getListContract();
+        LocalDate now = LocalDate.now();
+
+        for (Contract contract : contracts) {
+            if (contract.getToDate().isAfter(now)) {
+                // generate alert for expired contract
+//                Notification notification = new Notification();
+//                notification.setTitle("Contract Expiration");
+//                notification.setDescription("Contract of room " + contract.getRoomName() +
+//                                            " is expiring on " + contract.getToDate());
+//                notification.setTime(LocalDate.now());
+//                notificationRepository.save(notification);
+                System.out.println("Hop dong phong " + contract.getRoomName() + "da qua han");
+            } else {
+                // generate alert for upcoming contract expiration
+                Period period = Period.between(contract.getToDate(), now);
+                long timeUntilExpiration = period.getDays();
+                if (timeUntilExpiration <= ALERT_THRESHOLD) {
+//                    alertService.generateContractExpirationAlert(contract);
+                    System.out.println("Hop dong phong " + contract.getRoomName() + "con " + period + " ngay se het han");
+                }
+            }
+        }
+    }
 
 }
