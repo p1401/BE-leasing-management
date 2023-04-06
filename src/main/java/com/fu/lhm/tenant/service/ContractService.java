@@ -1,6 +1,7 @@
 package com.fu.lhm.tenant.service;
 
 import com.fu.lhm.exception.BadRequestException;
+import com.fu.lhm.jwt.JwtService;
 import com.fu.lhm.notification.Notification;
 import com.fu.lhm.notification.repository.NotificationRepository;
 import com.fu.lhm.tenant.modal.CreateContractRequest;
@@ -11,7 +12,9 @@ import com.fu.lhm.tenant.Tenant;
 import com.fu.lhm.tenant.repository.ContractRepository;
 import com.fu.lhm.tenant.repository.TenantRepository;
 import com.fu.lhm.tenant.validate.ContractValidate;
+import com.fu.lhm.user.User;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
@@ -39,6 +42,10 @@ public class ContractService {
 
     private NotificationRepository notificationRepository;
 
+
+    private final HttpServletRequest httpServletRequest;
+    private final JwtService jwtService;
+
     private static final int ALERT_THRESHOLD = 10;
 
     public Contract getContractById(Long contractId){
@@ -53,7 +60,7 @@ public class ContractService {
 
     public List<Contract> getListContract(){
 
-        return contractRepository.findAll();
+        return contractRepository.findAllByTenant_Room_House_User(this.getUserToken());
     }
 
     public Contract createContract(Long roomId, CreateContractRequest createContractRequest){
@@ -135,6 +142,10 @@ public class ContractService {
                 }
             }
         }
+    }
+
+    private User getUserToken() {
+        return jwtService.getUser(httpServletRequest);
     }
 
 }
