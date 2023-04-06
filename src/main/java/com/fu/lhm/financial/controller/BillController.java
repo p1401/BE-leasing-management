@@ -28,7 +28,6 @@ public class BillController {
 
     @PostMapping("/{roomId}")
     public ResponseEntity<Bill> createBill(@PathVariable("roomId") Long roomId, @RequestBody Bill bill) {
-
         if (bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")) {
             billValidate.validateForCreateBillTienPhong(roomId, bill);
         } else if (bill.getBillContent().name().equalsIgnoreCase("TIENPHUTROI")) {

@@ -44,7 +44,7 @@ public class ContractController {
     public ResponseEntity<Contract> changeHolder(@PathVariable("contractId") Long contractId,
                                                  @RequestParam(name = "oldTenantId") Long oldTenantId,
                                                  @RequestParam(name = "newTenantId") Long newTenantId) {
-
+        System.out.println(contractId + oldTenantId + newTenantId);
         return ResponseEntity.ok(contractService.changeHolder(contractId, oldTenantId, newTenantId));
     }
 

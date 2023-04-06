@@ -31,6 +31,7 @@ public class House {
     private int electricPrice;
     private int waterPrice;
     private int floor;
+    private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")

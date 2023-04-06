@@ -89,11 +89,12 @@ public class ContractService {
         Tenant newTenant = tenantRepository.findById(newTenantId).orElseThrow(() -> new EntityNotFoundException("Khách hàng không tồn tại!"));
 
         oldTenant.setIsContractHolder(false);
+        tenantRepository.save(oldTenant);
         newTenant.setIsContractHolder(true);
 
-        contract.setTenant(newTenant);
+        contract.setTenant(tenantRepository.save(newTenant));
 
-        return contract;
+        return contractRepository.save(contract);
     }
 
     public Contract updateContract(Long contractId, Contract newContract) {

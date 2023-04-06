@@ -35,7 +35,7 @@ public class BillService {
 
     public Page<Bill> getListBillByRoomId(Long roomId, Pageable pageable) {
 
-        return billRepository.findAllByContract_Tenant_Room_Id(roomId,pageable);
+        return billRepository.findAllByContract_Tenant_Room_Id(roomId, pageable);
     }
 
     public List<Bill> createAllBill() {
@@ -76,7 +76,7 @@ public class BillService {
                 bill.setElectricMoney(room.getWaterElectric().getNumberElectric() * house.getElectricPrice());
                 bill.setWaterMoney(room.getWaterElectric().getNumberWater() * house.getWaterPrice());
                 bill.setPayer(contract.getTenant().getName());
-                bill.setPay(false);
+                bill.setIsPay(false);
                 bill.setDateCreate(LocalDate.now());
                 bill.setDescription("Tiền phòng " + contract.getTenant().getRoom().getName() + " tháng " + month);
                 bill.setTotalMoney(room.getRoomMoney() + room.getWaterElectric().getNumberElectric() * house.getElectricPrice() + room.getWaterElectric().getNumberWater() * house.getWaterPrice());

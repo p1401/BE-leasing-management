@@ -36,8 +36,11 @@ public class TenantService {
 
         oldTenant.setName(newTenant.getName());
         oldTenant.setEmail(newTenant.getEmail());
-        oldTenant.setAddress(newTenant.getEmail());
+        oldTenant.setAddress(newTenant.getAddress());
         oldTenant.setPhone(newTenant.getPhone());
+        oldTenant.setBirth(newTenant.getBirth());
+        oldTenant.setIdentifyDate(newTenant.getIdentifyDate());
+        oldTenant.setIdentifyNumber(newTenant.getIdentifyNumber());
 
         return tenantRepository.save(oldTenant);
     }

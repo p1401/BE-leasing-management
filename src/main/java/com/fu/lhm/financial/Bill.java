@@ -45,7 +45,7 @@ public class Bill {
 
     private String payer;
 
-    private boolean isPay;
+    private Boolean isPay;
 
     private LocalDate dateCreate;
 

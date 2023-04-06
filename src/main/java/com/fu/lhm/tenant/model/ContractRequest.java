@@ -14,7 +14,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContractRequest {
-
     //contract
     @NotNull
     private long roomId;
