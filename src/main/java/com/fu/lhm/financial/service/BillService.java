@@ -9,7 +9,6 @@ import com.fu.lhm.house.House;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.repository.ContractRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +30,7 @@ public class BillService {
 
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         Contract contract = contractRepository.findByTenant_Room_Id(roomId);
-        bill.setBillCode("PT"+randomNumber);
+        bill.setBillCode("PT" + randomNumber);
         bill.setContract(contract);
 
         return billRepository.save(bill);
@@ -42,23 +41,20 @@ public class BillService {
         return billRepository.findAllByContract_Tenant_Room_Id(roomId, pageable);
     }
 
-    public void deleteBill(Long billId){
-        billRepository.deleteById(billId);
+    public void deleteBill(Long billId) {
+        billRepository.delete(billRepository.findById(billId).get());
     }
 
-    public Bill getBillById(Long billId){
+    public Bill getBillById(Long billId) {
         return billRepository.findById(billId).orElseThrow(() -> new BadRequestException("Hóa đơn không tồn tại!"));
     }
 
-    public Bill payBill(Long billId){
+    public Bill payBill(Long billId) {
         Bill bill = billRepository.findById(billId).orElseThrow(() -> new BadRequestException("Hóa đơn không tồn tại!"));
         bill.setIsPay(true);
 
         return billRepository.save(bill);
     }
-
-
-
 
 
     public List<Bill> createAllBill() {

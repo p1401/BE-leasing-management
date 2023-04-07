@@ -36,7 +36,7 @@ public class Contract {
     @JsonBackReference
     Tenant tenant;
 
-    @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER)
     @JsonManagedReference
     List<Bill> bills;
 }
