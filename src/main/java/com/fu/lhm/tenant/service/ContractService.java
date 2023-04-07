@@ -31,7 +31,7 @@ public class ContractService {
     }
 
     public Contract createContract(ContractRequest contractRequest) {
-        int randomNumber = (int) (Math.random() * (99999 - 10000 + 1) + 10000);
+        int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         long roomId = contractRequest.getRoomId();
         Date fromDate = contractRequest.getFromDate();
         Date toDate = contractRequest.getToDate();

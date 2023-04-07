@@ -10,7 +10,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SendListRoomAndInforRequest {
+public class ListRoomRequest {
 
     private Long roomId;
 
@@ -29,8 +29,6 @@ public class SendListRoomAndInforRequest {
     private int moneyNotPay;
 
     private Date dayEmpty;
-
-    private String tenantBooking;
 
     private int floor;
 

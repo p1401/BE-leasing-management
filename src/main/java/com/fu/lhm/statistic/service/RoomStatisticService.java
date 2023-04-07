@@ -35,6 +35,7 @@ public class RoomStatisticService {
                 }
             }
 
+
             roomStatistic.setRoomFull(full);
             roomStatistic.setRoomHaveSlot(haveSlot);
             roomStatistic.setRoomEmpty(empty);

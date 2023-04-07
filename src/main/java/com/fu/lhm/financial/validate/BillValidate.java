@@ -69,7 +69,7 @@ public class BillValidate {
 
         isNotPopulated(bill.getBillContent().name(), "Nhập nội dung hóa đơn");
         isNotPopulated(bill.getBillType().name(), "Nhập kiểu hóa đơn");
-        isNotPopulated(bill.getIsPay() + "", "Tích đã nộp hay chưa nộp");
+//        isNotPopulated(bill.getIsPay() + "", "Tích đã nộp hay chưa nộp");
         isNotPopulated(bill.getDateCreate() + "", "Nhập ngày tạo");
         isNotPopulated(bill.getDescription(), "Nhập mô tả");
         isNotPopulated(bill.getTotalMoney() + "", "Nhập tổng tiền");
