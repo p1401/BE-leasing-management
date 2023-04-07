@@ -25,6 +25,11 @@ public class BillController {
 
         return ResponseEntity.ok(billService.createAllBill());
     }
+    @GetMapping("/detail/{billId}")
+    public ResponseEntity<Bill> getBillById(@PathVariable("billId") Long billId) {
+
+        return ResponseEntity.ok(billService.getBillById(billId));
+    }
 
     @PostMapping("/{roomId}")
     public ResponseEntity<Bill> createBill(@PathVariable("roomId") Long roomId, @RequestBody Bill bill) {
@@ -38,12 +43,26 @@ public class BillController {
         return ResponseEntity.ok(billService.createBillTienPhong(roomId, bill));
     }
 
+    @PutMapping("/pay/{billId}")
+    public ResponseEntity<Bill> payBill(@PathVariable("billId") Long billId) {
+
+        return ResponseEntity.ok(billService.payBill(billId));
+    }
+
+
+
     @GetMapping("/{roomId}")
     public ResponseEntity<Page<Bill>> getListBillByRoomId(@PathVariable("roomId") Long roomId,
                                                           @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
         return ResponseEntity.ok(billService.getListBillByRoomId(roomId, PageRequest.of(page, pageSize)));
+    }
+
+    @DeleteMapping ("/{billId}")
+    public void deleteBillById(@PathVariable("billId") Long billId) {
+
+         billService.deleteBill(billId);
     }
 }
 

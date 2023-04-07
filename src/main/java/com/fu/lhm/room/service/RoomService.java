@@ -1,5 +1,7 @@
 package com.fu.lhm.room.service;
 
+import com.fu.lhm.financial.Bill;
+import com.fu.lhm.financial.repository.BillRepository;
 import com.fu.lhm.house.House;
 import com.fu.lhm.house.repository.HouseRepository;
 import com.fu.lhm.room.Room;
@@ -12,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RoomService {
@@ -23,9 +27,23 @@ public class RoomService {
 
     private final WaterElectricRepositoy waterElectricRepositoy;
 
+    private final BillRepository billRepository;
+
     public Page<Room> getListRoomByHouseIdAndFloor(Long houseId, int floor, Pageable page) {
 
-        return roomRepository.findAllByHouse_IdAndFloor(houseId, floor, page);
+            Page<Room> listRoom = roomRepository.findAllByHouse_IdAndFloor(houseId, floor, page);
+
+            for(Room room : listRoom){
+                List<Bill> listBill = billRepository.findAll();
+
+                for(Bill bill :listBill){
+                    if(bill.getIsPay()==false && bill.getBillType().name().equalsIgnoreCase("RECEIVE") && bill.getContract().getTenant().getRoom().getId()==room.getId()){
+                        room.setMoneyNotPay(room.getMoneyNotPay()+bill.getTotalMoney());
+                    }
+                }
+            }
+
+        return listRoom;
 
 
     }
