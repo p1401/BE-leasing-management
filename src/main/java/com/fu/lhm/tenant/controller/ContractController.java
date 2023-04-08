@@ -1,16 +1,27 @@
 package com.fu.lhm.tenant.controller;
 
+import com.fu.lhm.jwt.JwtService;
 import com.fu.lhm.tenant.service.ContractService;
 import com.fu.lhm.tenant.modal.CreateContractRequest;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.validate.ContractValidate;
+import com.fu.lhm.user.User;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/contracts")
@@ -20,6 +31,10 @@ public class ContractController {
     private final ContractService contractService;
 
     private final ContractValidate contractValidate;
+
+
+    private final HttpServletRequest httpServletRequest;
+    private final JwtService jwtService;
 
     @GetMapping("/{contractId}")
     public ResponseEntity<Contract> getContractById(@PathVariable("contractId") Long contractId){
@@ -58,5 +73,24 @@ public class ContractController {
         return ResponseEntity.ok(contractService.updateContract(contractId,contract));
     }
 
+    private User getUserToken() {
+        return jwtService.getUser(httpServletRequest);
+    }
+
+    @GetMapping("/generateDoc")
+    public ResponseEntity<byte[]> generateDoc() throws Exception {
+        // Set the paths for the template and output documents
+        String templatePath = "D:\\Git\\IdeaProjects\\test\\contract_template.docx";
+        String outputPath = "D:\\Git\\IdeaProjects\\test\\output.docx";
+
+        // Generate the modified document using the service method
+        contractService.replaceTextsInWordDocument(templatePath, outputPath);
+
+        // Return the modified document as a byte array
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "output.docx");
+        return new ResponseEntity<>(Files.readAllBytes(Paths.get(outputPath)), headers, HttpStatus.OK);
+    }
 
 }

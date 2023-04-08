@@ -13,22 +13,34 @@ import com.fu.lhm.tenant.repository.ContractRepository;
 import com.fu.lhm.tenant.repository.TenantRepository;
 import com.fu.lhm.tenant.validate.ContractValidate;
 import com.fu.lhm.user.User;
+import de.phip1611.Docx4JSRUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -58,9 +70,9 @@ public class ContractService {
         return contractRepository.findAllByTenant_Room_House_Id(houseId, pageable);
     }
 
-    public List<Contract> getListContract(){
+    public List<Contract> getListContract(User user){
 
-        return contractRepository.findAllByTenant_Room_House_User(this.getUserToken());
+        return contractRepository.findAllByTenant_Room_House_User(user);
     }
 
     public Contract createContract(Long roomId, CreateContractRequest createContractRequest){
@@ -117,35 +129,135 @@ public class ContractService {
     }
 
 
-    @Scheduled(cron = "0/5 * * * * *") // run every 5 seconds
-    public void generateNotifications() {
-        List<Contract> contracts = this.getListContract();
-        LocalDate now = LocalDate.now();
+//    @Scheduled(cron = "0/5 * * * * *") // run every 5 seconds
+//    public void generateNotifications(User user) {
+//        List<Contract> contracts = this.getListContract(user);
+//        LocalDate now = LocalDate.now();
+//
+//        for (Contract contract : contracts) {
+//            if (contract.getToDate().isAfter(now)) {
+//                // generate alert for expired contract
+////                Notification notification = new Notification();
+////                notification.setTitle("Contract Expiration");
+////                notification.setDescription("Contract of room " + contract.getRoomName() +
+////                                            " is expiring on " + contract.getToDate());
+////                notification.setTime(LocalDate.now());
+////                notificationRepository.save(notification);
+//                System.out.println("Hop dong phong " + contract.getRoomName() + "da qua han");
+//            } else {
+//                // generate alert for upcoming contract expiration
+//                Period period = Period.between(contract.getToDate(), now);
+//                long timeUntilExpiration = period.getDays();
+//                if (timeUntilExpiration <= ALERT_THRESHOLD) {
+////                    alertService.generateContractExpirationAlert(contract);
+//                    System.out.println("Hop dong phong " + contract.getRoomName() + "con " + period + " ngay se het han");
+//                }
+//            }
+//        }
+//    }
 
-        for (Contract contract : contracts) {
-            if (contract.getToDate().isAfter(now)) {
-                // generate alert for expired contract
-//                Notification notification = new Notification();
-//                notification.setTitle("Contract Expiration");
-//                notification.setDescription("Contract of room " + contract.getRoomName() +
-//                                            " is expiring on " + contract.getToDate());
-//                notification.setTime(LocalDate.now());
-//                notificationRepository.save(notification);
-                System.out.println("Hop dong phong " + contract.getRoomName() + "da qua han");
-            } else {
-                // generate alert for upcoming contract expiration
-                Period period = Period.between(contract.getToDate(), now);
-                long timeUntilExpiration = period.getDays();
-                if (timeUntilExpiration <= ALERT_THRESHOLD) {
-//                    alertService.generateContractExpirationAlert(contract);
-                    System.out.println("Hop dong phong " + contract.getRoomName() + "con " + period + " ngay se het han");
+
+    public void replaceTextsInWordDocument(String inputFilePath, String outputFilePath) throws Exception {
+        //        Contract contract = this.getContractById(contractId);
+//
+//        String day1 = Integer.toString(contract.getFromDate().getDayOfMonth());
+//        String month1 = Integer.toString(contract.getFromDate().getMonthValue());
+//        String year1 = Integer.toString(contract.getFromDate().getYear());
+//        String name1 = contract.getTenant().getRoom().getHouse().getUser().getLastname() +
+//                " " + contract.getTenant().getRoom().getHouse().getUser().getFirstname();
+//        String dob1 = "";
+//        String idcard1 = "";
+//        String sdt1 = "";
+//        String name2 = contract.getTenant().getName();
+//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//        String dob2 = contract.getTenant().getBirth().format(dateTimeFormatter);
+//        String address1 = contract.getTenant().getAddress();
+//        String idcard2 = contract.getTenant().getIdentityNumber();
+//        String sdt2 = contract.getTenant().getPhone();
+//        String address2 = contract.getTenant().getRoom().getHouse().getAddress() +
+//                ", " + contract.getTenant().getRoom().getHouse().getDistrict() +
+//                ", " + contract.getTenant().getRoom().getHouse().getCity();
+//        String price1 = Integer.toString(contract.getTenant().getRoom().getRoomMoney());
+//        String price2 = Integer.toString(contract.getTenant().getRoom().getHouse().getElectricPrice());
+//        String price3 = Integer.toString(contract.getTenant().getRoom().getHouse().getWaterPrice());
+//        String price4 = Integer.toString(contract.getDeposit());
+//        String day2 = Integer.toString(contract.getToDate().getDayOfMonth());
+//        String month2 = Integer.toString(contract.getToDate().getMonthValue());
+//        String year2 = Integer.toString(contract.getToDate().getYear());
+
+        String day1 = "1";
+        String month1 = "2";
+        String year1 = "3";
+        String name1 = "4";
+        String dob1 = "5";
+        String idcard1 = "6";
+        String sdt1 = "7";
+        String name2 = "8";
+        String dob2 = "9";
+        String address1 = "10";
+        String idcard2 = "11";
+        String sdt2 = "12";
+        String address2 = "13";
+        String price1 = "14";
+        String price2 = "15";
+        String price3 = "16";
+        String price4 = "17";
+        String day2 = "18";
+        String month2 ="19";
+        String year2 = "20";
+
+        // Load the Word document
+        Map<String, String> replacements = new HashMap<>();
+        replacements.put("${day1}", day1);
+        replacements.put("${month1}", month1);
+        replacements.put("${year1}", year1);
+        replacements.put("${name1}", name1);
+        replacements.put("${dob1}", dob1);
+        replacements.put("${idcard1}", idcard1);
+        replacements.put("${sdt1}", sdt1);
+        replacements.put("${name2}", name2);
+        replacements.put("${dob2}", dob2);
+        replacements.put("${address1}", address1);
+        replacements.put("${idcard2}", idcard2);
+        replacements.put("${sdt2}", sdt2);
+        replacements.put("${address2}", address2);
+        replacements.put("${price1}", price1);
+        replacements.put("${price2}", price2);
+        replacements.put("${price3}", price3);
+        replacements.put("${price4}", price4);
+        replacements.put("${day2}", day2);
+        replacements.put("${month2}", month2);
+        replacements.put("${year2}", year2);
+
+        // Load the Word document
+        FileInputStream fis = new FileInputStream(inputFilePath);
+        XWPFDocument document = new XWPFDocument(fis);
+
+        // Get all paragraphs in the document
+        for (XWPFParagraph paragraph : document.getParagraphs()) {
+            // Get all runs in the paragraph
+            for (XWPFRun run : paragraph.getRuns()) {
+                // Replace all occurrences of the old text with the new text
+                String text = run.getText(0);
+                if (text != null) {
+                    for (Map.Entry<String, String> entry : replacements.entrySet()) {
+                        String oldText = entry.getKey();
+                        String newText = entry.getValue();
+                        if (text.contains(oldText)) {
+                            text = text.replace(oldText, newText);
+                        }
+                    }
+                    run.setText(text, 0);
                 }
             }
         }
-    }
 
-    private User getUserToken() {
-        return jwtService.getUser(httpServletRequest);
-    }
+        // Save the modified document
+        FileOutputStream fos = new FileOutputStream(outputFilePath);
+        document.write(fos);
 
+        // Close the document
+        fos.close();
+        document.close();
+    }
 }
