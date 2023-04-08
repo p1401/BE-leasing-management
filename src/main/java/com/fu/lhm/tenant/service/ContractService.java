@@ -166,15 +166,16 @@ public class ContractService {
         String name1 = contract.getTenant().getRoom().getHouse().getUser().getLastname() +
                 " " + contract.getTenant().getRoom().getHouse().getUser().getFirstname();
         String dob1 = "";
+        String address1 = "";
         String idcard1 = "";
         String sdt1 = "";
         String name2 = contract.getTenant().getName();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String dob2 = contract.getTenant().getBirth().format(dateTimeFormatter);
-        String address1 = contract.getTenant().getAddress();
+        String address2 = contract.getTenant().getAddress();
         String idcard2 = contract.getTenant().getIdentityNumber();
         String sdt2 = contract.getTenant().getPhone();
-        String address2 = contract.getTenant().getRoom().getHouse().getAddress() +
+        String address3 = contract.getTenant().getRoom().getHouse().getAddress() +
                 ", " + contract.getTenant().getRoom().getHouse().getDistrict() +
                 ", " + contract.getTenant().getRoom().getHouse().getCity();
         String price1 = Integer.toString(contract.getTenant().getRoom().getRoomMoney());
@@ -192,14 +193,15 @@ public class ContractService {
         replacements.put("${year1}", year1);
         replacements.put("${name1}", name1);
         replacements.put("${dob1}", dob1);
+        replacements.put("${address1}", address1);
         replacements.put("${idcard1}", idcard1);
         replacements.put("${sdt1}", sdt1);
         replacements.put("${name2}", name2);
         replacements.put("${dob2}", dob2);
-        replacements.put("${address1}", address1);
+        replacements.put("${address2}", address2);
         replacements.put("${idcard2}", idcard2);
         replacements.put("${sdt2}", sdt2);
-        replacements.put("${address2}", address2);
+        replacements.put("${address3}", address3);
         replacements.put("${price1}", price1);
         replacements.put("${price2}", price2);
         replacements.put("${price3}", price3);

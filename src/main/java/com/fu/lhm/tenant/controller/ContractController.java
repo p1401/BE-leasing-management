@@ -78,18 +78,19 @@ public class ContractController {
         // Set the paths for the template and output documents
         String templatePath = "D:\\Git\\IdeaProjects\\test\\contract_template.docx";
         String outputPath = "D:\\Git\\IdeaProjects\\test\\output.docx";
+        try {
+            // Generate the modified document using the service method
+            contractService.replaceTextsInWordDocument(contractId, templatePath, outputPath);
 
-        // Generate the modified document using the service method
-        contractService.replaceTextsInWordDocument(contractId, templatePath, outputPath);
-
-        // Return the modified document as a byte array
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", "output.docx");
-        return new ResponseEntity<>(Files.readAllBytes(Paths.get(outputPath)), headers, HttpStatus.OK);
+            // Return the modified document as a byte array
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "CONTRACT_#" + contractId + ".docx");
+            return new ResponseEntity<>(Files.readAllBytes(Paths.get(outputPath)), headers, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    private User getUserToken() {
-        return jwtService.getUser(httpServletRequest);
-    }
 }
