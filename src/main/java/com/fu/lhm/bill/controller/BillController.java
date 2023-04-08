@@ -1,8 +1,8 @@
-package com.fu.lhm.financial.controller;
+package com.fu.lhm.bill.controller;
 
-import com.fu.lhm.financial.Bill;
-import com.fu.lhm.financial.service.BillService;
-import com.fu.lhm.financial.validate.BillValidate;
+import com.fu.lhm.bill.Bill;
+import com.fu.lhm.bill.service.BillService;
+import com.fu.lhm.bill.validate.BillValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

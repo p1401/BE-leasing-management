@@ -1,8 +1,8 @@
-package com.fu.lhm.financial.validate;
+package com.fu.lhm.bill.validate;
 
 import com.fu.lhm.exception.BadRequestException;
-import com.fu.lhm.financial.Bill;
-import com.fu.lhm.financial.repository.BillRepository;
+import com.fu.lhm.bill.Bill;
+import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.repository.ContractRepository;
@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -87,7 +89,8 @@ public class BillValidate {
         int month = today.getMonthValue();
 
         for (Bill bill : listBill) {
-            if (bill.getDateCreate().getMonthValue() == month
+            LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
+            if (dateCreate.getMonthValue() == month
                     && bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")
                     && bill.getBillType().name().equalsIgnoreCase("RECEIVE")
                     && bill.getContract().getTenant().getRoom() == contract.getTenant().getRoom()) {
@@ -95,6 +98,12 @@ public class BillValidate {
 
             }
         }
+    }
+
+    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 
     private void isNotPopulated(String value, String errorMsg) {

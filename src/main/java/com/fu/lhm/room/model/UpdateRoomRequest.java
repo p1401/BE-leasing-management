@@ -1,4 +1,4 @@
-package com.fu.lhm.room.modal;
+package com.fu.lhm.room.model;
 
 import lombok.*;
 

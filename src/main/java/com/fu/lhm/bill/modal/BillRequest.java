@@ -1,4 +1,4 @@
-package com.fu.lhm.financial.modal;
+package com.fu.lhm.bill.modal;
 
 import lombok.*;
 

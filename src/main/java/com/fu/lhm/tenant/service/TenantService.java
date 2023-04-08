@@ -39,22 +39,11 @@ public class TenantService {
         oldTenant.setAddress(newTenant.getAddress());
         oldTenant.setPhone(newTenant.getPhone());
         oldTenant.setBirth(newTenant.getBirth());
-        oldTenant.setIdentifyDate(newTenant.getIdentifyDate());
         oldTenant.setIdentifyNumber(newTenant.getIdentifyNumber());
 
         return tenantRepository.save(oldTenant);
     }
 
-    public Tenant bookRoom(Long roomId, Tenant tenantBookRoom) {
-
-        Room room = roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
-
-        tenantBookRoom.setName(tenantBookRoom.getName());
-        tenantBookRoom.setRoom(room);
-        tenantBookRoom.setIsBookRoom(true);
-
-        return tenantRepository.save(tenantBookRoom);
-    }
 
     public Page<Tenant> getListTenantByRoomId(Long id, Pageable page) {
 

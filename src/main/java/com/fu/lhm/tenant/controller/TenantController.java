@@ -43,11 +43,6 @@ public class TenantController {
         tenantService.deleteTenant(id);
     }
 
-    @PostMapping({"/bookRoom/{roomId}"})
-    public ResponseEntity<Tenant> bookRoom(@PathVariable("roomId") Long id, @RequestBody Tenant tenant) {
-
-        return ResponseEntity.ok(tenantService.bookRoom(id, tenant));
-    }
 
     @GetMapping("/rooms/{roomId}")
     public ResponseEntity<Page<Tenant>> getListTenantByRoomId(@PathVariable("roomId") Long id,

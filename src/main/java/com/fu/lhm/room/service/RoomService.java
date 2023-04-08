@@ -1,7 +1,7 @@
 package com.fu.lhm.room.service;
 
-import com.fu.lhm.financial.Bill;
-import com.fu.lhm.financial.repository.BillRepository;
+import com.fu.lhm.bill.Bill;
+import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.house.House;
 import com.fu.lhm.house.repository.HouseRepository;
 import com.fu.lhm.room.Room;

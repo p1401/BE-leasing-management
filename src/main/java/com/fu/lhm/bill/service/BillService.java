@@ -1,10 +1,10 @@
-package com.fu.lhm.financial.service;
+package com.fu.lhm.bill.service;
 
 import com.fu.lhm.exception.BadRequestException;
-import com.fu.lhm.financial.Bill;
-import com.fu.lhm.financial.BillContent;
-import com.fu.lhm.financial.BillType;
-import com.fu.lhm.financial.repository.BillRepository;
+import com.fu.lhm.bill.Bill;
+import com.fu.lhm.bill.BillContent;
+import com.fu.lhm.bill.BillType;
+import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.house.House;
 import com.fu.lhm.room.Room;
 import com.fu.lhm.tenant.Contract;
@@ -15,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -56,7 +58,11 @@ public class BillService {
         return billRepository.save(bill);
     }
 
-
+    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
     public List<Bill> createAllBill() {
 
         List<Contract> listContract = contractRepository.findAll();
@@ -76,7 +82,8 @@ public class BillService {
             //check bill tien phong da tao thang nay chua
             boolean isCreate = false;
             for (Bill bill : listBill) {
-                if (bill.getDateCreate().getMonthValue() == month
+                LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
+                if (dateCreate.getMonthValue() == month
                         && bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")
                         && bill.getBillType().name().equalsIgnoreCase("RECEIVE")
                         && bill.getContract().getTenant().getRoom() == contract.getTenant().getRoom()) {
@@ -96,7 +103,7 @@ public class BillService {
                 bill.setWaterMoney(room.getWaterElectric().getNumberWater() * house.getWaterPrice());
                 bill.setPayer(contract.getTenant().getName());
                 bill.setIsPay(false);
-                bill.setDateCreate(LocalDate.now());
+                bill.setDateCreate(new Date());
                 bill.setDescription("Tiền phòng " + contract.getTenant().getRoom().getName() + " tháng " + month);
                 bill.setTotalMoney(room.getRoomMoney() + room.getWaterElectric().getNumberElectric() * house.getElectricPrice() + room.getWaterElectric().getNumberWater() * house.getWaterPrice());
                 bill.setBillContent(BillContent.TIENPHONG);

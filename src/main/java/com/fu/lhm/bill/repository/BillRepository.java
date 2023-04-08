@@ -1,6 +1,7 @@
-package com.fu.lhm.financial.repository;
+package com.fu.lhm.bill.repository;
 
-import com.fu.lhm.financial.Bill;
+import com.fu.lhm.bill.Bill;
+import com.fu.lhm.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,6 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     Page<Bill> findAllByContract_Tenant_Room_Id(Long roomId, Pageable pageable);
 
-
+    List<Bill> findAllByIsPayFalse();
 
 }

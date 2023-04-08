@@ -37,7 +37,8 @@ public class ContractService {
         Date toDate = contractRequest.getToDate();
 
         Room room = roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
-
+        room.setCurrentTenant(room.getCurrentTenant()+1);
+        roomrepository.save(room);
         //create tenant
         Tenant tenant = contractRequest.getTenant();
         tenant.setIsContractHolder(true);
@@ -68,7 +69,6 @@ public class ContractService {
 
         //create tenant
         Tenant tenant = tenantRepository.findById(contractBookingRequest.getTenantId()).orElseThrow(() -> new EntityNotFoundException("Khách hàng không tồn tại!"));
-        tenant.setIsBookRoom(false);
         tenant.setIsContractHolder(true);
         tenantRepository.save(tenant);
 

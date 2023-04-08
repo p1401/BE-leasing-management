@@ -2,10 +2,8 @@ package com.fu.lhm.tenant;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fu.lhm.financial.Bill;
+import com.fu.lhm.bill.Bill;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +26,8 @@ public class Contract {
     private String contractCode;
     private Date fromDate;
     private Date toDate;
+    private String roomName;
+    private String houseName;
     private Boolean isActive;
     private Long deposit;
 

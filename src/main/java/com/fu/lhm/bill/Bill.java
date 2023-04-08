@@ -1,9 +1,6 @@
-package com.fu.lhm.financial;
+package com.fu.lhm.bill;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fu.lhm.house.House;
-import com.fu.lhm.room.Room;
 import com.fu.lhm.tenant.Contract;
 import jakarta.persistence.*;
 import lombok.*;
@@ -47,7 +44,7 @@ public class Bill {
 
     private Boolean isPay;
 
-    private LocalDate dateCreate;
+    private Date dateCreate;
 
     private String description;
 

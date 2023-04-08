@@ -27,13 +27,12 @@ public class Tenant {
     private String email;
     private String phone;
     private String identifyNumber;
-    private Date identifyDate;
     private Date birth;
     private String address;
+    private Boolean isStay;
     private Boolean isContractHolder;
-    private Boolean isBookRoom;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Room.class, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Room.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "roomId")
     @JsonBackReference
     Room room;
