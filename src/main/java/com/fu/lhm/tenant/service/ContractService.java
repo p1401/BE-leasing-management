@@ -157,54 +157,33 @@ public class ContractService {
 //    }
 
 
-    public void replaceTextsInWordDocument(String inputFilePath, String outputFilePath) throws Exception {
-        //        Contract contract = this.getContractById(contractId);
-//
-//        String day1 = Integer.toString(contract.getFromDate().getDayOfMonth());
-//        String month1 = Integer.toString(contract.getFromDate().getMonthValue());
-//        String year1 = Integer.toString(contract.getFromDate().getYear());
-//        String name1 = contract.getTenant().getRoom().getHouse().getUser().getLastname() +
-//                " " + contract.getTenant().getRoom().getHouse().getUser().getFirstname();
-//        String dob1 = "";
-//        String idcard1 = "";
-//        String sdt1 = "";
-//        String name2 = contract.getTenant().getName();
-//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//        String dob2 = contract.getTenant().getBirth().format(dateTimeFormatter);
-//        String address1 = contract.getTenant().getAddress();
-//        String idcard2 = contract.getTenant().getIdentityNumber();
-//        String sdt2 = contract.getTenant().getPhone();
-//        String address2 = contract.getTenant().getRoom().getHouse().getAddress() +
-//                ", " + contract.getTenant().getRoom().getHouse().getDistrict() +
-//                ", " + contract.getTenant().getRoom().getHouse().getCity();
-//        String price1 = Integer.toString(contract.getTenant().getRoom().getRoomMoney());
-//        String price2 = Integer.toString(contract.getTenant().getRoom().getHouse().getElectricPrice());
-//        String price3 = Integer.toString(contract.getTenant().getRoom().getHouse().getWaterPrice());
-//        String price4 = Integer.toString(contract.getDeposit());
-//        String day2 = Integer.toString(contract.getToDate().getDayOfMonth());
-//        String month2 = Integer.toString(contract.getToDate().getMonthValue());
-//        String year2 = Integer.toString(contract.getToDate().getYear());
+    public void replaceTextsInWordDocument(Long contractId, String inputFilePath, String outputFilePath) throws Exception {
+        Contract contract = this.getContractById(contractId);
 
-        String day1 = "1";
-        String month1 = "2";
-        String year1 = "3";
-        String name1 = "4";
-        String dob1 = "5";
-        String idcard1 = "6";
-        String sdt1 = "7";
-        String name2 = "8";
-        String dob2 = "9";
-        String address1 = "10";
-        String idcard2 = "11";
-        String sdt2 = "12";
-        String address2 = "13";
-        String price1 = "14";
-        String price2 = "15";
-        String price3 = "16";
-        String price4 = "17";
-        String day2 = "18";
-        String month2 ="19";
-        String year2 = "20";
+        String day1 = Integer.toString(contract.getFromDate().getDayOfMonth());
+        String month1 = Integer.toString(contract.getFromDate().getMonthValue());
+        String year1 = Integer.toString(contract.getFromDate().getYear());
+        String name1 = contract.getTenant().getRoom().getHouse().getUser().getLastname() +
+                " " + contract.getTenant().getRoom().getHouse().getUser().getFirstname();
+        String dob1 = "";
+        String idcard1 = "";
+        String sdt1 = "";
+        String name2 = contract.getTenant().getName();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dob2 = contract.getTenant().getBirth().format(dateTimeFormatter);
+        String address1 = contract.getTenant().getAddress();
+        String idcard2 = contract.getTenant().getIdentityNumber();
+        String sdt2 = contract.getTenant().getPhone();
+        String address2 = contract.getTenant().getRoom().getHouse().getAddress() +
+                ", " + contract.getTenant().getRoom().getHouse().getDistrict() +
+                ", " + contract.getTenant().getRoom().getHouse().getCity();
+        String price1 = Integer.toString(contract.getTenant().getRoom().getRoomMoney());
+        String price2 = Integer.toString(contract.getTenant().getRoom().getHouse().getElectricPrice());
+        String price3 = Integer.toString(contract.getTenant().getRoom().getHouse().getWaterPrice());
+        String price4 = Integer.toString(contract.getDeposit());
+        String day2 = Integer.toString(contract.getToDate().getDayOfMonth());
+        String month2 = Integer.toString(contract.getToDate().getMonthValue());
+        String year2 = Integer.toString(contract.getToDate().getYear());
 
         // Load the Word document
         Map<String, String> replacements = new HashMap<>();

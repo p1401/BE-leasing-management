@@ -73,18 +73,14 @@ public class ContractController {
         return ResponseEntity.ok(contractService.updateContract(contractId,contract));
     }
 
-    private User getUserToken() {
-        return jwtService.getUser(httpServletRequest);
-    }
-
-    @GetMapping("/generateDoc")
-    public ResponseEntity<byte[]> generateDoc() throws Exception {
+    @GetMapping("/generateDoc/{contractId}")
+    public ResponseEntity<byte[]> generateDoc(@PathVariable("contractId") Long contractId) throws Exception {
         // Set the paths for the template and output documents
         String templatePath = "D:\\Git\\IdeaProjects\\test\\contract_template.docx";
         String outputPath = "D:\\Git\\IdeaProjects\\test\\output.docx";
 
         // Generate the modified document using the service method
-        contractService.replaceTextsInWordDocument(templatePath, outputPath);
+        contractService.replaceTextsInWordDocument(contractId, templatePath, outputPath);
 
         // Return the modified document as a byte array
         HttpHeaders headers = new HttpHeaders();
@@ -93,4 +89,7 @@ public class ContractController {
         return new ResponseEntity<>(Files.readAllBytes(Paths.get(outputPath)), headers, HttpStatus.OK);
     }
 
+    private User getUserToken() {
+        return jwtService.getUser(httpServletRequest);
+    }
 }
