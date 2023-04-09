@@ -7,15 +7,14 @@ import com.fu.lhm.notification.repository.NotificationRepository;
 import com.fu.lhm.tenant.modal.CreateContractRequest;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.room.Room;
+import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.Tenant;
+import com.fu.lhm.tenant.model.ContractBookingRequest;
+import com.fu.lhm.tenant.model.ContractRequest;
 import com.fu.lhm.tenant.repository.ContractRepository;
 import com.fu.lhm.tenant.repository.TenantRepository;
-import com.fu.lhm.tenant.validate.ContractValidate;
-import com.fu.lhm.user.User;
-import de.phip1611.Docx4JSRUtil;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -23,9 +22,6 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -52,110 +48,84 @@ public class ContractService {
 
     private final RoomRepository roomrepository;
 
-    private NotificationRepository notificationRepository;
-
-
-    private final HttpServletRequest httpServletRequest;
-    private final JwtService jwtService;
-
-    private static final int ALERT_THRESHOLD = 10;
-
     public Contract getContractById(Long contractId){
 
         return contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
     }
 
-    public Page<Contract> getListContractByHouseId(Long houseId, Pageable pageable){
+    public Contract createContract(ContractRequest contractRequest) {
+        int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
+        long roomId = contractRequest.getRoomId();
+        Date fromDate = contractRequest.getFromDate();
+        Date toDate = contractRequest.getToDate();
 
-        return contractRepository.findAllByTenant_Room_House_Id(houseId, pageable);
-    }
-
-    public List<Contract> getListContract(User user){
-
-        return contractRepository.findAllByTenant_Room_House_User(user);
-    }
-
-    public Contract createContract(Long roomId, CreateContractRequest createContractRequest){
-        int randomNumber = (int)(Math.random()*(99999-10000+1)+10000);
-
-        Room room = roomrepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
+        Room room = roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
         room.setCurrentTenant(room.getCurrentTenant()+1);
+        roomrepository.save(room);
         //create tenant
-        Tenant tenant = new Tenant();
-        tenant.setName(createContractRequest.getTenantName());
-        tenant.setEmail(createContractRequest.getEmail());
-        tenant.setPhone(createContractRequest.getPhone()+"");
-        tenant.setAddress(createContractRequest.getAddress());
-        tenant.setBirth(createContractRequest.getBirth());
-        tenant.setIdentityNumber(createContractRequest.getIdentityNumber());
-        tenant.setContractHolder(true);
-        tenant.setRoomName(room.getName());
-        tenant.setHouseName(room.getHouse().getName());
+        Tenant tenant = contractRequest.getTenant();
+        tenant.setIsContractHolder(true);
         tenant.setRoom(room);
+//        tenant.setHouse(room.getHouse());
 
         //create contract
         Contract contract = new Contract();
-        contract.setContractCode("HĐ"+randomNumber);
-        contract.setHouseName(createContractRequest.getHouseName());
-        contract.setRoomName(createContractRequest.getRoomName());
-        contract.setFloor(createContractRequest.getFloor());
-        contract.setActive(true);
-        contract.setDeposit(createContractRequest.getDeposit());
-        contract.setFromDate(createContractRequest.getFromDate());
-        contract.setToDate(createContractRequest.getToDate());
+        contract.setContractCode("HĐ" + randomNumber);
+        contract.setIsActive(true);
+        contract.setDeposit(contractRequest.getDeposit());
+        contract.setFromDate(fromDate);
+        contract.setToDate(toDate);
         contract.setTenant(tenantRepository.save(tenant));
+
         return contractRepository.save(contract);
     }
 
+    public Contract createContractFromBooking(Long roomId, @NotNull ContractBookingRequest contractBookingRequest) {
+        int randomNumber = (int) (Math.random() * (99999 - 10000 + 1) + 10000);
 
-    public Contract changeHolder(Long contractid, Long oldTenantId, Long newTenantId){
-        Contract contract = contractRepository.findById(contractid).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
+        Date fromDate = contractBookingRequest.getFromDate();
+        Date toDate = contractBookingRequest.getToDate();
+
+        Room room = roomrepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
+        room.setHaveBookRoom(false);
+        roomrepository.save(room);
+
+        //create tenant
+        Tenant tenant = tenantRepository.findById(contractBookingRequest.getTenantId()).orElseThrow(() -> new EntityNotFoundException("Khách hàng không tồn tại!"));
+        tenant.setIsContractHolder(true);
+        tenantRepository.save(tenant);
+
+        //create contract
+        Contract contract = new Contract();
+        contract.setContractCode("HĐ" + randomNumber);
+        contract.setIsActive(true);
+        contract.setDeposit(contractBookingRequest.getDeposit());
+        contract.setFromDate(fromDate);
+        contract.setToDate(toDate);
+        contract.setTenant(tenant);
+        return contractRepository.save(contract);
+    }
+
+    public Contract changeHolder(Long contractId, Long oldTenantId, Long newTenantId) {
+        Contract contract = contractRepository.findById(contractId).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
         Tenant oldTenant = tenantRepository.findById(oldTenantId).orElseThrow(() -> new EntityNotFoundException("Khách hàng không tồn tại!"));
         Tenant newTenant = tenantRepository.findById(newTenantId).orElseThrow(() -> new EntityNotFoundException("Khách hàng không tồn tại!"));
 
-        oldTenant.setContractHolder(false);
-        newTenant.setContractHolder(true);
+        oldTenant.setIsContractHolder(false);
+        tenantRepository.save(oldTenant);
+        newTenant.setIsContractHolder(true);
 
-        contract.setTenant(newTenant);
+        contract.setTenant(tenantRepository.save(newTenant));
 
-        return contract;
+        return contractRepository.save(contract);
     }
 
-    public Contract updateContract(Long contractId, Contract newContract){
+    public Contract updateContract(Long contractId, Contract newContract) {
         Contract oldContract = contractRepository.findById(contractId).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
         oldContract.setToDate(newContract.getToDate());
         contractRepository.save(oldContract);
         return oldContract;
     }
-
-
-//    @Scheduled(cron = "0/5 * * * * *") // run every 5 seconds
-//    public void generateNotifications(User user) {
-//        List<Contract> contracts = this.getListContract(user);
-//        LocalDate now = LocalDate.now();
-//
-//        for (Contract contract : contracts) {
-//            if (contract.getToDate().isAfter(now)) {
-//                // generate alert for expired contract
-////                Notification notification = new Notification();
-////                notification.setTitle("Contract Expiration");
-////                notification.setDescription("Contract of room " + contract.getRoomName() +
-////                                            " is expiring on " + contract.getToDate());
-////                notification.setTime(LocalDate.now());
-////                notificationRepository.save(notification);
-//                System.out.println("Hop dong phong " + contract.getRoomName() + "da qua han");
-//            } else {
-//                // generate alert for upcoming contract expiration
-//                Period period = Period.between(contract.getToDate(), now);
-//                long timeUntilExpiration = period.getDays();
-//                if (timeUntilExpiration <= ALERT_THRESHOLD) {
-////                    alertService.generateContractExpirationAlert(contract);
-//                    System.out.println("Hop dong phong " + contract.getRoomName() + "con " + period + " ngay se het han");
-//                }
-//            }
-//        }
-//    }
-
 
     public void replaceTextsInWordDocument(Long contractId, String inputFilePath, String outputFilePath) throws Exception {
         Contract contract = this.getContractById(contractId);

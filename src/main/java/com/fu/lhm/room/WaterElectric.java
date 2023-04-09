@@ -1,7 +1,7 @@
 package com.fu.lhm.room;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fu.lhm.house.House;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,7 +27,7 @@ public class WaterElectric {
 
     private int numberWater;
 
-    private  int numberElectric;
+    private int numberElectric;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roomId")

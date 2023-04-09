@@ -26,14 +26,14 @@ public class RoomStatisticService {
             for(Room room : listRoom){
                 if(room.getCurrentTenant()==room.getMaxTenant()){
                     full+=1;
-                }
-                if(room.getCurrentTenant()<room.getMaxTenant() && room.getCurrentTenant()!=0){
+                }else if(room.getCurrentTenant()<room.getMaxTenant() && room.getCurrentTenant()>0){
                     haveSlot+=1;
                 }
-                if(room.getCurrentTenant()==0){
+                else if(room.getCurrentTenant()==0){
                     empty+=1;
                 }
             }
+
 
             roomStatistic.setRoomFull(full);
             roomStatistic.setRoomHaveSlot(haveSlot);

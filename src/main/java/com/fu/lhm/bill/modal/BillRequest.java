@@ -1,4 +1,4 @@
-package com.fu.lhm.financial.modal;
+package com.fu.lhm.bill.modal;
 
 import lombok.*;
 
@@ -28,6 +28,6 @@ public class BillRequest {
 
     private String description;
 
-    private String billContent;
+    private String billType;
 
 }

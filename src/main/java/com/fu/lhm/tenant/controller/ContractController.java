@@ -1,12 +1,12 @@
 package com.fu.lhm.tenant.controller;
 
-import com.fu.lhm.jwt.JwtService;
 import com.fu.lhm.tenant.service.ContractService;
 import com.fu.lhm.tenant.modal.CreateContractRequest;
 import com.fu.lhm.tenant.Contract;
+import com.fu.lhm.tenant.model.ContractBookingRequest;
+import com.fu.lhm.tenant.model.ContractRequest;
+import com.fu.lhm.tenant.service.ContractService;
 import com.fu.lhm.tenant.validate.ContractValidate;
-import com.fu.lhm.user.User;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.springframework.data.domain.Page;
@@ -32,10 +32,6 @@ public class ContractController {
 
     private final ContractValidate contractValidate;
 
-
-    private final HttpServletRequest httpServletRequest;
-    private final JwtService jwtService;
-
     @GetMapping("/{contractId}")
     public ResponseEntity<Contract> getContractById(@PathVariable("contractId") Long contractId){
 
@@ -43,34 +39,33 @@ public class ContractController {
         return ResponseEntity.ok(contractService.getContractById(contractId));
     }
 
-    @GetMapping("/houses/{houseId}")
-    public ResponseEntity<Page<Contract>> getContractByHouseId(@PathVariable("houseId") Long houseId,
-                                                               @RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                               @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
+    @PostMapping("")
+    public ResponseEntity<Contract> createContract(@RequestBody ContractRequest contractRequest) {
 
+        contractValidate.validateForCreateContract(contractRequest);
 
-        return ResponseEntity.ok(contractService.getListContractByHouseId(houseId, PageRequest.of(page, pageSize)));
+        return ResponseEntity.ok(contractService.createContract(contractRequest));
     }
 
-
-    @PostMapping("/rooms/{roomId}")
-    public ResponseEntity<Contract> createContract(@PathVariable("roomId") Long roomId, @RequestBody CreateContractRequest createContractRequest) throws ParseException {
-
-        contractValidate.validateForCreateContract(roomId,createContractRequest);
-        return ResponseEntity.ok(contractService.createContract(roomId,createContractRequest));
+    @PostMapping("/booking")
+    public ResponseEntity<Contract> createContractFromBooking(@RequestParam(name = "roomId") Long roomId,
+                                                              @RequestBody ContractBookingRequest contractBookingRequest) {
+        return ResponseEntity.ok(contractService.createContractFromBooking(roomId, contractBookingRequest));
     }
 
-
-    @PutMapping("{contractId}/changeHolder/{oldTenantId}/{newTenantId}")
-    public ResponseEntity<Contract> changeHolder(@PathVariable("contractId") Long contractId, @PathVariable("oldTenantId") Long oldTenantId,@PathVariable("newTenantId") Long newTenantId ) {
-
-        return ResponseEntity.ok(contractService.changeHolder(contractId,oldTenantId,newTenantId));
+    @PutMapping("{contractId}/change-holder")
+    public ResponseEntity<Contract> changeHolder(@PathVariable("contractId") Long contractId,
+                                                 @RequestParam(name = "oldTenantId") Long oldTenantId,
+                                                 @RequestParam(name = "newTenantId") Long newTenantId) {
+        System.out.println(contractId + oldTenantId + newTenantId);
+        return ResponseEntity.ok(contractService.changeHolder(contractId, oldTenantId, newTenantId));
     }
 
     @PutMapping("/{contractId}")
-    public ResponseEntity<Contract> updateContract(@PathVariable("contractId") Long contractId, @RequestBody Contract contract) {
+    public ResponseEntity<Contract> updateContract(@PathVariable("contractId") Long contractId,
+                                                   @RequestBody Contract contract) {
 
-        return ResponseEntity.ok(contractService.updateContract(contractId,contract));
+        return ResponseEntity.ok(contractService.updateContract(contractId, contract));
     }
 
     @GetMapping("/generateDoc/{contractId}")

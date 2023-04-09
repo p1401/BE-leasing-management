@@ -1,13 +1,11 @@
 package com.fu.lhm.notification;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fu.lhm.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity(name = "notifications")
@@ -18,20 +16,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notification {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String title;
+    private String message;
 
-    private String description;
+    private Date dateCreate;
 
-    private LocalDate time;
+    private Boolean isRead;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @JsonBackReference
     User user;
-
 }

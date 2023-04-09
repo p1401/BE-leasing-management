@@ -40,11 +40,12 @@ public class Room {
 
     private int moneyNotPay;
 
+    private Boolean haveBookRoom;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "houseId")
     @JsonBackReference
-     House house;
+    House house;
 
     @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

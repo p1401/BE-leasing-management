@@ -12,25 +12,25 @@ public class WaterElectricSerice {
 
     private final WaterElectricRepositoy waterElectricRepositoy;
 
-        public WaterElectric updateWaterElectric(Long roomId, WaterElectric newWaterElectric){
+    public WaterElectric updateWaterElectric(Long roomId, WaterElectric newWaterElectric){
 
-            WaterElectric oldWaterElectric = waterElectricRepositoy.findByRoom_Id(roomId);
+        WaterElectric oldWaterElectric = waterElectricRepositoy.findByRoom_Id(roomId);
 
-            oldWaterElectric.setChiSoDauNuoc(newWaterElectric.getChiSoDauNuoc());
-            oldWaterElectric.setChiSoDauDien(newWaterElectric.getChiSoDauDien());
-            oldWaterElectric.setChiSoCuoiNuoc(newWaterElectric.getChiSoCuoiNuoc());
-            oldWaterElectric.setChiSoCuoiDien(newWaterElectric.getChiSoCuoiDien());
-            oldWaterElectric.setNumberElectric(newWaterElectric.getNumberElectric());
-            oldWaterElectric.setNumberWater(newWaterElectric.getNumberWater());
+        oldWaterElectric.setChiSoDauNuoc(newWaterElectric.getChiSoDauNuoc());
+        oldWaterElectric.setChiSoDauDien(newWaterElectric.getChiSoDauDien());
+        oldWaterElectric.setChiSoCuoiNuoc(newWaterElectric.getChiSoCuoiNuoc());
+        oldWaterElectric.setChiSoCuoiDien(newWaterElectric.getChiSoCuoiDien());
+        oldWaterElectric.setNumberElectric(newWaterElectric.getNumberElectric());
+        oldWaterElectric.setNumberWater(newWaterElectric.getNumberWater());
 
-            return waterElectricRepositoy.save(oldWaterElectric);
+        return waterElectricRepositoy.save(oldWaterElectric);
 
-        }
+    }
 
-        public WaterElectric getWaterElectrictByRoomId(Long roomId){
+    public WaterElectric getWaterElectrictByRoomId(Long roomId){
 
-            return waterElectricRepositoy.findByRoom_Id(roomId);
-        }
+        return waterElectricRepositoy.findByRoom_Id(roomId);
+    }
 
 
 

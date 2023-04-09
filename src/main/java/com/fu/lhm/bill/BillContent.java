@@ -1,4 +1,4 @@
-package com.fu.lhm.financial;
+package com.fu.lhm.bill;
 
 public enum BillContent {
 
