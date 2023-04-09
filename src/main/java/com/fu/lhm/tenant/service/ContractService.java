@@ -1,13 +1,8 @@
 package com.fu.lhm.tenant.service;
 
 import com.fu.lhm.exception.BadRequestException;
-import com.fu.lhm.jwt.JwtService;
-import com.fu.lhm.notification.Notification;
-import com.fu.lhm.notification.repository.NotificationRepository;
-import com.fu.lhm.tenant.modal.CreateContractRequest;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.room.Room;
-import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.Tenant;
 import com.fu.lhm.tenant.model.ContractBookingRequest;
@@ -19,23 +14,16 @@ import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -130,9 +118,10 @@ public class ContractService {
     public void replaceTextsInWordDocument(Long contractId, String inputFilePath, String outputFilePath) throws Exception {
         Contract contract = this.getContractById(contractId);
 
-        String day1 = contract.getFromDate().getDayOfMonth()+"";
-        String month1 = contract.getFromDate().getMonthValue()+"";
-        String year1 = contract.getFromDate().getYear()+"";
+        LocalDate date1 = contract.getFromDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        String day1 = String.valueOf(date1.getDayOfMonth());
+        String month1 = String.valueOf(date1.getMonthValue());
+        String year1 = String.valueOf(date1.getYear());
         String name1 = contract.getTenant().getRoom().getHouse().getUser().getLastname() +
                 " " + contract.getTenant().getRoom().getHouse().getUser().getFirstname();
         String dob1 = "";
@@ -140,10 +129,10 @@ public class ContractService {
         String idcard1 = "";
         String sdt1 = "";
         String name2 = contract.getTenant().getName();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String dob2 = contract.getTenant().getBirth().format(dateTimeFormatter);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String dob2 = dateFormat.format(contract.getTenant().getBirth());
         String address2 = contract.getTenant().getAddress();
-        String idcard2 = contract.getTenant().getIdentityNumber();
+        String idcard2 = contract.getTenant().getIdentifyNumber();
         String sdt2 = contract.getTenant().getPhone();
         String address3 = contract.getTenant().getRoom().getHouse().getAddress() +
                 ", " + contract.getTenant().getRoom().getHouse().getDistrict() +
@@ -152,9 +141,10 @@ public class ContractService {
         String price2 = String.format("%,d", contract.getTenant().getRoom().getHouse().getElectricPrice());
         String price3 = String.format("%,d", contract.getTenant().getRoom().getHouse().getWaterPrice());
         String price4 = String.format("%,d", contract.getDeposit());
-        String day2 = contract.getToDate().getDayOfMonth()+"";
-        String month2 = contract.getToDate().getMonthValue()+"";
-        String year2 = contract.getToDate().getYear()+"";
+        LocalDate date2 = contract.getToDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        String day2 = String.valueOf(date2.getDayOfMonth());
+        String month2 = String.valueOf(date2.getMonthValue());
+        String year2 = String.valueOf(date2.getYear());
 
         // Load the Word document
         Map<String, String> replacements = new HashMap<>();

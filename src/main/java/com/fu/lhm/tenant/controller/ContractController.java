@@ -1,27 +1,19 @@
 package com.fu.lhm.tenant.controller;
 
 import com.fu.lhm.tenant.service.ContractService;
-import com.fu.lhm.tenant.modal.CreateContractRequest;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.model.ContractBookingRequest;
 import com.fu.lhm.tenant.model.ContractRequest;
-import com.fu.lhm.tenant.service.ContractService;
 import com.fu.lhm.tenant.validate.ContractValidate;
 import lombok.RequiredArgsConstructor;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/contracts")
