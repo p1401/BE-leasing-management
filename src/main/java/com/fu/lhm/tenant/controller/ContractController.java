@@ -76,8 +76,8 @@ public class ContractController {
     @GetMapping("/generateDoc/{contractId}")
     public ResponseEntity<byte[]> generateDoc(@PathVariable("contractId") Long contractId) throws Exception {
         // Set the paths for the template and output documents
-        String templatePath = "D:\\Git\\IdeaProjects\\test\\contract_template.docx";
-        String outputPath = "D:\\Git\\IdeaProjects\\test\\output.docx";
+        String templatePath = "D:\\Git\\IdeaProjects\\backend-lhm\\contract_template.docx";
+        String outputPath = "D:\\Git\\IdeaProjects\\backend-lhm\\output.docx";
         try {
             // Generate the modified document using the service method
             contractService.replaceTextsInWordDocument(contractId, templatePath, outputPath);

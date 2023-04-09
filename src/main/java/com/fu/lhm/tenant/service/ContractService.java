@@ -160,9 +160,9 @@ public class ContractService {
     public void replaceTextsInWordDocument(Long contractId, String inputFilePath, String outputFilePath) throws Exception {
         Contract contract = this.getContractById(contractId);
 
-        String day1 = Integer.toString(contract.getFromDate().getDayOfMonth());
-        String month1 = Integer.toString(contract.getFromDate().getMonthValue());
-        String year1 = Integer.toString(contract.getFromDate().getYear());
+        String day1 = contract.getFromDate().getDayOfMonth()+"";
+        String month1 = contract.getFromDate().getMonthValue()+"";
+        String year1 = contract.getFromDate().getYear()+"";
         String name1 = contract.getTenant().getRoom().getHouse().getUser().getLastname() +
                 " " + contract.getTenant().getRoom().getHouse().getUser().getFirstname();
         String dob1 = "";
@@ -178,37 +178,37 @@ public class ContractService {
         String address3 = contract.getTenant().getRoom().getHouse().getAddress() +
                 ", " + contract.getTenant().getRoom().getHouse().getDistrict() +
                 ", " + contract.getTenant().getRoom().getHouse().getCity();
-        String price1 = Integer.toString(contract.getTenant().getRoom().getRoomMoney());
-        String price2 = Integer.toString(contract.getTenant().getRoom().getHouse().getElectricPrice());
-        String price3 = Integer.toString(contract.getTenant().getRoom().getHouse().getWaterPrice());
-        String price4 = Integer.toString(contract.getDeposit());
-        String day2 = Integer.toString(contract.getToDate().getDayOfMonth());
-        String month2 = Integer.toString(contract.getToDate().getMonthValue());
-        String year2 = Integer.toString(contract.getToDate().getYear());
+        String price1 = String.format("%,d", contract.getTenant().getRoom().getRoomMoney());
+        String price2 = String.format("%,d", contract.getTenant().getRoom().getHouse().getElectricPrice());
+        String price3 = String.format("%,d", contract.getTenant().getRoom().getHouse().getWaterPrice());
+        String price4 = String.format("%,d", contract.getDeposit());
+        String day2 = contract.getToDate().getDayOfMonth()+"";
+        String month2 = contract.getToDate().getMonthValue()+"";
+        String year2 = contract.getToDate().getYear()+"";
 
         // Load the Word document
         Map<String, String> replacements = new HashMap<>();
-        replacements.put("${day1}", day1);
-        replacements.put("${month1}", month1);
-        replacements.put("${year1}", year1);
-        replacements.put("${name1}", name1);
-        replacements.put("${dob1}", dob1);
-        replacements.put("${address1}", address1);
-        replacements.put("${idcard1}", idcard1);
-        replacements.put("${sdt1}", sdt1);
-        replacements.put("${name2}", name2);
-        replacements.put("${dob2}", dob2);
-        replacements.put("${address2}", address2);
-        replacements.put("${idcard2}", idcard2);
-        replacements.put("${sdt2}", sdt2);
-        replacements.put("${address3}", address3);
-        replacements.put("${price1}", price1);
-        replacements.put("${price2}", price2);
-        replacements.put("${price3}", price3);
-        replacements.put("${price4}", price4);
-        replacements.put("${day2}", day2);
-        replacements.put("${month2}", month2);
-        replacements.put("${year2}", year2);
+        replacements.put("day1", day1);
+        replacements.put("month1", month1);
+        replacements.put("year1", year1);
+        replacements.put("name1", name1);
+        replacements.put("dob1", dob1);
+        replacements.put("address1", address1);
+        replacements.put("idcard1", idcard1);
+        replacements.put("sdt1", sdt1);
+        replacements.put("name2", name2);
+        replacements.put("dob2", dob2);
+        replacements.put("address2", address2);
+        replacements.put("idcard2", idcard2);
+        replacements.put("sdt2", sdt2);
+        replacements.put("address3", address3);
+        replacements.put("price1", price1);
+        replacements.put("price2", price2);
+        replacements.put("price3", price3);
+        replacements.put("price4", price4);
+        replacements.put("day2", day2);
+        replacements.put("month2", month2);
+        replacements.put("year2", year2);
 
         // Load the Word document
         FileInputStream fis = new FileInputStream(inputFilePath);
