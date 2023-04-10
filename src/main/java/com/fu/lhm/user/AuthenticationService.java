@@ -1,12 +1,9 @@
-package com.fu.lhm.auth;
+package com.fu.lhm.user;
 
 import com.fu.lhm.jwt.JwtService;
-import com.fu.lhm.token.Token;
-import com.fu.lhm.token.TokenRepository;
-import com.fu.lhm.token.TokenType;
-import com.fu.lhm.user.Role;
-import com.fu.lhm.user.User;
-import com.fu.lhm.user.UserRepository;
+import com.fu.lhm.jwt.Token;
+import com.fu.lhm.jwt.TokenRepository;
+import com.fu.lhm.jwt.TokenType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

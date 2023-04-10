@@ -1,7 +1,6 @@
 package com.fu.lhm.room.service;
 
-import com.fu.lhm.room.Room;
-import com.fu.lhm.room.WaterElectric;
+import com.fu.lhm.room.entity.WaterElectric;
 import com.fu.lhm.room.repository.WaterElectricRepositoy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

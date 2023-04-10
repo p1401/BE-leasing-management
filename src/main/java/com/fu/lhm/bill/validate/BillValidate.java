@@ -1,10 +1,10 @@
 package com.fu.lhm.bill.validate;
 
-import com.fu.lhm.bill.BillContent;
-import com.fu.lhm.bill.BillType;
+import com.fu.lhm.bill.entity.BillContent;
+import com.fu.lhm.bill.entity.BillType;
 import com.fu.lhm.bill.modal.BillRequest;
 import com.fu.lhm.exception.BadRequestException;
-import com.fu.lhm.bill.Bill;
+import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.tenant.Contract;

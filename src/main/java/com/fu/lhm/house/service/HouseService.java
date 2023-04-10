@@ -1,6 +1,6 @@
 package com.fu.lhm.house.service;
 
-import com.fu.lhm.house.House;
+import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
 import com.fu.lhm.user.User;
 import jakarta.persistence.EntityNotFoundException;

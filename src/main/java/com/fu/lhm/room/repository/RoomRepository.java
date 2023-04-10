@@ -1,6 +1,6 @@
 package com.fu.lhm.room.repository;
 
-import com.fu.lhm.room.Room;
+import com.fu.lhm.room.entity.Room;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

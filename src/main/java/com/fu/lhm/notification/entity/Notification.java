@@ -1,4 +1,4 @@
-package com.fu.lhm.notification;
+package com.fu.lhm.notification.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fu.lhm.user.User;

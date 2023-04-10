@@ -1,7 +1,7 @@
 package com.fu.lhm.house.validate;
 
 import com.fu.lhm.exception.BadRequestException;
-import com.fu.lhm.house.House;
+import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
 import com.fu.lhm.user.User;
 import lombok.RequiredArgsConstructor;

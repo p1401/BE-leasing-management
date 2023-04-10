@@ -1,4 +1,4 @@
-package com.fu.lhm.token;
+package com.fu.lhm.jwt;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

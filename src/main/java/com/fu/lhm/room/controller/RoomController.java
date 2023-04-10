@@ -1,6 +1,6 @@
 package com.fu.lhm.room.controller;
 
-import com.fu.lhm.room.Room;
+import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.service.RoomService;
 import com.fu.lhm.room.validate.RoomValidate;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.fu.lhm.bill.controller;
 
-import com.fu.lhm.bill.Bill;
+import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.modal.BillRequest;
 import com.fu.lhm.bill.service.BillService;
 import com.fu.lhm.bill.validate.BillValidate;

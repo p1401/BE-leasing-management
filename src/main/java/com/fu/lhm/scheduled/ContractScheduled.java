@@ -1,24 +1,19 @@
 package com.fu.lhm.scheduled;
 
-import com.fu.lhm.jwt.JwtService;
-import com.fu.lhm.notification.Notification;
+import com.fu.lhm.notification.entity.Notification;
 import com.fu.lhm.notification.repository.NotificationRepository;
 import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.Tenant;
 import com.fu.lhm.tenant.repository.ContractRepository;
 import com.fu.lhm.tenant.repository.TenantRepository;
-import com.fu.lhm.user.User;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor

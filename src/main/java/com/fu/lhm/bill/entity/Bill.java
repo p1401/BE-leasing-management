@@ -1,4 +1,4 @@
-package com.fu.lhm.bill;
+package com.fu.lhm.bill.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fu.lhm.tenant.Contract;

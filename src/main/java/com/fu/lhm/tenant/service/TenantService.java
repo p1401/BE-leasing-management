@@ -1,6 +1,6 @@
 package com.fu.lhm.tenant.service;
 
-import com.fu.lhm.room.Room;
+import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.tenant.Tenant;
 import com.fu.lhm.tenant.repository.TenantRepository;

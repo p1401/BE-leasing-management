@@ -1,7 +1,7 @@
 package com.fu.lhm.house.controller;
 
 
-import com.fu.lhm.house.House;
+import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.service.HouseService;
 import com.fu.lhm.house.validate.HouseValidate;
 import com.fu.lhm.jwt.JwtService;

@@ -1,24 +1,14 @@
 package com.fu.lhm.notification.service;
 
 import com.fu.lhm.exception.BadRequestException;
-import com.fu.lhm.notification.Notification;
+import com.fu.lhm.notification.entity.Notification;
 import com.fu.lhm.notification.repository.NotificationRepository;
-import com.fu.lhm.tenant.Contract;
 import com.fu.lhm.tenant.repository.ContractRepository;
 import com.fu.lhm.user.User;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

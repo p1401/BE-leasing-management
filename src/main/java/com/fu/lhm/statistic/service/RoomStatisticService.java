@@ -1,7 +1,7 @@
 package com.fu.lhm.statistic.service;
 
 import com.fu.lhm.statistic.entity.RoomStatistic;
-import com.fu.lhm.room.Room;
+import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

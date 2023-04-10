@@ -2,7 +2,7 @@ package com.fu.lhm.tenant;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fu.lhm.room.Room;
+import com.fu.lhm.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

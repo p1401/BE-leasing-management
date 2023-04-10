@@ -1,4 +1,4 @@
-package com.fu.lhm.auth;
+package com.fu.lhm.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

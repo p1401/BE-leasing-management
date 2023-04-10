@@ -1,6 +1,6 @@
-package com.fu.lhm.auth;
+package com.fu.lhm.user;
 
-import com.fu.lhm.token.TokenRepository;
+import com.fu.lhm.jwt.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

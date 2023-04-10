@@ -1,4 +1,4 @@
-package com.fu.lhm.token;
+package com.fu.lhm.jwt;
 
 import com.fu.lhm.user.User;
 import jakarta.persistence.*;

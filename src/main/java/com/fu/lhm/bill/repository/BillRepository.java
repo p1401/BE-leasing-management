@@ -1,9 +1,8 @@
 package com.fu.lhm.bill.repository;
 
-import com.fu.lhm.bill.Bill;
-import com.fu.lhm.bill.BillContent;
-import com.fu.lhm.bill.BillType;
-import com.fu.lhm.user.User;
+import com.fu.lhm.bill.entity.Bill;
+import com.fu.lhm.bill.entity.BillContent;
+import com.fu.lhm.bill.entity.BillType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

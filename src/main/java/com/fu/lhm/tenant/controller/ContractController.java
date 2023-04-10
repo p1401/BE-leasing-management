@@ -1,7 +1,6 @@
 package com.fu.lhm.tenant.controller;
 
 import com.fu.lhm.tenant.Contract;
-import com.fu.lhm.tenant.model.ContractBookingRequest;
 import com.fu.lhm.tenant.model.ContractRequest;
 import com.fu.lhm.tenant.service.ContractService;
 import com.fu.lhm.tenant.validate.ContractValidate;
@@ -34,11 +33,6 @@ public class ContractController {
         return ResponseEntity.ok(contractService.createContract(contractRequest));
     }
 
-    @PostMapping("/booking")
-    public ResponseEntity<Contract> createContractFromBooking(@RequestParam(name = "roomId") Long roomId,
-                                                              @RequestBody ContractBookingRequest contractBookingRequest) {
-        return ResponseEntity.ok(contractService.createContractFromBooking(roomId, contractBookingRequest));
-    }
 
     @PutMapping("{contractId}/change-holder")
     public ResponseEntity<Contract> changeHolder(@PathVariable("contractId") Long contractId,

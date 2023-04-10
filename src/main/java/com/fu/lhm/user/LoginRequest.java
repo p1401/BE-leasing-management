@@ -1,4 +1,4 @@
-package com.fu.lhm.auth;
+package com.fu.lhm.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
+public class LoginRequest {
 
-  private String token;
+  private String email;
+  String password;
 }

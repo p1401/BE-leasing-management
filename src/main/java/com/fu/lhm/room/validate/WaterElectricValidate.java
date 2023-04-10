@@ -1,8 +1,7 @@
 package com.fu.lhm.room.validate;
 
 import com.fu.lhm.exception.BadRequestException;
-import com.fu.lhm.room.Room;
-import com.fu.lhm.room.WaterElectric;
+import com.fu.lhm.room.entity.WaterElectric;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

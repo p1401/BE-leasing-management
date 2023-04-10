@@ -3,7 +3,7 @@ package com.fu.lhm.tenant;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fu.lhm.bill.Bill;
+import com.fu.lhm.bill.entity.Bill;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

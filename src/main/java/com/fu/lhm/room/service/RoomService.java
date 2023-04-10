@@ -1,11 +1,11 @@
 package com.fu.lhm.room.service;
 
-import com.fu.lhm.bill.Bill;
+import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.repository.BillRepository;
-import com.fu.lhm.house.House;
+import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
-import com.fu.lhm.room.Room;
-import com.fu.lhm.room.WaterElectric;
+import com.fu.lhm.room.entity.Room;
+import com.fu.lhm.room.entity.WaterElectric;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.room.repository.WaterElectricRepositoy;
 import jakarta.persistence.EntityNotFoundException;
@@ -42,10 +42,7 @@ public class RoomService {
                     }
                 }
             }
-
         return listRoom;
-
-
     }
 
     public Room createroom(Long houseId, Room room) {
