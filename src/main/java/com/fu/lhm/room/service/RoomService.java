@@ -1,13 +1,13 @@
 package com.fu.lhm.room.service;
 
 import com.fu.lhm.bill.entity.Bill;
-import com.fu.lhm.bill.repository.BillRepository;
+import com.fu.lhm.bill.modal.repository.BillRepository;
 import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
 import com.fu.lhm.room.entity.Room;
-import com.fu.lhm.room.entity.WaterElectric;
+import com.fu.lhm.waterElectric.entity.WaterElectric;
 import com.fu.lhm.room.repository.RoomRepository;
-import com.fu.lhm.room.repository.WaterElectricRepositoy;
+import com.fu.lhm.waterElectric.repository.WaterElectricRepositoy;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

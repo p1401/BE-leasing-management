@@ -1,7 +1,8 @@
 package com.fu.lhm.bill.controller;
 
 import com.fu.lhm.bill.entity.Bill;
-import com.fu.lhm.bill.modal.BillRequest;
+import com.fu.lhm.bill.modal.BillReceiveRequest;
+import com.fu.lhm.bill.modal.BillSpendRequest;
 import com.fu.lhm.bill.service.BillService;
 import com.fu.lhm.bill.validate.BillValidate;
 import lombok.RequiredArgsConstructor;
@@ -33,15 +34,19 @@ public class BillController {
     }
 
     @PostMapping("/{roomId}")
-    public ResponseEntity<Bill> createBill(@PathVariable("roomId") Long roomId, @RequestBody BillRequest bill) {
-        if (bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")) {
+    public ResponseEntity<Bill> createReceiveBill(@PathVariable("roomId") Long roomId, @RequestBody BillReceiveRequest bill) {
+        if (bill.getBillContent().name().equalsIgnoreCase("TIENPHONG") && bill.getBillType().name().equalsIgnoreCase("RECEIVE")) {
             billValidate.validateForCreateBillTienPhong(roomId, bill);
-        } else if (bill.getBillContent().name().equalsIgnoreCase("TIENPHUTROI")) {
-            billValidate.validateForCreateBillTienPhuTroi(roomId, bill);
+        } else if (bill.getBillContent().name().equalsIgnoreCase("TIENPHUTROI") && bill.getBillType().name().equalsIgnoreCase("RECEIVE")) {
+            billValidate.validateForCreateBillTienPhuTroi(bill);
         }
+        return ResponseEntity.ok(billService.createBillReceive(roomId, bill));
+    }
 
-
-        return ResponseEntity.ok(billService.createBillTienPhong(roomId, bill));
+    @PostMapping("/spend/{roomId}")
+    public ResponseEntity<Bill> createSpendBill(@PathVariable("roomId") Long roomId, @RequestBody BillSpendRequest bill) {
+        billValidate.validateforCreateBillSpend(bill);
+        return ResponseEntity.ok(billService.createBillSpend(roomId, bill));
     }
 
     @PutMapping("/pay/{billId}")

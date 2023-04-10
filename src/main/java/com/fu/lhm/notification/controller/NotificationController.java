@@ -1,9 +1,9 @@
 package com.fu.lhm.notification.controller;
 
-import com.fu.lhm.jwt.JwtService;
+import com.fu.lhm.jwt.service.JwtService;
 import com.fu.lhm.notification.entity.Notification;
 import com.fu.lhm.notification.service.NotificationService;
-import com.fu.lhm.user.User;
+import com.fu.lhm.user.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

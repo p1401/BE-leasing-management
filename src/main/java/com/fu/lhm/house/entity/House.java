@@ -4,7 +4,7 @@ package com.fu.lhm.house.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fu.lhm.room.entity.Room;
-import com.fu.lhm.user.User;
+import com.fu.lhm.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 

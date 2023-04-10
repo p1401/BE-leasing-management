@@ -1,7 +1,7 @@
 package com.fu.lhm.scheduled;
 
 import com.fu.lhm.bill.entity.Bill;
-import com.fu.lhm.bill.repository.BillRepository;
+import com.fu.lhm.bill.modal.repository.BillRepository;
 import com.fu.lhm.notification.entity.Notification;
 import com.fu.lhm.notification.repository.NotificationRepository;
 import com.fu.lhm.tenant.repository.TenantRepository;
