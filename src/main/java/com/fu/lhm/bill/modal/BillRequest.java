@@ -1,8 +1,13 @@
 package com.fu.lhm.bill.modal;
 
+import com.fu.lhm.bill.BillContent;
+import com.fu.lhm.bill.BillType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -11,23 +16,44 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BillRequest {
+    private Long id;
 
-    private LocalDate dateCreate;
+    private String billCode;
 
-    private Integer money;
+    private int roomMoney;
 
-    private Integer chiSoDauDien;
+    private int chiSoDauDien;
 
-    private Integer chiSoDauNuoc;
+    private int chiSoDauNuoc;
 
-    private Integer chiSoCuoiDien;
+    private int chiSoCuoiDien;
 
-    private Integer chiSoCuoiNuoc;
+    private int chiSoCuoiNuoc;
 
-    private Integer totalMoney;
+    private int electricNumber;
+
+    private int waterNumber;
+
+    private int electricMoney;
+
+    private int waterMoney;
+
+    private String payer;
+
+    private Boolean isPay;
+
+    private Date dateCreate;
 
     private String description;
 
-    private String billType;
+    private int totalMoney;
+
+    //Phieu thu, phieu chi
+    @Enumerated(EnumType.STRING)
+    private BillType billType;
+
+    //Tien phong hoac tien thu them
+    @Enumerated(EnumType.STRING)
+    private BillContent billContent;
 
 }

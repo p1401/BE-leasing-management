@@ -39,8 +39,8 @@ public class BillSchedule {
         List<Bill> listBill = billRepository.findAllByIsPayFalse();
         for (Bill bill : listBill) {
 
-            LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
-            long days = today.until(dateCreate, ChronoUnit.DAYS);
+//            LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
+            long days = today.until(bill.getDateCreate(), ChronoUnit.DAYS);
 
             //neu hop dong het han
                 if (days>=15) {

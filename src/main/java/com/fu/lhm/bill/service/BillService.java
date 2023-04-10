@@ -1,5 +1,6 @@
 package com.fu.lhm.bill.service;
 
+import com.fu.lhm.bill.modal.BillRequest;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.bill.Bill;
 import com.fu.lhm.bill.BillContent;
@@ -28,15 +29,39 @@ public class BillService {
 
     private final BillRepository billRepository;
 
-    public Bill createBillTienPhong(Long roomId, Bill bill) {
+    public Bill createBillTienPhong(Long roomId, BillRequest billRequest) {
 
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         Contract contract = contractRepository.findByTenant_Room_Id(roomId);
-        bill.setBillCode("PT" + randomNumber);
+        Bill bill = mapToBill(billRequest);
+        bill.setBillCode("PT"+randomNumber);
         bill.setContract(contract);
-
         return billRepository.save(bill);
     }
+
+    public static Bill mapToBill(BillRequest billRE) {
+        Bill bill = new Bill();
+        bill.setId(billRE.getId());
+        bill.setRoomMoney(billRE.getRoomMoney());
+        bill.setChiSoDauDien(billRE.getChiSoDauDien());
+        bill.setChiSoDauNuoc(billRE.getChiSoDauNuoc());
+        bill.setChiSoCuoiDien(billRE.getChiSoCuoiDien());
+        bill.setChiSoCuoiNuoc(billRE.getChiSoCuoiNuoc());
+        bill.setElectricNumber(billRE.getElectricNumber());
+        bill.setWaterNumber(billRE.getWaterNumber());
+        bill.setElectricMoney(billRE.getElectricMoney());
+        bill.setWaterMoney(billRE.getWaterMoney());
+        bill.setPayer(billRE.getPayer());
+        bill.setIsPay(billRE.getIsPay());
+        bill.setDateCreate(billRE.getDateCreate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        bill.setDescription(billRE.getDescription());
+        bill.setTotalMoney(billRE.getTotalMoney());
+        bill.setBillType(billRE.getBillType());
+        bill.setBillContent(billRE.getBillContent());
+        return bill;
+    }
+
+
 
     public Page<Bill> getListBillByRoomId(Long roomId, Pageable pageable) {
 
@@ -82,8 +107,8 @@ public class BillService {
             //check bill tien phong da tao thang nay chua
             boolean isCreate = false;
             for (Bill bill : listBill) {
-                LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
-                if (dateCreate.getMonthValue() == month
+//                LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
+                if (bill.getDateCreate().getMonthValue() == month
                         && bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")
                         && bill.getBillType().name().equalsIgnoreCase("RECEIVE")
                         && bill.getContract().getTenant().getRoom() == contract.getTenant().getRoom()) {
@@ -103,7 +128,7 @@ public class BillService {
                 bill.setWaterMoney(room.getWaterElectric().getNumberWater() * house.getWaterPrice());
                 bill.setPayer(contract.getTenant().getName());
                 bill.setIsPay(false);
-                bill.setDateCreate(new Date());
+//                bill.setDateCreate(new Date());
                 bill.setDescription("Tiền phòng " + contract.getTenant().getRoom().getName() + " tháng " + month);
                 bill.setTotalMoney(room.getRoomMoney() + room.getWaterElectric().getNumberElectric() * house.getElectricPrice() + room.getWaterElectric().getNumberWater() * house.getWaterPrice());
                 bill.setBillContent(BillContent.TIENPHONG);
@@ -117,6 +142,8 @@ public class BillService {
 
         return newListBill;
     }
+
+
 
 
 }

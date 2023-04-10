@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity(name = "bills")
 @Getter
@@ -44,7 +43,7 @@ public class Bill {
 
     private Boolean isPay;
 
-    private Date dateCreate;
+    private LocalDate dateCreate;
 
     private String description;
 

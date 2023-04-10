@@ -1,6 +1,7 @@
 package com.fu.lhm.bill.controller;
 
 import com.fu.lhm.bill.Bill;
+import com.fu.lhm.bill.modal.BillRequest;
 import com.fu.lhm.bill.service.BillService;
 import com.fu.lhm.bill.validate.BillValidate;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class BillController {
     }
 
     @PostMapping("/{roomId}")
-    public ResponseEntity<Bill> createBill(@PathVariable("roomId") Long roomId, @RequestBody Bill bill) {
+    public ResponseEntity<Bill> createBill(@PathVariable("roomId") Long roomId, @RequestBody BillRequest bill) {
         if (bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")) {
             billValidate.validateForCreateBillTienPhong(roomId, bill);
         } else if (bill.getBillContent().name().equalsIgnoreCase("TIENPHUTROI")) {
