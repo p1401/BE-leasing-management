@@ -47,6 +47,7 @@ public class BillService {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         Bill bill = mapToBillSpend(billRequest);
+        bill.setBillContent(BillContent.TIENPHUTROI);
         bill.setBillCode("PC"+randomNumber);
         bill.setIsPay(true);
         bill.setRoomId(roomId);

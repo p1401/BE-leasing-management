@@ -1,4 +1,4 @@
-package com.fu.lhm.statistic.entity;
+package com.fu.lhm.statistic.model;
 
 import lombok.*;
 

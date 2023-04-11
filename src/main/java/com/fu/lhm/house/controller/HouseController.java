@@ -21,7 +21,9 @@ public class HouseController {
     private final HouseValidate houseValidate;
     private final HttpServletRequest httpServletRequest;
     private final JwtService jwtService;
-
+    private User getUserToken() {
+        return jwtService.getUser(httpServletRequest);
+    }
 
     @PostMapping({""})
     public ResponseEntity<House> addHouse(@RequestBody House house) {
@@ -61,7 +63,5 @@ public class HouseController {
         houseService.deleteHouse(id);
     }
 
-    private User getUserToken() {
-        return jwtService.getUser(httpServletRequest);
-    }
+
 }

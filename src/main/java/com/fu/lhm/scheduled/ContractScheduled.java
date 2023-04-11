@@ -76,7 +76,7 @@ public class ContractScheduled {
     public void checkIfContractDurationUnder30days(Contract contract, long days){
         Notification notification = new Notification();
         notification.setDateCreate(new Date());
-        notification.setMessage("Hop dong phong "+contract.getTenant().getRoom().getHouse().getName()+", phong "+contract.getRoomName()+" con " + days + " ngay se het han");
+        notification.setMessage("Hợp đồng nhà "+contract.getTenant().getRoom().getHouse().getName()+", phòng "+contract.getRoomName()+" còn " + days + " ngày sẽ hết hạn");
         notification.setIsRead(false);
         notification.setUser(contract.getTenant().getRoom().getHouse().getUser());
         System.out.println("Hop dong phong "+contract.getTenant().getRoom().getHouse().getName()+", phong "+contract.getRoomName()+" con " + days + " ngay se het han");
