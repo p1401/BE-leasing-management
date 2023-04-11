@@ -1,8 +1,11 @@
 package com.fu.lhm.bill.controller;
 
-import com.fu.lhm.bill.Bill;
+import com.fu.lhm.bill.entity.Bill;
+import com.fu.lhm.bill.modal.BillReceiveRequest;
+import com.fu.lhm.bill.modal.BillSpendRequest;
 import com.fu.lhm.bill.service.BillService;
 import com.fu.lhm.bill.validate.BillValidate;
+import com.fu.lhm.contract.entity.Contract;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,15 +35,19 @@ public class BillController {
     }
 
     @PostMapping("/{roomId}")
-    public ResponseEntity<Bill> createBill(@PathVariable("roomId") Long roomId, @RequestBody Bill bill) {
-        if (bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")) {
+    public ResponseEntity<Bill> createReceiveBill(@PathVariable("roomId") Long roomId, @RequestBody BillReceiveRequest bill) {
+        if (bill.getBillContent().name().equalsIgnoreCase("TIENPHONG") && bill.getBillType().name().equalsIgnoreCase("RECEIVE")) {
             billValidate.validateForCreateBillTienPhong(roomId, bill);
-        } else if (bill.getBillContent().name().equalsIgnoreCase("TIENPHUTROI")) {
-            billValidate.validateForCreateBillTienPhuTroi(roomId, bill);
+        } else if (bill.getBillContent().name().equalsIgnoreCase("TIENPHUTROI") && bill.getBillType().name().equalsIgnoreCase("RECEIVE")) {
+            billValidate.validateForCreateBillTienPhuTroi(bill);
         }
+        return ResponseEntity.ok(billService.createBillReceive(roomId, bill));
+    }
 
-
-        return ResponseEntity.ok(billService.createBillTienPhong(roomId, bill));
+    @PostMapping("/spend/{roomId}")
+    public ResponseEntity<Bill> createSpendBill(@PathVariable("roomId") Long roomId, @RequestBody BillSpendRequest bill) {
+        billValidate.validateforCreateBillSpend(bill);
+        return ResponseEntity.ok(billService.createBillSpend(roomId, bill));
     }
 
     @PutMapping("/pay/{billId}")
@@ -57,6 +64,17 @@ public class BillController {
                                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
         return ResponseEntity.ok(billService.getListBillByRoomId(roomId, PageRequest.of(page, pageSize)));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<Page<Bill>> getBills(@RequestParam(name = "houseId", required = false) Long houseId,
+                                                       @RequestParam(name = "roomId", required = false) Long roomId,
+                                                       @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                       @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+
+        Page<Bill> listBill = billService.getBills(houseId, roomId, PageRequest.of(page, pageSize));
+
+        return ResponseEntity.ok(listBill);
     }
 
     @DeleteMapping ("/{billId}")

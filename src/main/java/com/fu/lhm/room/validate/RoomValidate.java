@@ -1,9 +1,9 @@
 package com.fu.lhm.room.validate;
 
 import com.fu.lhm.exception.BadRequestException;
-import com.fu.lhm.house.House;
+import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
-import com.fu.lhm.room.Room;
+import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +25,11 @@ public class RoomValidate {
         isNotPopulated(room.getArea()+"","Vui lòng nhập diện tích");
         isNotPopulated(room.getFloor()+"","Vui lòng nhập tầng");
 
-        this.validateForNameExistInFloor(room.getName(), room.getFloor(), house.getId());
-        this.validateFloor(room.getFloor(), house.getFloor());
-        this.validateRoomMoney(room.getRoomMoney());
-        this.validateMaxTenant(room.getMaxTenant());
-        this.validateCurrentTenant(room.getMaxTenant(), room.getCurrentTenant());
+        validateForNameExistInFloor(room.getName(), room.getFloor(), house.getId());
+        validateFloor(room.getFloor(), house.getFloor());
+        validateRoomMoney(room.getRoomMoney());
+        validateMaxTenant(room.getMaxTenant());
+        validateCurrentTenant(room.getMaxTenant(), room.getCurrentTenant());
     }
 
     public void validateUpdateRoom(Room room, Long roomId) {
@@ -40,11 +40,16 @@ public class RoomValidate {
         isNotPopulated(room.getArea()+"","Vui lòng nhập diện tích");
         isNotPopulated(room.getFloor()+"","Vui lòng nhập tầng");
 
-        this.validateForNameExistInFloor(room.getName(), room.getFloor(), oldRoom.getHouse().getId());
-        this.validateFloor(room.getFloor(), oldRoom.getHouse().getFloor());
-        this.validateRoomMoney(room.getRoomMoney());
-        this.validateMaxTenant(room.getMaxTenant());
-        this.validateCurrentTenant(room.getMaxTenant(), room.getCurrentTenant());
+        if(oldRoom.getName().equals(room.getName())){
+
+        }else{
+            validateForNameExistInFloor(room.getName(), room.getFloor(), oldRoom.getHouse().getId());
+
+        }
+        validateFloor(room.getFloor(), oldRoom.getHouse().getFloor());
+        validateRoomMoney(room.getRoomMoney());
+        validateMaxTenant(room.getMaxTenant());
+        validateCurrentTenant(room.getMaxTenant(), room.getCurrentTenant());
     }
 
 

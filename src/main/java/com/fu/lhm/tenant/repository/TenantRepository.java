@@ -1,7 +1,7 @@
 package com.fu.lhm.tenant.repository;
 
 
-import com.fu.lhm.tenant.Tenant;
+import com.fu.lhm.tenant.entity.Tenant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

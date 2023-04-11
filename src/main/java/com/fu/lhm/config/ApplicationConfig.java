@@ -1,7 +1,7 @@
 package com.fu.lhm.config;
 
 
-import com.fu.lhm.user.UserRepository;
+import com.fu.lhm.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

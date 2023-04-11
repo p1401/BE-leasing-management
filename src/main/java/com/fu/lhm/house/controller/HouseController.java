@@ -1,11 +1,11 @@
 package com.fu.lhm.house.controller;
 
 
-import com.fu.lhm.house.House;
+import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.service.HouseService;
 import com.fu.lhm.house.validate.HouseValidate;
-import com.fu.lhm.jwt.JwtService;
-import com.fu.lhm.user.User;
+import com.fu.lhm.jwt.service.JwtService;
+import com.fu.lhm.user.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,12 +21,14 @@ public class HouseController {
     private final HouseValidate houseValidate;
     private final HttpServletRequest httpServletRequest;
     private final JwtService jwtService;
-
+    private User getUserToken() {
+        return jwtService.getUser(httpServletRequest);
+    }
 
     @PostMapping({""})
     public ResponseEntity<House> addHouse(@RequestBody House house) {
 
-        houseValidate.validateCreateUpdateHouse(house, getUserToken());
+        houseValidate.validateCreateHouse(house, getUserToken());
 
         house.setUser(getUserToken());
 
@@ -35,7 +37,7 @@ public class HouseController {
 
     @PutMapping({"/{id}"})
     public ResponseEntity<House> updateHouse(@PathVariable("id") Long id, @RequestBody House house) {
-        houseValidate.validateCreateUpdateHouse(house, getUserToken());
+        houseValidate.validateUpdateHouse(id, house, getUserToken());
         return ResponseEntity.ok(houseService.updateHouse(id, house));
     }
 
@@ -61,7 +63,5 @@ public class HouseController {
         houseService.deleteHouse(id);
     }
 
-    private User getUserToken() {
-        return jwtService.getUser(httpServletRequest);
-    }
+
 }

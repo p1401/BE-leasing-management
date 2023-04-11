@@ -1,9 +1,9 @@
 package com.fu.lhm.house.service;
 
-import com.fu.lhm.house.House;
+import com.fu.lhm.exception.BadRequestException;
+import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
-import com.fu.lhm.user.User;
-import jakarta.persistence.EntityNotFoundException;
+import com.fu.lhm.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +21,7 @@ public class HouseService {
     }
 
     public House updateHouse(Long houseId, House updateHouse) {
-        House oldHouse = houseRepository.findById(houseId).orElseThrow(() -> new EntityNotFoundException("Nhà không tồn tại!"));
+        House oldHouse = houseRepository.findById(houseId).orElseThrow(() -> new BadRequestException("Nhà không tồn tại!"));
         oldHouse.setName(updateHouse.getName());
         oldHouse.setCity(updateHouse.getCity());
         oldHouse.setDistrict(updateHouse.getDistrict());
@@ -39,7 +39,7 @@ public class HouseService {
 
     public House getHouseById(Long houseId){
 
-        return houseRepository.findById(houseId).orElseThrow(() -> new EntityNotFoundException("Nhà không tồn tại!"));
+        return houseRepository.findById(houseId).orElseThrow(() -> new BadRequestException("Nhà không tồn tại!"));
     }
     public void deleteHouse(Long houseId) {
 

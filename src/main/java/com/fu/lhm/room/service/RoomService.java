@@ -1,13 +1,15 @@
 package com.fu.lhm.room.service;
 
-import com.fu.lhm.bill.Bill;
+import com.fu.lhm.bill.entity.Bill;
+import com.fu.lhm.bill.entity.BillType;
 import com.fu.lhm.bill.repository.BillRepository;
-import com.fu.lhm.house.House;
+import com.fu.lhm.exception.BadRequestException;
+import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
-import com.fu.lhm.room.Room;
-import com.fu.lhm.room.WaterElectric;
+import com.fu.lhm.room.entity.Room;
+import com.fu.lhm.waterElectric.entity.WaterElectric;
 import com.fu.lhm.room.repository.RoomRepository;
-import com.fu.lhm.room.repository.WaterElectricRepositoy;
+import com.fu.lhm.waterElectric.repository.WaterElectricRepositoy;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,23 +36,20 @@ public class RoomService {
             Page<Room> listRoom = roomRepository.findAllByHouse_IdAndFloor(houseId, floor, page);
 
             for(Room room : listRoom){
-                List<Bill> listBill = billRepository.findAll();
+                List<Bill> listBill = billRepository.findAllByRoomIdAndBillType(room.getId(), BillType.RECEIVE);
 
                 for(Bill bill :listBill){
-                    if(bill.getIsPay()==false && bill.getBillType().name().equalsIgnoreCase("RECEIVE") && bill.getContract().getTenant().getRoom().getId()==room.getId()){
+                    if(bill.getIsPay()==false){
                         room.setMoneyNotPay(room.getMoneyNotPay()+bill.getTotalMoney());
                     }
                 }
             }
-
         return listRoom;
-
-
     }
 
     public Room createroom(Long houseId, Room room) {
 
-        House house = houseRepository.findById(houseId).orElseThrow(() -> new EntityNotFoundException("Nha không tồn tại!"));
+        House house = houseRepository.findById(houseId).orElseThrow(() -> new BadRequestException("Nha không tồn tại!"));
         Room newRoom = new Room();
         newRoom.setName(room.getName());
         newRoom.setArea(room.getArea());
@@ -74,7 +73,7 @@ public class RoomService {
 
     public Room updateRoom(Long roomId, Room updateRoom) {
 
-        Room oldRoom = roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
+        Room oldRoom = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
         oldRoom.setFloor(updateRoom.getFloor());
         oldRoom.setArea(updateRoom.getArea());
         oldRoom.setRoomMoney(updateRoom.getRoomMoney());

@@ -1,7 +1,7 @@
 package com.fu.lhm.statistic.service;
 
-import com.fu.lhm.statistic.entity.RoomStatistic;
-import com.fu.lhm.room.Room;
+import com.fu.lhm.statistic.model.RoomStatistic;
+import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,8 +33,6 @@ public class RoomStatisticService {
                     empty+=1;
                 }
             }
-
-
             roomStatistic.setRoomFull(full);
             roomStatistic.setRoomHaveSlot(haveSlot);
             roomStatistic.setRoomEmpty(empty);

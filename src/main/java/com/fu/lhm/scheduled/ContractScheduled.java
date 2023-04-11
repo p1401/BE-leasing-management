@@ -1,24 +1,19 @@
 package com.fu.lhm.scheduled;
 
-import com.fu.lhm.jwt.JwtService;
-import com.fu.lhm.notification.Notification;
+import com.fu.lhm.notification.entity.Notification;
 import com.fu.lhm.notification.repository.NotificationRepository;
-import com.fu.lhm.tenant.Contract;
-import com.fu.lhm.tenant.Tenant;
-import com.fu.lhm.tenant.repository.ContractRepository;
+import com.fu.lhm.contract.entity.Contract;
+import com.fu.lhm.tenant.entity.Tenant;
+import com.fu.lhm.contract.repository.ContractRepository;
 import com.fu.lhm.tenant.repository.TenantRepository;
-import com.fu.lhm.user.User;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -81,7 +76,7 @@ public class ContractScheduled {
     public void checkIfContractDurationUnder30days(Contract contract, long days){
         Notification notification = new Notification();
         notification.setDateCreate(new Date());
-        notification.setMessage("Hop dong phong "+contract.getTenant().getRoom().getHouse().getName()+", phong "+contract.getRoomName()+" con " + days + " ngay se het han");
+        notification.setMessage("Hợp đồng nhà "+contract.getTenant().getRoom().getHouse().getName()+", phòng "+contract.getRoomName()+" còn " + days + " ngày sẽ hết hạn");
         notification.setIsRead(false);
         notification.setUser(contract.getTenant().getRoom().getHouse().getUser());
         System.out.println("Hop dong phong "+contract.getTenant().getRoom().getHouse().getName()+", phong "+contract.getRoomName()+" con " + days + " ngay se het han");

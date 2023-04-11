@@ -1,7 +1,8 @@
 package com.fu.lhm.tenant.controller;
 
 
-import com.fu.lhm.tenant.Tenant;
+import com.fu.lhm.tenant.entity.Tenant;
+import com.fu.lhm.tenant.model.TenantRequest;
 import com.fu.lhm.tenant.service.TenantService;
 import com.fu.lhm.tenant.validate.TenantValidate;
 import lombok.RequiredArgsConstructor;
@@ -43,23 +44,12 @@ public class TenantController {
         tenantService.deleteTenant(id);
     }
 
-
     @GetMapping("/rooms/{roomId}")
     public ResponseEntity<Page<Tenant>> getListTenantByRoomId(@PathVariable("roomId") Long id,
                                                               @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                               @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
         Page<Tenant> listTenant = tenantService.getListTenantByRoomId(id, PageRequest.of(page, pageSize));
-
-        return ResponseEntity.ok(listTenant);
-    }
-
-    @GetMapping("/houses/{houseId}")
-    public ResponseEntity<Page<Tenant>> getListTenantByHouseId(@PathVariable("houseId") Long id,
-                                                               @RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                               @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-
-        Page<Tenant> listTenant = tenantService.getListTenantByHouseId(id, PageRequest.of(page, pageSize));
 
         return ResponseEntity.ok(listTenant);
     }

@@ -1,15 +1,17 @@
 package com.fu.lhm.bill.validate;
 
+import com.fu.lhm.bill.entity.BillContent;
+import com.fu.lhm.bill.entity.BillType;
+import com.fu.lhm.bill.modal.BillReceiveRequest;
+import com.fu.lhm.bill.modal.BillSpendRequest;
 import com.fu.lhm.exception.BadRequestException;
-import com.fu.lhm.bill.Bill;
+import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.room.repository.RoomRepository;
-import com.fu.lhm.tenant.Contract;
-import com.fu.lhm.tenant.repository.ContractRepository;
+import com.fu.lhm.contract.entity.Contract;
+import com.fu.lhm.contract.repository.ContractRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -27,15 +29,14 @@ public class BillValidate {
 
     private final RoomRepository roomRepository;
 
-    public void validateForCreateBillTienPhong(Long roomId, Bill bill) {
+    public void validateForCreateBillTienPhong(Long roomId, BillReceiveRequest bill) {
 
         roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
 
-        Page<Bill> listBill = billRepository.findAllByContract_Tenant_Room_Id(roomId, Pageable.unpaged());
+        Contract contract = contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
+        LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
 
-        Contract contract = contractRepository.findByTenant_Room_Id(roomId);
-
-        checkIsCreateTienPhongThisMonth(listBill.getContent(), contract);
+        checkBillExistsInMonthAndYear(roomId, dateCreate.getMonth().getValue(), dateCreate.getYear());
 
         isNotPopulated(bill.getRoomMoney() + "", "Nhập tiền phòng");
         isNotPopulated(bill.getChiSoDauDien() + "", "Nhập chỉ số đầu điện");
@@ -59,7 +60,7 @@ public class BillValidate {
         validateForTotalMoney(bill.getTotalMoney());
     }
 
-    public void validateForCreateBillTienPhuTroi(Long roomId, Bill bill) {
+    public void validateForCreateBillTienPhuTroi(BillReceiveRequest bill) {
 
         isNotPopulated(bill.getRoomMoney() + "", "Nhập tiền phòng");
         isNotPopulated(bill.getChiSoDauDien() + "", "Nhập chỉ số đầu điện");
@@ -71,7 +72,7 @@ public class BillValidate {
 
         isNotPopulated(bill.getBillContent().name(), "Nhập nội dung hóa đơn");
         isNotPopulated(bill.getBillType().name(), "Nhập kiểu hóa đơn");
-//        isNotPopulated(bill.getIsPay() + "", "Tích đã nộp hay chưa nộp");
+        isNotPopulated(bill.getIsPay() + "", "Tích đã nộp hay chưa nộp");
         isNotPopulated(bill.getDateCreate() + "", "Nhập ngày tạo");
         isNotPopulated(bill.getDescription(), "Nhập mô tả");
         isNotPopulated(bill.getTotalMoney() + "", "Nhập tổng tiền");
@@ -83,20 +84,20 @@ public class BillValidate {
         validateForTotalMoney(bill.getTotalMoney());
     }
 
-    public void checkIsCreateTienPhongThisMonth(List<Bill> listBill, Contract contract) {
+    public void validateforCreateBillSpend(BillSpendRequest bill){
+        isNotPopulated(bill.getBillType().name(), "Nhập kiểu hóa đơn");
+        isNotPopulated(bill.getDateCreate() + "", "Nhập ngày tạo");
+        isNotPopulated(bill.getDescription(), "Nhập mô tả");
+        isNotPopulated(bill.getTotalMoney() + "", "Nhập tổng tiền");
+    }
 
-        LocalDate today = LocalDate.now();
-        int month = today.getMonthValue();
-
-        for (Bill bill : listBill) {
-            LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
-            if (dateCreate.getMonthValue() == month
-                    && bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")
-                    && bill.getBillType().name().equalsIgnoreCase("RECEIVE")
-                    && bill.getContract().getTenant().getRoom() == contract.getTenant().getRoom()) {
-                throw new BadRequestException("Tiền phòng tháng " + month + " đã tạo");
-
-            }
+    public void checkBillExistsInMonthAndYear( Long roomId, int month, int year) {
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+        List<Bill> listBill = billRepository.findByContract_Tenant_Room_IdAndBillTypeAndBillContentAndDateCreateBetween(roomId, BillType.RECEIVE, BillContent.TIENPHONG, startDate, endDate);
+        if (listBill.isEmpty()) {
+        } else {
+            throw new BadRequestException("Có " + listBill.size() + " hóa đơn tiền phòng đã được tạo trong tháng " + month + "/" + year);
         }
     }
 
