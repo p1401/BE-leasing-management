@@ -54,6 +54,7 @@ public class ContractService {
         tenant.setRoomName(room.getName());
         tenant.setHouseName(room.getHouse().getName());
         tenant.setRoom(room);
+        tenant.setIsStay(true);
 
         //create contract
         Contract contract = new Contract();
@@ -63,6 +64,8 @@ public class ContractService {
         contract.setFromDate(fromDate);
         contract.setToDate(toDate);
         contract.setTenant(tenantRepository.save(tenant));
+        contract.setRoomName(room.getName());
+        contract.setHouseName(room.getHouse().getName());
 
         //Create bill TIENCOC
         BillReceiveRequest bill = new BillReceiveRequest();
@@ -102,13 +105,14 @@ public class ContractService {
 
     public Page<Contract> getContracts(Long houseId,
                                    Long roomId,
+                                   Boolean isActive,
                                    Pageable page) {
         if (roomId != null) {
-            return contractRepository.findAllByTenant_Room_Id(roomId, page);
+            return contractRepository.findAllByTenant_Room_IdAndIsActive(roomId,isActive, page);
         }
 
         if (houseId != null) {
-            return contractRepository.findAllByTenant_Room_House_Id(houseId, page);
+            return contractRepository.findAllByTenant_Room_House_IdAndIsActive(houseId,isActive, page);
         }
 
         return Page.empty(page);

@@ -4,6 +4,7 @@ package com.fu.lhm.contract.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fu.lhm.bill.entity.Bill;
+import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.tenant.entity.Tenant;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,7 +33,7 @@ public class Contract {
     private Boolean isActive;
     private Long deposit;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Tenant.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "tenantId")
     @JsonBackReference
     Tenant tenant;

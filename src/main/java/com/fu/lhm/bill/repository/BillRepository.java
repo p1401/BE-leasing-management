@@ -8,8 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -31,6 +33,19 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     List<Bill> findAllByContract_Tenant_Room_House_User(User user);
 
     List<Bill> findAllByContract_Tenant_Room_House_Id(Long houseId);
+
+//    @Query(value = "SELECT * FROM ticket "
+//            + "WHERE (:isPlus IS NULL OR IS_PLUS = :isPlus) "
+//            + "AND (:fromDateOfTrans IS NULL OR DATE_OF_TRANS >= :fromDateOfTrans) "
+//            + "AND (:toDateOfTrans IS NULL OR DATE_OF_TRANS <= :toDateOfTrans) ",
+//            nativeQuery = true)
+//    List<Bill> findList(
+//
+//            @Param("fromDate") Instant fromDateOfTrans,
+//            @Param("toDate") Instant toDateOfTrans);
+//
+
+
 }
 
 

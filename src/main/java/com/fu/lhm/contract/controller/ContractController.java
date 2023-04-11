@@ -56,10 +56,11 @@ public class ContractController {
     @GetMapping("")
     public ResponseEntity<Page<Contract>> getContracts(@RequestParam(name = "houseId", required = false) Long houseId,
                                                    @RequestParam(name = "roomId", required = false) Long roomId,
+                                                  @RequestParam(name = "isActive", required = false) Boolean isActive,
                                                    @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        Page<Contract> listContract = contractService.getContracts(houseId, roomId, PageRequest.of(page, pageSize));
+        Page<Contract> listContract = contractService.getContracts(houseId, roomId, isActive,PageRequest.of(page, pageSize));
 
         return ResponseEntity.ok(listContract);
     }

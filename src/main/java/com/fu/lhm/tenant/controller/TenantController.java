@@ -58,10 +58,11 @@ public class TenantController {
     @GetMapping("")
     public ResponseEntity<Page<Tenant>> getTenants(@RequestParam(name = "houseId", required = false) Long houseId,
                                                    @RequestParam(name = "roomId", required = false) Long roomId,
+                                                   @RequestParam(name = "isStay", required = false,defaultValue = "1") Boolean isStay,
                                                    @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        Page<Tenant> listTenant = tenantService.getTenants(houseId, roomId, PageRequest.of(page, pageSize));
+        Page<Tenant> listTenant = tenantService.getTenants(houseId, roomId, isStay, PageRequest.of(page, pageSize));
 
         return ResponseEntity.ok(listTenant);
     }
