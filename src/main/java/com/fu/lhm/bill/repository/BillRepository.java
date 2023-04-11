@@ -20,6 +20,8 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     Page<Bill> findAllByRoomId(Long roomId, Pageable pageable);
 
+    Page<Bill> findAllByHouseId(Long houseId, Pageable pageable);
+
     List<Bill> findAllByIsPayFalse();
 
     List<Bill> findByContract_Tenant_Room_IdAndBillTypeAndBillContentAndDateCreateBetween(Long roomId, BillType billType, BillContent billContent, LocalDate startDate, LocalDate endDate);

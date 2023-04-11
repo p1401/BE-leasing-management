@@ -35,11 +35,13 @@ public class BillService {
 
     public Bill createBillReceive(Long roomId, BillReceiveRequest billRequest) {
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
         Contract contract = contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
         Bill bill = mapToBillReceive(billRequest);
         bill.setBillCode("PT"+randomNumber);
         bill.setContract(contract);
         bill.setRoomId(roomId);
+        bill.setHouseId(room.getHouse().getId());
         return billRepository.save(bill);
     }
 
@@ -51,6 +53,7 @@ public class BillService {
         bill.setBillCode("PC"+randomNumber);
         bill.setIsPay(true);
         bill.setRoomId(roomId);
+        bill.setHouseId(room.getHouse().getId());
         return billRepository.save(bill);
     }
 
@@ -168,5 +171,19 @@ public class BillService {
         }
 
         return newListBill;
+    }
+
+    public Page<Bill> getBills(Long houseId,
+                                       Long roomId,
+                                       Pageable page) {
+        if (roomId != null) {
+            return billRepository.findAllByRoomId(roomId, page);
+        }
+
+        if (houseId != null) {
+            return billRepository.findAllByHouseId(houseId, page);
+        }
+
+        return Page.empty(page);
     }
 }
