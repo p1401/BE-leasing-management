@@ -5,6 +5,8 @@ import com.fu.lhm.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Entity(name = "waterelectrics")
 @Getter
 @Setter
@@ -28,6 +30,8 @@ public class WaterElectric {
     private int numberWater;
 
     private int numberElectric;
+
+    private Date dateUpdate;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roomId")

@@ -1,7 +1,7 @@
 package com.fu.lhm.scheduled;
 
 import com.fu.lhm.bill.entity.Bill;
-import com.fu.lhm.bill.modal.repository.BillRepository;
+import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.notification.entity.Notification;
 import com.fu.lhm.notification.repository.NotificationRepository;
 import com.fu.lhm.tenant.repository.TenantRepository;
@@ -37,11 +37,10 @@ public class BillSchedule {
         LocalDate today = LocalDate.now();
         List<Bill> listBill = billRepository.findAllByIsPayFalse();
         for (Bill bill : listBill) {
-
-//            LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
+            //            LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
             long days = today.until(bill.getDateCreate(), ChronoUnit.DAYS);
 
-            //neu hop dong het han
+            //neu qua 15 ngay chưa thanh toán
                 if (days>=15) {
                     checkIfBill15days(bill, days);
             }

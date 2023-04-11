@@ -6,7 +6,7 @@ import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.entity.BillContent;
 import com.fu.lhm.bill.entity.BillType;
-import com.fu.lhm.bill.modal.repository.BillRepository;
+import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.house.entity.House;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
@@ -35,10 +35,11 @@ public class BillService {
 
     public Bill createBillReceive(Long roomId, BillReceiveRequest billRequest) {
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
-        Contract contract = contractRepository.findByTenant_Room_Id(roomId);
+        Contract contract = contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
         Bill bill = mapToBillReceive(billRequest);
         bill.setBillCode("PT"+randomNumber);
         bill.setContract(contract);
+        bill.setRoomId(roomId);
         return billRepository.save(bill);
     }
 
@@ -47,7 +48,8 @@ public class BillService {
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         Bill bill = mapToBillSpend(billRequest);
         bill.setBillCode("PC"+randomNumber);
-        bill.setRoom(room);
+        bill.setIsPay(true);
+        bill.setRoomId(roomId);
         return billRepository.save(bill);
     }
 
@@ -66,6 +68,7 @@ public class BillService {
         bill.setPayer(billRE.getPayer());
         bill.setIsPay(billRE.getIsPay());
         bill.setDateCreate(billRE.getDateCreate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+//        bill.setDateCreate(billRE.getDateCreate());
         bill.setDescription(billRE.getDescription());
         bill.setTotalMoney(billRE.getTotalMoney());
         bill.setBillType(billRE.getBillType());
@@ -76,6 +79,7 @@ public class BillService {
     public static Bill mapToBillSpend(BillSpendRequest billRE) {
         Bill bill = new Bill();
         bill.setId(billRE.getId());
+//        bill.setDateCreate(billRE.getDateCreate());
         bill.setDateCreate(billRE.getDateCreate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         bill.setDescription(billRE.getDescription());
         bill.setTotalMoney(billRE.getTotalMoney());
@@ -87,7 +91,7 @@ public class BillService {
 
     public Page<Bill> getListBillByRoomId(Long roomId, Pageable pageable) {
 
-        return billRepository.findAllByContract_Tenant_Room_Id(roomId, pageable);
+        return billRepository.findAllByRoomId(roomId, pageable);
     }
 
     public void deleteBill(Long billId) {
@@ -164,8 +168,4 @@ public class BillService {
 
         return newListBill;
     }
-
-
-
-
 }

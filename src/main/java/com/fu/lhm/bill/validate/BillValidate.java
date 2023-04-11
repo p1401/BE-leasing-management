@@ -6,7 +6,7 @@ import com.fu.lhm.bill.modal.BillReceiveRequest;
 import com.fu.lhm.bill.modal.BillSpendRequest;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.bill.entity.Bill;
-import com.fu.lhm.bill.modal.repository.BillRepository;
+import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.contract.entity.Contract;
 import com.fu.lhm.contract.repository.ContractRepository;
@@ -33,7 +33,7 @@ public class BillValidate {
 
         roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
 
-        Contract contract = contractRepository.findByTenant_Room_Id(roomId);
+        Contract contract = contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
         LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
 
         checkBillExistsInMonthAndYear(roomId, dateCreate.getMonth().getValue(), dateCreate.getYear());

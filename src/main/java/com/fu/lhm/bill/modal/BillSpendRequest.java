@@ -16,6 +16,8 @@ import java.util.Date;
 public class BillSpendRequest {
     private Long id;
 
+    private int roomMoney;
+
     private String billCode;
 
     private int totalMoney;

@@ -50,6 +50,7 @@ public class Bill {
 
     private int totalMoney;
 
+    private long roomId;
     //Phieu thu, phieu chi
     @Enumerated(EnumType.STRING)
     private BillType billType;
@@ -63,9 +64,5 @@ public class Bill {
     @JsonBackReference
     private Contract contract;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "roomId")
-    @JsonBackReference
-    private Room room;
 
 }

@@ -52,10 +52,6 @@ public class Room {
     @JsonManagedReference
     List<Tenant> tenants;
 
-//    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonManagedReference
-//    List<Bill> bills;
-
     @OneToOne(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     WaterElectric waterElectric;

@@ -1,4 +1,4 @@
-package com.fu.lhm.bill.modal.repository;
+package com.fu.lhm.bill.repository;
 
 import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.entity.BillContent;
@@ -15,6 +15,8 @@ import java.util.List;
 public interface BillRepository extends JpaRepository<Bill, Long> {
 
     Page<Bill> findAllByContract_Tenant_Room_Id(Long roomId, Pageable pageable);
+
+    Page<Bill> findAllByRoomId(Long roomId, Pageable pageable);
 
     List<Bill> findAllByIsPayFalse();
 

@@ -1,5 +1,11 @@
 package com.fu.lhm.contract.service;
 
+import com.fu.lhm.bill.entity.Bill;
+import com.fu.lhm.bill.entity.BillContent;
+import com.fu.lhm.bill.entity.BillType;
+import com.fu.lhm.bill.modal.BillReceiveRequest;
+import com.fu.lhm.bill.repository.BillRepository;
+import com.fu.lhm.bill.service.BillService;
 import com.fu.lhm.contract.repository.ContractRepository;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.room.entity.Room;
@@ -14,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.ZoneId;
 import java.util.Date;
 
 @Service
@@ -25,6 +32,7 @@ public class ContractService {
     private final ContractRepository contractRepository;
 
     private final RoomRepository roomrepository;
+    private final BillService billService;
 
     public Contract getContractById(Long contractId) {
 
@@ -55,6 +63,17 @@ public class ContractService {
         contract.setFromDate(fromDate);
         contract.setToDate(toDate);
         contract.setTenant(tenantRepository.save(tenant));
+
+        //Create bill TIENCOC
+        BillReceiveRequest bill = new BillReceiveRequest();
+        bill.setBillType(BillType.RECEIVE);
+        bill.setBillContent(BillContent.TIENCOC);
+        bill.setTotalMoney(Integer.parseInt(String.valueOf(contract.getDeposit())));
+        bill.setDateCreate(contractRequest.getFromDate());
+        bill.setPayer(tenant.getName());
+        bill.setIsPay(true);
+        bill.setDescription("Tiền cọc của khách "+tenant.getName());
+        billService.createBillReceive(roomId,bill);
 
         return contractRepository.save(contract);
     }

@@ -21,6 +21,7 @@ public class WaterElectricSerice {
         oldWaterElectric.setChiSoCuoiDien(newWaterElectric.getChiSoCuoiDien());
         oldWaterElectric.setNumberElectric(newWaterElectric.getNumberElectric());
         oldWaterElectric.setNumberWater(newWaterElectric.getNumberWater());
+        oldWaterElectric.setDateUpdate(newWaterElectric.getDateUpdate());
 
         return waterElectricRepositoy.save(oldWaterElectric);
 
