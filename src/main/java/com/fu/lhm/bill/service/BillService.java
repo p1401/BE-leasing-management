@@ -33,7 +33,7 @@ public class BillService {
 
     private final RoomRepository roomRepository;
 
-    public Bill createBillReceive(Long roomId, BillReceiveRequest billRequest) {
+    public Bill createBillReceive(Long roomId, BillReceiveRequest billRequest) throws BadRequestException {
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
         Contract contract = contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
