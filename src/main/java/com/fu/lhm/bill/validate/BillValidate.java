@@ -29,7 +29,7 @@ public class BillValidate {
 
     private final RoomRepository roomRepository;
 
-    public void validateForCreateBillTienPhong(Long roomId, BillReceiveRequest bill) {
+    public void validateForCreateBillTienPhong(Long roomId, BillReceiveRequest bill) throws BadRequestException {
 
         roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
 
@@ -60,7 +60,7 @@ public class BillValidate {
         validateForTotalMoney(bill.getTotalMoney());
     }
 
-    public void validateForCreateBillTienPhuTroi(BillReceiveRequest bill) {
+    public void validateForCreateBillTienPhuTroi(BillReceiveRequest bill) throws BadRequestException {
 
         isNotPopulated(bill.getRoomMoney() + "", "Nhập tiền phòng");
         isNotPopulated(bill.getChiSoDauDien() + "", "Nhập chỉ số đầu điện");
@@ -84,14 +84,14 @@ public class BillValidate {
         validateForTotalMoney(bill.getTotalMoney());
     }
 
-    public void validateforCreateBillSpend(BillSpendRequest bill){
+    public void validateforCreateBillSpend(BillSpendRequest bill) throws BadRequestException {
         isNotPopulated(bill.getBillType().name(), "Nhập kiểu hóa đơn");
         isNotPopulated(bill.getDateCreate() + "", "Nhập ngày tạo");
         isNotPopulated(bill.getDescription(), "Nhập mô tả");
         isNotPopulated(bill.getTotalMoney() + "", "Nhập tổng tiền");
     }
 
-    public void checkBillExistsInMonthAndYear( Long roomId, int month, int year) {
+    public void checkBillExistsInMonthAndYear( Long roomId, int month, int year) throws BadRequestException {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
         List<Bill> listBill = billRepository.findByContract_Tenant_Room_IdAndBillTypeAndBillContentAndDateCreateBetween(roomId, BillType.RECEIVE, BillContent.TIENPHONG, startDate, endDate);
@@ -107,13 +107,13 @@ public class BillValidate {
                 .toLocalDate();
     }
 
-    private void isNotPopulated(String value, String errorMsg) {
+    private void isNotPopulated(String value, String errorMsg) throws BadRequestException {
         if (null == value || value.trim().isEmpty() || value.equalsIgnoreCase("")) {
             throw new BadRequestException(errorMsg);
         }
     }
 
-    public void validateForChiSoDien(int chiSoDauDien, int chiSoCuoiDien) {
+    public void validateForChiSoDien(int chiSoDauDien, int chiSoCuoiDien) throws BadRequestException {
         if (chiSoDauDien > chiSoCuoiDien) {
             throw new BadRequestException("Chỉ số đầu của điện phải nhỏ hơn chỉ số cuối");
         } else if (chiSoDauDien < 0 || chiSoCuoiDien < 0) {
@@ -121,7 +121,7 @@ public class BillValidate {
         }
     }
 
-    public void validateForChiSoNuoc(int chiSoDauNuoc, int chiSoCuoiNuoc) {
+    public void validateForChiSoNuoc(int chiSoDauNuoc, int chiSoCuoiNuoc) throws BadRequestException {
         if (chiSoDauNuoc > chiSoCuoiNuoc) {
             throw new BadRequestException("Chỉ số đầu của nước phải nhỏ hơn chỉ số cuối");
         } else if (chiSoDauNuoc < 0 || chiSoCuoiNuoc < 0) {
@@ -129,19 +129,19 @@ public class BillValidate {
         }
     }
 
-    public void validateForNumberElectric(int numberElectrict) {
+    public void validateForNumberElectric(int numberElectrict) throws BadRequestException {
         if (numberElectrict < 0) {
             throw new BadRequestException("Lượng điện sử dụng phải >=0");
         }
     }
 
-    public void validateForNumberWater(int numberWater) {
+    public void validateForNumberWater(int numberWater) throws BadRequestException {
         if (numberWater < 0) {
             throw new BadRequestException("Lượng nước sử dụng phải >=0");
         }
     }
 
-    public void validateForTotalMoney(int totalMoney) {
+    public void validateForTotalMoney(int totalMoney) throws BadRequestException {
         if (totalMoney <= 0) {
             throw new BadRequestException("Tổng tiền phải >0");
         }

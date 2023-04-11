@@ -20,7 +20,7 @@ public class ContractValidate {
     private final RoomRepository roomRepository;
     private final ContractRepository contractRepository;
 
-    public void validateForCreateContract(ContractRequest contract) {
+    public void validateForCreateContract(ContractRequest contract) throws BadRequestException {
 
         long roomId = contract.getRoomId();
 
@@ -38,7 +38,7 @@ public class ContractValidate {
         checkInputToDate(fromDate, toDate);
     }
 
-    private void validateRoomHaveContractActive(Long roomId) {
+    private void validateRoomHaveContractActive(Long roomId) throws BadRequestException {
         List<Contract> listContract = contractRepository.findAllByTenant_Room_Id(roomId);
 
         for (Contract contract : listContract) {
@@ -48,13 +48,13 @@ public class ContractValidate {
         }
     }
 
-    private void isNotPopulated(String value, String errorMsg) {
+    private void isNotPopulated(String value, String errorMsg) throws BadRequestException {
         if (null == value || value.trim().isEmpty() || value.equalsIgnoreCase("")) {
             throw new BadRequestException(errorMsg);
         }
     }
 
-    private void checkInputToDate(Date fromDate, Date toDate) {
+    private void checkInputToDate(Date fromDate, Date toDate) throws BadRequestException {
 
         if (fromDate.compareTo(toDate) > 0) {
             throw new BadRequestException("Ngày kết thúc phải lớn hơn ngày ký");

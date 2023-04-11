@@ -74,7 +74,7 @@ public class InformationStatisticService {
         return informationStatistic;
     }
 
-    public InformationStatistic getHouseInfor(long houseId){
+    public InformationStatistic getHouseInfor(long houseId) throws BadRequestException {
 
         Integer numberHouse = 1;
         Integer numberRoom = 0;

@@ -1,5 +1,6 @@
 package com.fu.lhm.statistic.controller;
 
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.jwt.service.JwtService;
 import com.fu.lhm.statistic.model.InformationStatistic;
 import com.fu.lhm.statistic.model.RevenueStatistic;
@@ -22,17 +23,17 @@ public class InformationStatisticController {
 
     private final HttpServletRequest httpServletRequest;
     private final JwtService jwtService;
-    private User getUserToken() {
+    private User getUserToken() throws BadRequestException {
         return jwtService.getUser(httpServletRequest);
     }
 
     @GetMapping("")
-    public ResponseEntity<InformationStatistic> getTotalInformationStatistic() {
+    public ResponseEntity<InformationStatistic> getTotalInformationStatistic() throws BadRequestException {
         return ResponseEntity.ok(informationStatisticService.getTotalInfor(getUserToken()));
     }
 
     @GetMapping("/{houseId}")
-    public ResponseEntity<InformationStatistic> getHouseInformationStatistic(@PathVariable("houseId") Long houseId) {
+    public ResponseEntity<InformationStatistic> getHouseInformationStatistic(@PathVariable("houseId") Long houseId) throws BadRequestException {
         return ResponseEntity.ok(informationStatisticService.getHouseInfor(houseId));
     }
 

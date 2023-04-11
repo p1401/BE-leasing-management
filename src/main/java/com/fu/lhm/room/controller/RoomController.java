@@ -1,5 +1,6 @@
 package com.fu.lhm.room.controller;
 
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.service.RoomService;
 import com.fu.lhm.room.validate.RoomValidate;
@@ -33,7 +34,7 @@ RoomController {
     @PostMapping("/{houseId}")
     public ResponseEntity<Room> createRoom(
             @PathVariable("houseId") Long houseId,
-            @RequestBody Room room) {
+            @RequestBody Room room) throws BadRequestException {
 
         roomValidate.validateCreateRoom(room, houseId);
 
@@ -41,7 +42,7 @@ RoomController {
     }
 
     @PutMapping({"/{roomId}"})
-    public ResponseEntity<Room> updateRoom(@PathVariable("roomId") Long id, @RequestBody Room room) {
+    public ResponseEntity<Room> updateRoom(@PathVariable("roomId") Long id, @RequestBody Room room) throws BadRequestException {
 
         roomValidate.validateUpdateRoom(room, id);
 

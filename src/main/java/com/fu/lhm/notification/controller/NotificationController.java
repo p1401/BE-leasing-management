@@ -1,5 +1,6 @@
 package com.fu.lhm.notification.controller;
 
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.jwt.service.JwtService;
 import com.fu.lhm.notification.entity.Notification;
 import com.fu.lhm.notification.service.NotificationService;
@@ -20,26 +21,26 @@ public class NotificationController {
     private final HttpServletRequest httpServletRequest;
     private final JwtService jwtService;
     private final NotificationService notificationService;
-    private User getUserToken() {
+    private User getUserToken() throws BadRequestException {
         return jwtService.getUser(httpServletRequest);
     }
 
     @GetMapping({""})
     public ResponseEntity<Page<Notification>> getAllNotification(
             @RequestParam(name = "page", defaultValue = "0") Integer page,
-            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) throws BadRequestException {
         return ResponseEntity.ok(notificationService.getAllNotification(getUserToken(), PageRequest.of(page, pageSize)));
     }
 
     @GetMapping({"/unread"})
     public ResponseEntity<Page<Notification>> getUnreadNotification(
             @RequestParam(name = "page", defaultValue = "0") Integer page,
-            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) throws BadRequestException {
         return ResponseEntity.ok(notificationService.getUnreadNotification(getUserToken(), PageRequest.of(page, pageSize)));
     }
 
     @PutMapping({"/{id}"})
-    public ResponseEntity<Notification> updateNotification(@PathVariable("id") Long id, @RequestBody Notification notification) {
+    public ResponseEntity<Notification> updateNotification(@PathVariable("id") Long id, @RequestBody Notification notification) throws BadRequestException {
 
         return ResponseEntity.ok(notificationService.updateNotification(id, notification));
     }

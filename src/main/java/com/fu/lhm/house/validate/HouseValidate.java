@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class HouseValidate {
     private final HouseRepository houseRepository;
 
-    public void validateCreateHouse(House house, User user) {
+    public void validateCreateHouse(House house, User user) throws BadRequestException {
 
         validateForNameExist(house.getName(), user);
 
@@ -29,7 +29,7 @@ public class HouseValidate {
         checkWaterPriceInput(house.getWaterPrice(), "Tiền nước phải lớn hơn hoặc bằng 0");
     }
 
-    public void validateUpdateHouse(Long houseId, House house,User user) {
+    public void validateUpdateHouse(Long houseId, House house,User user) throws BadRequestException {
 
         House oldHouse = houseRepository.findById(houseId).orElseThrow(() -> new BadRequestException("Nhà không tồn tại!"));
         if(oldHouse.getName().equals(house.getName())){
@@ -52,14 +52,14 @@ public class HouseValidate {
     }
 
 
-    private void isNotPopulated(String value, String errorMsg) {
+    private void isNotPopulated(String value, String errorMsg) throws BadRequestException {
         if (null == value || value.trim().isEmpty()) {
             throw new BadRequestException(errorMsg);
         }
     }
 
 
-    private void validateForNameExist(String houseName, User user) {
+    private void validateForNameExist(String houseName, User user) throws BadRequestException {
         if (!houseRepository.existsByNameAndUser(houseName, user)) {
             return;
         }
@@ -67,19 +67,19 @@ public class HouseValidate {
         throw new BadRequestException("Tên nhà đã được sử dụng!");
     }
 
-    private void checkFloorInput(int floor, String errorMsg) {
+    private void checkFloorInput(int floor, String errorMsg) throws BadRequestException {
         if (floor <= 0) {
             throw new BadRequestException(errorMsg);
         }
     }
 
-    private void checkElectricPriceInput(int electricPrice, String errorMsg) {
+    private void checkElectricPriceInput(int electricPrice, String errorMsg) throws BadRequestException {
         if (electricPrice < 0) {
             throw new BadRequestException(errorMsg);
         }
     }
 
-    private void checkWaterPriceInput(int waterPrice, String errorMsg) {
+    private void checkWaterPriceInput(int waterPrice, String errorMsg) throws BadRequestException {
         if (waterPrice < 0) {
             throw new BadRequestException(errorMsg);
         }

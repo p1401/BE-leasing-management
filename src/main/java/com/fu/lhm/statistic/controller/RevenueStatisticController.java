@@ -1,5 +1,6 @@
 package com.fu.lhm.statistic.controller;
 
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.jwt.service.JwtService;
 import com.fu.lhm.statistic.model.RevenueStatistic;
 import com.fu.lhm.statistic.service.RevenueStatisticService;
@@ -20,12 +21,12 @@ public class RevenueStatisticController {
 
     private final HttpServletRequest httpServletRequest;
     private final JwtService jwtService;
-    private User getUserToken() {
+    private User getUserToken() throws BadRequestException {
         return jwtService.getUser(httpServletRequest);
     }
 
     @GetMapping("")
-    public ResponseEntity<List<RevenueStatistic>> getTotalRevenueStatistic(@RequestParam(name = "year", required = false) int year) {
+    public ResponseEntity<List<RevenueStatistic>> getTotalRevenueStatistic(@RequestParam(name = "year", required = false) int year) throws BadRequestException {
 
         return ResponseEntity.ok(revenueStatisticService.getTotalRevenueStatistic(getUserToken(), year));
     }

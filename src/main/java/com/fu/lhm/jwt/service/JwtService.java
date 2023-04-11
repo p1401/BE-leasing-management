@@ -41,7 +41,7 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public User getUser(HttpServletRequest httpServletRequest) {
+    public User getUser(HttpServletRequest httpServletRequest) throws BadRequestException {
         String token = httpServletRequest.getHeader("Authorization").substring(7);
 
         Claims claims = extractAllClaims(token);

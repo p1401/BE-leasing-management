@@ -5,6 +5,7 @@ import com.fu.lhm.bill.modal.BillReceiveRequest;
 import com.fu.lhm.bill.modal.BillSpendRequest;
 import com.fu.lhm.bill.service.BillService;
 import com.fu.lhm.bill.validate.BillValidate;
+import com.fu.lhm.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,13 +29,13 @@ public class BillController {
         return ResponseEntity.ok(billService.createAllBill());
     }
     @GetMapping("/detail/{billId}")
-    public ResponseEntity<Bill> getBillById(@PathVariable("billId") Long billId) {
+    public ResponseEntity<Bill> getBillById(@PathVariable("billId") Long billId) throws BadRequestException {
 
         return ResponseEntity.ok(billService.getBillById(billId));
     }
 
     @PostMapping("/{roomId}")
-    public ResponseEntity<Bill> createReceiveBill(@PathVariable("roomId") Long roomId, @RequestBody BillReceiveRequest bill) {
+    public ResponseEntity<Bill> createReceiveBill(@PathVariable("roomId") Long roomId, @RequestBody BillReceiveRequest bill) throws BadRequestException {
         if (bill.getBillContent().name().equalsIgnoreCase("TIENPHONG") && bill.getBillType().name().equalsIgnoreCase("RECEIVE")) {
             billValidate.validateForCreateBillTienPhong(roomId, bill);
         } else if (bill.getBillContent().name().equalsIgnoreCase("TIENPHUTROI") && bill.getBillType().name().equalsIgnoreCase("RECEIVE")) {
@@ -44,13 +45,13 @@ public class BillController {
     }
 
     @PostMapping("/spend/{roomId}")
-    public ResponseEntity<Bill> createSpendBill(@PathVariable("roomId") Long roomId, @RequestBody BillSpendRequest bill) {
+    public ResponseEntity<Bill> createSpendBill(@PathVariable("roomId") Long roomId, @RequestBody BillSpendRequest bill) throws BadRequestException {
         billValidate.validateforCreateBillSpend(bill);
         return ResponseEntity.ok(billService.createBillSpend(roomId, bill));
     }
 
     @PutMapping("/pay/{billId}")
-    public ResponseEntity<Bill> payBill(@PathVariable("billId") Long billId) {
+    public ResponseEntity<Bill> payBill(@PathVariable("billId") Long billId) throws BadRequestException {
 
         return ResponseEntity.ok(billService.payBill(billId));
     }

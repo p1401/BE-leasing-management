@@ -20,7 +20,7 @@ public class HouseService {
         return houseRepository.save(house);
     }
 
-    public House updateHouse(Long houseId, House updateHouse) {
+    public House updateHouse(Long houseId, House updateHouse) throws BadRequestException {
         House oldHouse = houseRepository.findById(houseId).orElseThrow(() -> new BadRequestException("Nhà không tồn tại!"));
         oldHouse.setName(updateHouse.getName());
         oldHouse.setCity(updateHouse.getCity());
@@ -37,7 +37,7 @@ public class HouseService {
         return houseRepository.findAllByUser(user, pageable);
     }
 
-    public House getHouseById(Long houseId){
+    public House getHouseById(Long houseId) throws BadRequestException {
 
         return houseRepository.findById(houseId).orElseThrow(() -> new BadRequestException("Nhà không tồn tại!"));
     }

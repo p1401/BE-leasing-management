@@ -4,6 +4,7 @@ import com.fu.lhm.contract.service.ContractService;
 import com.fu.lhm.contract.entity.Contract;
 import com.fu.lhm.contract.model.ContractRequest;
 import com.fu.lhm.contract.validate.ContractValidate;
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.tenant.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,7 +30,7 @@ public class ContractController {
 
 
     @PostMapping("")
-    public ResponseEntity<Contract> createContract(@RequestBody ContractRequest contractRequest) {
+    public ResponseEntity<Contract> createContract(@RequestBody ContractRequest contractRequest) throws BadRequestException {
 
         contractValidate.validateForCreateContract(contractRequest);
 
@@ -40,14 +41,14 @@ public class ContractController {
     @PutMapping("{contractId}/change-holder")
     public ResponseEntity<Contract> changeHolder(@PathVariable("contractId") Long contractId,
                                                  @RequestParam(name = "oldTenantId") Long oldTenantId,
-                                                 @RequestParam(name = "newTenantId") Long newTenantId) {
+                                                 @RequestParam(name = "newTenantId") Long newTenantId) throws BadRequestException {
         System.out.println(contractId + oldTenantId + newTenantId);
         return ResponseEntity.ok(contractService.changeHolder(contractId, oldTenantId, newTenantId));
     }
 
     @PutMapping("/{contractId}")
     public ResponseEntity<Contract> updateContract(@PathVariable("contractId") Long contractId,
-                                                   @RequestBody Contract contract) {
+                                                   @RequestBody Contract contract) throws BadRequestException {
 
         return ResponseEntity.ok(contractService.updateContract(contractId, contract));
     }

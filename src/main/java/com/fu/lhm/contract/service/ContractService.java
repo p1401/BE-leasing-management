@@ -39,7 +39,7 @@ public class ContractService {
         return contractRepository.findById(contractId).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
     }
 
-    public Contract createContract(ContractRequest contractRequest) {
+    public Contract createContract(ContractRequest contractRequest) throws BadRequestException {
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         long roomId = contractRequest.getRoomId();
         Date fromDate = contractRequest.getFromDate();
@@ -79,7 +79,7 @@ public class ContractService {
     }
 
 
-    public Contract changeHolder(Long contractId, Long oldTenantId, Long newTenantId) {
+    public Contract changeHolder(Long contractId, Long oldTenantId, Long newTenantId) throws BadRequestException {
         Contract contract = contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
         Tenant oldTenant = tenantRepository.findById(oldTenantId).orElseThrow(() -> new BadRequestException("Khách hàng không tồn tại!"));
         Tenant newTenant = tenantRepository.findById(newTenantId).orElseThrow(() -> new BadRequestException("Khách hàng không tồn tại!"));
@@ -93,7 +93,7 @@ public class ContractService {
         return contractRepository.save(contract);
     }
 
-    public Contract updateContract(Long contractId, Contract newContract) {
+    public Contract updateContract(Long contractId, Contract newContract) throws BadRequestException {
         Contract oldContract = contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
         oldContract.setToDate(newContract.getToDate());
         contractRepository.save(oldContract);

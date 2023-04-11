@@ -43,7 +43,7 @@ public class BillService {
         return billRepository.save(bill);
     }
 
-    public Bill createBillSpend(Long roomId, BillSpendRequest billRequest) {
+    public Bill createBillSpend(Long roomId, BillSpendRequest billRequest) throws BadRequestException {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         Bill bill = mapToBillSpend(billRequest);
@@ -99,11 +99,11 @@ public class BillService {
         billRepository.delete(billRepository.findById(billId).get());
     }
 
-    public Bill getBillById(Long billId) {
+    public Bill getBillById(Long billId) throws BadRequestException {
         return billRepository.findById(billId).orElseThrow(() -> new BadRequestException("Hóa đơn không tồn tại!"));
     }
 
-    public Bill payBill(Long billId) {
+    public Bill payBill(Long billId) throws BadRequestException {
         Bill bill = billRepository.findById(billId).orElseThrow(() -> new BadRequestException("Hóa đơn không tồn tại!"));
         bill.setIsPay(true);
 
