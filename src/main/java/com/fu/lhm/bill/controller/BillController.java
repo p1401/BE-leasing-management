@@ -6,6 +6,7 @@ import com.fu.lhm.bill.modal.BillSpendRequest;
 import com.fu.lhm.bill.service.BillService;
 import com.fu.lhm.bill.validate.BillValidate;
 import com.fu.lhm.exception.BadRequestException;
+import com.fu.lhm.contract.entity.Contract;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -64,6 +65,17 @@ public class BillController {
                                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
         return ResponseEntity.ok(billService.getListBillByRoomId(roomId, PageRequest.of(page, pageSize)));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<Page<Bill>> getBills(@RequestParam(name = "houseId", required = false) Long houseId,
+                                                       @RequestParam(name = "roomId", required = false) Long roomId,
+                                                       @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                       @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+
+        Page<Bill> listBill = billService.getBills(houseId, roomId, PageRequest.of(page, pageSize));
+
+        return ResponseEntity.ok(listBill);
     }
 
     @DeleteMapping ("/{billId}")
