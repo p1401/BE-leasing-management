@@ -44,7 +44,6 @@ public class TenantController {
         tenantService.deleteTenant(id);
     }
 
-
     @GetMapping("/rooms/{roomId}")
     public ResponseEntity<Page<Tenant>> getListTenantByRoomId(@PathVariable("roomId") Long id,
                                                               @RequestParam(name = "page", defaultValue = "0") Integer page,
@@ -53,14 +52,6 @@ public class TenantController {
         Page<Tenant> listTenant = tenantService.getListTenantByRoomId(id, PageRequest.of(page, pageSize));
 
         return ResponseEntity.ok(listTenant);
-    }
-
-    @GetMapping("/houses/{houseId}")
-    public ResponseEntity<Page<Tenant>> getListTenantByHouseId(@PathVariable("houseId") Long id,
-                                                                      @RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                                      @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-
-        return ResponseEntity.ok(tenantService.getListTenantByHouseId(id, PageRequest.of(page, pageSize)));
     }
 
     @GetMapping("")
