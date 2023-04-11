@@ -3,6 +3,7 @@ package com.fu.lhm.room.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.house.entity.House;
 import com.fu.lhm.tenant.Tenant;
 import jakarta.persistence.*;
@@ -26,7 +27,7 @@ public class Room {
     @Column(nullable = false)
     private String name;
 
-    private Integer roomMoney;
+    private int roomMoney;
 
     //So nguoi toi da
     private int maxTenant;
@@ -49,6 +50,10 @@ public class Room {
     @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     List<Tenant> tenants;
+
+//    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonManagedReference
+//    List<Bill> bills;
 
     @OneToOne(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

@@ -14,7 +14,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BillRequest {
+public class BillReceiveRequest {
     private Long id;
 
     private String billCode;

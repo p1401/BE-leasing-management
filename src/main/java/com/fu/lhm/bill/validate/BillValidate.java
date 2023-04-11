@@ -2,7 +2,8 @@ package com.fu.lhm.bill.validate;
 
 import com.fu.lhm.bill.entity.BillContent;
 import com.fu.lhm.bill.entity.BillType;
-import com.fu.lhm.bill.modal.BillRequest;
+import com.fu.lhm.bill.modal.BillReceiveRequest;
+import com.fu.lhm.bill.modal.BillSpendRequest;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.repository.BillRepository;
@@ -28,11 +29,11 @@ public class BillValidate {
 
     private final RoomRepository roomRepository;
 
-    public void validateForCreateBillTienPhong(Long roomId, BillRequest bill) {
+    public void validateForCreateBillTienPhong(Long roomId, BillReceiveRequest bill) {
 
         roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
 
-        Contract contract = contractRepository.findByTenant_Room_Id(roomId);
+        Contract contract = contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
         LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
 
         checkBillExistsInMonthAndYear(roomId, dateCreate.getMonth().getValue(), dateCreate.getYear());
@@ -59,7 +60,7 @@ public class BillValidate {
         validateForTotalMoney(bill.getTotalMoney());
     }
 
-    public void validateForCreateBillTienPhuTroi(Long roomId, BillRequest bill) {
+    public void validateForCreateBillTienPhuTroi(Long roomId, BillReceiveRequest bill) {
 
         isNotPopulated(bill.getRoomMoney() + "", "Nhập tiền phòng");
         isNotPopulated(bill.getChiSoDauDien() + "", "Nhập chỉ số đầu điện");
@@ -81,6 +82,13 @@ public class BillValidate {
         validateForNumberElectric(bill.getElectricNumber());
         validateForNumberWater(bill.getWaterNumber());
         validateForTotalMoney(bill.getTotalMoney());
+    }
+
+    public void validateforCreateBillSpend(BillSpendRequest bill){
+        isNotPopulated(bill.getBillType().name(), "Nhập kiểu hóa đơn");
+        isNotPopulated(bill.getDateCreate() + "", "Nhập ngày tạo");
+        isNotPopulated(bill.getDescription(), "Nhập mô tả");
+        isNotPopulated(bill.getTotalMoney() + "", "Nhập tổng tiền");
     }
 
 

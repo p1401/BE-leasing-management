@@ -18,8 +18,9 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     List<Bill> findAllByIsPayFalse();
 
-    List<Bill> findByContract_Tenant_Room_IdAndBillTypeAndBillContentAndDateCreateBetween(Long roomId,
-                                                                                          BillType billType, BillContent billContent, LocalDate startDate, LocalDate endDate);
+    List<Bill> findByContract_Tenant_Room_IdAndBillTypeAndBillContentAndDateCreateBetween(Long roomId, BillType billType, BillContent billContent, LocalDate startDate, LocalDate endDate);
+
+    List<Bill> findAllByRoomIdAndBillType(Long roomId, BillType billType);
 }
 
 //    List<Bill> findByContract_Tenant_Room_IdAndDateCreateBetween(Long id, LocalDate startDate, LocalDate endDate);

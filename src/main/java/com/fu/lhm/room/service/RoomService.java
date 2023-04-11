@@ -1,6 +1,7 @@
 package com.fu.lhm.room.service;
 
 import com.fu.lhm.bill.entity.Bill;
+import com.fu.lhm.bill.entity.BillType;
 import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
@@ -34,7 +35,7 @@ public class RoomService {
             Page<Room> listRoom = roomRepository.findAllByHouse_IdAndFloor(houseId, floor, page);
 
             for(Room room : listRoom){
-                List<Bill> listBill = billRepository.findAll();
+                List<Bill> listBill = billRepository.findAllByRoomIdAndBillType(room.getId(), BillType.RECEIVE);
 
                 for(Bill bill :listBill){
                     if(bill.getIsPay()==false && bill.getBillType().name().equalsIgnoreCase("RECEIVE") && bill.getContract().getTenant().getRoom().getId()==room.getId()){

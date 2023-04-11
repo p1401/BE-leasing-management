@@ -24,7 +24,7 @@ public class ContractValidate {
 
         long roomId = contract.getRoomId();
 
-        roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
+        roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
 
         validateRoomHaveContractActive(roomId);
 
