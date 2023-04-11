@@ -1,25 +1,16 @@
 package com.fu.lhm.contract.service;
 
-import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.entity.BillContent;
 import com.fu.lhm.bill.entity.BillType;
 import com.fu.lhm.bill.modal.BillReceiveRequest;
-import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.bill.service.BillService;
 import com.fu.lhm.contract.repository.ContractRepository;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.room.entity.Room;
-import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.contract.entity.Contract;
 import com.fu.lhm.tenant.entity.Tenant;
 import com.fu.lhm.contract.model.ContractRequest;
-import com.fu.lhm.room.Room;
-import com.fu.lhm.tenant.Contract;
-import com.fu.lhm.tenant.Tenant;
-import com.fu.lhm.tenant.model.ContractBookingRequest;
-import com.fu.lhm.tenant.model.ContractRequest;
-import com.fu.lhm.tenant.repository.ContractRepository;
 import com.fu.lhm.tenant.repository.TenantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
@@ -36,7 +26,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -140,8 +129,7 @@ public class ContractService {
         String day1 = String.valueOf(date1.getDayOfMonth());
         String month1 = String.valueOf(date1.getMonthValue());
         String year1 = String.valueOf(date1.getYear());
-        String name1 = contract.getTenant().getRoom().getHouse().getUser().getLastname() +
-                " " + contract.getTenant().getRoom().getHouse().getUser().getFirstname();
+        String name1 = contract.getTenant().getRoom().getHouse().getUser().getName();
         String dob1 = "";
         String address1 = "";
         String idcard1 = "";
