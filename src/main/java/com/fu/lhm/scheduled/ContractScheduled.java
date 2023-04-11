@@ -2,9 +2,9 @@ package com.fu.lhm.scheduled;
 
 import com.fu.lhm.notification.entity.Notification;
 import com.fu.lhm.notification.repository.NotificationRepository;
-import com.fu.lhm.tenant.Contract;
-import com.fu.lhm.tenant.Tenant;
-import com.fu.lhm.tenant.repository.ContractRepository;
+import com.fu.lhm.contract.entity.Contract;
+import com.fu.lhm.tenant.entity.Tenant;
+import com.fu.lhm.contract.repository.ContractRepository;
 import com.fu.lhm.tenant.repository.TenantRepository;
 import lombok.*;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -1,7 +1,7 @@
 package com.fu.lhm.notification.repository;
 
 import com.fu.lhm.notification.entity.Notification;
-import com.fu.lhm.user.User;
+import com.fu.lhm.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

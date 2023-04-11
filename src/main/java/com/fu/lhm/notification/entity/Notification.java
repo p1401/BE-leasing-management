@@ -1,12 +1,11 @@
 package com.fu.lhm.notification.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fu.lhm.user.User;
+import com.fu.lhm.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity(name = "notifications")
 @Getter

@@ -38,9 +38,9 @@ public class BillController {
         if (bill.getBillContent().name().equalsIgnoreCase("TIENPHONG") && bill.getBillType().name().equalsIgnoreCase("RECEIVE")) {
             billValidate.validateForCreateBillTienPhong(roomId, bill);
         } else if (bill.getBillContent().name().equalsIgnoreCase("TIENPHUTROI") && bill.getBillType().name().equalsIgnoreCase("RECEIVE")) {
-            billValidate.validateForCreateBillTienPhuTroi(roomId, bill);
+            billValidate.validateForCreateBillTienPhuTroi(bill);
         }
-        return ResponseEntity.ok(billService.createBillTienPhong(roomId, bill));
+        return ResponseEntity.ok(billService.createBillReceive(roomId, bill));
     }
 
     @PostMapping("/spend/{roomId}")

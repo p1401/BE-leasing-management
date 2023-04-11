@@ -6,12 +6,12 @@ import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.entity.BillContent;
 import com.fu.lhm.bill.entity.BillType;
-import com.fu.lhm.bill.repository.BillRepository;
+import com.fu.lhm.bill.modal.repository.BillRepository;
 import com.fu.lhm.house.entity.House;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
-import com.fu.lhm.tenant.Contract;
-import com.fu.lhm.tenant.repository.ContractRepository;
+import com.fu.lhm.contract.entity.Contract;
+import com.fu.lhm.contract.repository.ContractRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,19 +33,25 @@ public class BillService {
 
     private final RoomRepository roomRepository;
 
-    public Bill createBillTienPhong(Long roomId, BillReceiveRequest billRequest) {
-
+    public Bill createBillReceive(Long roomId, BillReceiveRequest billRequest) {
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
-        Contract contract = contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
-        Bill bill = mapToBill(billRequest);
+        Contract contract = contractRepository.findByTenant_Room_Id(roomId);
+        Bill bill = mapToBillReceive(billRequest);
         bill.setBillCode("PT"+randomNumber);
         bill.setContract(contract);
-//        bill.setRoom(contract.getTenant().getRoom());
-        bill.setRoomId(contract.getTenant().getRoom().getId());
         return billRepository.save(bill);
     }
 
-    public static Bill mapToBill(BillReceiveRequest billRE) {
+    public Bill createBillSpend(Long roomId, BillSpendRequest billRequest) {
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
+        int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
+        Bill bill = mapToBillSpend(billRequest);
+        bill.setBillCode("PC"+randomNumber);
+        bill.setRoom(room);
+        return billRepository.save(bill);
+    }
+
+    public static Bill mapToBillReceive(BillReceiveRequest billRE) {
         Bill bill = new Bill();
         bill.setId(billRE.getId());
         bill.setRoomMoney(billRE.getRoomMoney());
@@ -67,16 +73,6 @@ public class BillService {
         return bill;
     }
 
-    public Bill createBillSpend(Long roomId, BillSpendRequest billRequest) {
-        Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
-        int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
-        Bill bill = mapToBillSpend(billRequest);
-        bill.setBillCode("PC"+randomNumber);
-        bill.setRoomId(room.getId());
-        return billRepository.save(bill);
-    }
-
-
     public static Bill mapToBillSpend(BillSpendRequest billRE) {
         Bill bill = new Bill();
         bill.setId(billRE.getId());
@@ -86,6 +82,7 @@ public class BillService {
         bill.setBillType(billRE.getBillType());
         return bill;
     }
+
 
 
     public Page<Bill> getListBillByRoomId(Long roomId, Pageable pageable) {

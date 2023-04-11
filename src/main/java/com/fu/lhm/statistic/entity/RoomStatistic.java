@@ -16,8 +16,4 @@ public class RoomStatistic {
 
     private int roomEmpty;
 
-
-
-
-
 }

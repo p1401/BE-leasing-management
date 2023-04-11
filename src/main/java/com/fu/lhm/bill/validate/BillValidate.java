@@ -6,10 +6,10 @@ import com.fu.lhm.bill.modal.BillReceiveRequest;
 import com.fu.lhm.bill.modal.BillSpendRequest;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.bill.entity.Bill;
-import com.fu.lhm.bill.repository.BillRepository;
+import com.fu.lhm.bill.modal.repository.BillRepository;
 import com.fu.lhm.room.repository.RoomRepository;
-import com.fu.lhm.tenant.Contract;
-import com.fu.lhm.tenant.repository.ContractRepository;
+import com.fu.lhm.contract.entity.Contract;
+import com.fu.lhm.contract.repository.ContractRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -33,7 +33,7 @@ public class BillValidate {
 
         roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
 
-        Contract contract = contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
+        Contract contract = contractRepository.findByTenant_Room_Id(roomId);
         LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
 
         checkBillExistsInMonthAndYear(roomId, dateCreate.getMonth().getValue(), dateCreate.getYear());
@@ -60,7 +60,7 @@ public class BillValidate {
         validateForTotalMoney(bill.getTotalMoney());
     }
 
-    public void validateForCreateBillTienPhuTroi(Long roomId, BillReceiveRequest bill) {
+    public void validateForCreateBillTienPhuTroi(BillReceiveRequest bill) {
 
         isNotPopulated(bill.getRoomMoney() + "", "Nhập tiền phòng");
         isNotPopulated(bill.getChiSoDauDien() + "", "Nhập chỉ số đầu điện");
@@ -72,7 +72,7 @@ public class BillValidate {
 
         isNotPopulated(bill.getBillContent().name(), "Nhập nội dung hóa đơn");
         isNotPopulated(bill.getBillType().name(), "Nhập kiểu hóa đơn");
-//        isNotPopulated(bill.getIsPay() + "", "Tích đã nộp hay chưa nộp");
+        isNotPopulated(bill.getIsPay() + "", "Tích đã nộp hay chưa nộp");
         isNotPopulated(bill.getDateCreate() + "", "Nhập ngày tạo");
         isNotPopulated(bill.getDescription(), "Nhập mô tả");
         isNotPopulated(bill.getTotalMoney() + "", "Nhập tổng tiền");
@@ -90,7 +90,6 @@ public class BillValidate {
         isNotPopulated(bill.getDescription(), "Nhập mô tả");
         isNotPopulated(bill.getTotalMoney() + "", "Nhập tổng tiền");
     }
-
 
     public void checkBillExistsInMonthAndYear( Long roomId, int month, int year) {
         LocalDate startDate = LocalDate.of(year, month, 1);

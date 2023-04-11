@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.house.entity.House;
-import com.fu.lhm.tenant.Tenant;
+import com.fu.lhm.tenant.entity.Tenant;
+import com.fu.lhm.waterElectric.entity.WaterElectric;
 import jakarta.persistence.*;
 import lombok.*;
 

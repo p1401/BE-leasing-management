@@ -3,7 +3,7 @@ package com.fu.lhm.tenant.validate;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
-import com.fu.lhm.tenant.Tenant;
+import com.fu.lhm.tenant.entity.Tenant;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

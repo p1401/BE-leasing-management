@@ -3,7 +3,7 @@ package com.fu.lhm.house.validate;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
-import com.fu.lhm.user.User;
+import com.fu.lhm.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
