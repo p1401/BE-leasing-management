@@ -1,11 +1,11 @@
 package com.fu.lhm.contract.controller;
 
+import com.fu.lhm.contract.model.ContractRequest;
 import com.fu.lhm.contract.service.ContractService;
 import com.fu.lhm.contract.entity.Contract;
-import com.fu.lhm.contract.model.ContractRequest;
+import com.fu.lhm.contract.model.CreateContractRequest;
 import com.fu.lhm.contract.validate.ContractValidate;
 import com.fu.lhm.exception.BadRequestException;
-import com.fu.lhm.tenant.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +28,7 @@ public class ContractController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Contract> createContract(@RequestBody ContractRequest contractRequest) throws BadRequestException {
+    public ResponseEntity<Contract> createContract(@RequestBody CreateContractRequest contractRequest) throws BadRequestException {
 
         contractValidate.validateForCreateContract(contractRequest);
 
@@ -45,7 +45,7 @@ public class ContractController {
 
     @PutMapping("/{contractId}")
     public ResponseEntity<Contract> updateContract(@PathVariable("contractId") Long contractId,
-                                                   @RequestBody Contract contract) throws BadRequestException {
+                                                   @RequestBody ContractRequest contract) throws BadRequestException {
         contractValidate.validateForUpdateContract(contractId,contract);
         return ResponseEntity.ok(contractService.updateContract(contractId, contract));
     }

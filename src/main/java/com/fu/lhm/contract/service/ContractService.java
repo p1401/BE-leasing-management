@@ -1,26 +1,25 @@
 package com.fu.lhm.contract.service;
 
-import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.entity.BillContent;
 import com.fu.lhm.bill.entity.BillType;
 import com.fu.lhm.bill.modal.BillReceiveRequest;
-import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.bill.service.BillService;
+import com.fu.lhm.contract.model.ContractRequest;
 import com.fu.lhm.contract.repository.ContractRepository;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.contract.entity.Contract;
 import com.fu.lhm.tenant.entity.Tenant;
-import com.fu.lhm.contract.model.ContractRequest;
+import com.fu.lhm.contract.model.CreateContractRequest;
 import com.fu.lhm.tenant.repository.TenantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class ContractService {
         return contractRepository.findById(contractId).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
     }
 
-    public Contract createContract(ContractRequest contractRequest) throws BadRequestException {
+    public Contract createContract(CreateContractRequest contractRequest) throws BadRequestException {
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         long roomId = contractRequest.getRoomId();
         Date fromDate = contractRequest.getFromDate();
@@ -67,6 +66,7 @@ public class ContractService {
         contract.setTenant(tenantRepository.save(tenant));
         contract.setRoomName(room.getName());
         contract.setHouseName(room.getHouse().getName());
+        contract.setTenantName(tenant.getName());
         contract.setAutoBillDate(contract.getAutoBillDate());
 
         //Create bill TIENCOC
@@ -92,14 +92,17 @@ public class ContractService {
         oldTenant.setIsContractHolder(false);
         tenantRepository.save(oldTenant);
         newTenant.setIsContractHolder(true);
-
+        contract.setTenantName(newTenant.getName());
         contract.setTenant(tenantRepository.save(newTenant));
 
         return contractRepository.save(contract);
     }
 
-    public Contract updateContract(Long contractId, Contract newContract) throws BadRequestException {
+    public Contract updateContract(Long contractId, ContractRequest newContract) throws BadRequestException {
         Contract oldContract = contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
+        oldContract.setAutoBillDate(newContract.getAutoBillDate());
+        oldContract.setDeposit(newContract.getDeposit());
+        oldContract.setFromDate(newContract.getFromDate());
         oldContract.setToDate(newContract.getToDate());
         contractRepository.save(oldContract);
         return oldContract;
@@ -130,6 +133,4 @@ public class ContractService {
 
         return Page.empty(page);
     }
-
-
 }
