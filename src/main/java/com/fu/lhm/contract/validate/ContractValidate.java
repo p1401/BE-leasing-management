@@ -1,11 +1,11 @@
 package com.fu.lhm.contract.validate;
 
+import com.fu.lhm.contract.model.ContractRequest;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.contract.entity.Contract;
-import com.fu.lhm.contract.model.ContractRequest;
+import com.fu.lhm.contract.model.CreateContractRequest;
 import com.fu.lhm.contract.repository.ContractRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,7 @@ public class ContractValidate {
     private final RoomRepository roomRepository;
     private final ContractRepository contractRepository;
 
-    public void validateForCreateContract(ContractRequest contract) throws BadRequestException {
+    public void validateForCreateContract(CreateContractRequest contract) throws BadRequestException {
 
         long roomId = contract.getRoomId();
 
@@ -39,14 +39,13 @@ public class ContractValidate {
         checkInputToDate(fromDate, toDate);
     }
 
-    public void validateForUpdateContract(Long contractId, Contract contract) throws BadRequestException {
+    public void validateForUpdateContract(Long contractId, ContractRequest contract) throws BadRequestException {
 
         Contract oldContract = contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
 
         Date fromDate = contract.getFromDate();
         Date toDate = contract.getToDate();
 
-        isNotPopulated(contract.getTenant().getName(), "Hợp đồng phải có người ký");
         isNotPopulated(contract.getFromDate().toString(), "Vui lòng nhập ngày bắt đầu ký hợp đồng");
         isNotPopulated(contract.getToDate().toString(), "Vui lòng nhập ngày kết thúc hơp đồng");
         isNotPopulated(contract.getAutoBillDate()+"", "Vui lòng nhập ngày chốt tiền phòng");

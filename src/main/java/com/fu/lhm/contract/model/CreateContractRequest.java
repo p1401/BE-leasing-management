@@ -1,30 +1,28 @@
 package com.fu.lhm.contract.model;
 
 import com.fu.lhm.tenant.entity.Tenant;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContractRequest {
-
-    private Long id;
-    private String contractCode;
+public class CreateContractRequest {
+    //contract
+    @NotNull
+    private long roomId;
     private Date fromDate;
     private Date toDate;
-    private String roomName;
-    private String houseName;
-    private int floor;
-    private int area;
-    private Boolean isActive;
     private Long deposit;
-    private Integer autoBillDate;
+    private int autoBillDate;
 
-    private String tenantName;
+    //tenant
+    private Tenant tenant;
 
 }
