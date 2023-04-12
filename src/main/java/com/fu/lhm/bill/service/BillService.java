@@ -158,7 +158,7 @@ public class BillService {
                 bill.setWaterMoney(room.getWaterElectric().getNumberWater() * house.getWaterPrice());
                 bill.setPayer(contract.getTenant().getName());
                 bill.setIsPay(false);
-//                bill.setDateCreate(new Date());
+                bill.setDateCreate(LocalDate.now());
                 bill.setDescription("Tiền phòng " + contract.getTenant().getRoom().getName() + " tháng " + month);
                 bill.setTotalMoney(room.getRoomMoney() + room.getWaterElectric().getNumberElectric() * house.getElectricPrice() + room.getWaterElectric().getNumberWater() * house.getWaterPrice());
                 bill.setBillContent(BillContent.TIENPHONG);

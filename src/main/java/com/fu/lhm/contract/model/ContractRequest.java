@@ -20,6 +20,7 @@ public class ContractRequest {
     private Date fromDate;
     private Date toDate;
     private Long deposit;
+    private int autoBillDate;
 
     //tenant
     private Tenant tenant;

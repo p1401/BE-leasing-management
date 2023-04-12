@@ -13,7 +13,4 @@ public class ListContractRequest {
     private Boolean isActive;
     private int dateExpired;
 
-
-
-
 }

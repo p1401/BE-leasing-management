@@ -32,6 +32,7 @@ public class Contract {
     private String houseName;
     private Boolean isActive;
     private Long deposit;
+    private int autoBillDate;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Tenant.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "tenantId")

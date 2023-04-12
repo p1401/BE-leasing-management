@@ -42,7 +42,6 @@ public class ContractScheduled {
     //Run every day at 12h
     @Scheduled(cron = "0 0 6 * * *")
     public void checkDurationContract() {
-
             LocalDate today = LocalDate.now();
             List<Contract>  listContact = contractRepository.findAllByIsActiveTrue();
             for (Contract contract : listContact) {
@@ -59,7 +58,6 @@ public class ContractScheduled {
                 }
             }
         }
-
 
     //if contract expired set all tenant in room isStay=false
     public void checkIfContractExpired(Contract contract){

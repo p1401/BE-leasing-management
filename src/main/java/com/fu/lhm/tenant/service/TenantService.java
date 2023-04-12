@@ -52,24 +52,6 @@ public class TenantService {
         return tenantRepository.save(oldTenant);
     }
 
-//    public TenantRequest tenantMapper(Tenant tenant){
-//        TenantRequest tenantRequest = new TenantRequest();
-//        tenantRequest.setId(tenant.getId());
-//        tenantRequest.setName(tenant.getName());
-//        tenantRequest.setEmail(tenant.getEmail());
-//        tenantRequest.setPhone(tenant.getPhone());
-//        tenantRequest.setIdentifyNumber(tenant.getIdentifyNumber());
-//        tenantRequest.setBirth(tenant.getBirth());
-//        tenantRequest.setAddress(tenant.getAddress());
-//        tenantRequest.setIsStay(tenant.getIsStay());
-//        tenantRequest.setIsContractHolder(tenant.getIsContractHolder());
-//        tenantRequest.setRoom(tenant.getRoom());
-//        tenantRequest.setHouse(tenant.getRoom().getHouse());
-//        tenantRequest.setContracts(tenant.getContracts());
-//        return  tenantRequest;
-//    }
-
-
     public Page<Tenant> getListTenantByRoomId(Long id, Pageable page) {
 
         return tenantRepository.findAllByRoom_IdAndIsStay(id,true, page);

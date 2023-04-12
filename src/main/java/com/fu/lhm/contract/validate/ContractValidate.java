@@ -34,6 +34,22 @@ public class ContractValidate {
         isNotPopulated(contract.getTenant().getName(), "Hợp đồng phải có người ký");
         isNotPopulated(contract.getFromDate().toString(), "Vui lòng nhập ngày bắt đầu ký hợp đồng");
         isNotPopulated(contract.getToDate().toString(), "Vui lòng nhập ngày kết thúc hơp đồng");
+        isNotPopulated(contract.getAutoBillDate()+"", "Vui lòng nhập ngày chốt tiền phòng");
+        isNotPopulated(String.valueOf(contract.getDeposit()), "Vui lòng nhập Tiền cọc");
+        checkInputToDate(fromDate, toDate);
+    }
+
+    public void validateForUpdateContract(Long contractId, Contract contract) throws BadRequestException {
+
+        Contract oldContract = contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
+
+        Date fromDate = contract.getFromDate();
+        Date toDate = contract.getToDate();
+
+        isNotPopulated(contract.getTenant().getName(), "Hợp đồng phải có người ký");
+        isNotPopulated(contract.getFromDate().toString(), "Vui lòng nhập ngày bắt đầu ký hợp đồng");
+        isNotPopulated(contract.getToDate().toString(), "Vui lòng nhập ngày kết thúc hơp đồng");
+        isNotPopulated(contract.getAutoBillDate()+"", "Vui lòng nhập ngày chốt tiền phòng");
         isNotPopulated(String.valueOf(contract.getDeposit()), "Vui lòng nhập Tiền cọc");
         checkInputToDate(fromDate, toDate);
     }
@@ -59,7 +75,13 @@ public class ContractValidate {
         if (fromDate.compareTo(toDate) > 0) {
             throw new BadRequestException("Ngày kết thúc phải lớn hơn ngày ký");
         }
+    }
 
+    private void checkInputToDateUpdate(Date oldToDate, Date newToDate) throws BadRequestException {
+
+        if (oldToDate.compareTo(newToDate) > 0) {
+            throw new BadRequestException("Ngày gia hạn phải lớn hơn hạn ngày cũ");
+        }
     }
 
 

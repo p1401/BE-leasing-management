@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -66,6 +67,7 @@ public class ContractService {
         contract.setTenant(tenantRepository.save(tenant));
         contract.setRoomName(room.getName());
         contract.setHouseName(room.getHouse().getName());
+        contract.setAutoBillDate(contract.getAutoBillDate());
 
         //Create bill TIENCOC
         BillReceiveRequest bill = new BillReceiveRequest();
@@ -103,6 +105,17 @@ public class ContractService {
         return oldContract;
     }
 
+    public Contract liquidationContract(Long contractId) throws BadRequestException {
+        Contract oldContract = contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
+        oldContract.setIsActive(false);
+        contractRepository.save(oldContract);
+        List<Tenant> listTenantInRoom = tenantRepository.findAllByRoom_IdAndIsStayTrue(oldContract.getTenant().getRoom().getId());
+        for(Tenant tenant : listTenantInRoom){
+            tenant.setIsStay(false);
+            tenantRepository.save(tenant);
+        }
+        return oldContract;
+    }
     public Page<Contract> getContracts(Long houseId,
                                    Long roomId,
                                    Boolean isActive,
