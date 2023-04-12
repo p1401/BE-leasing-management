@@ -21,6 +21,7 @@ public class NotificationController {
     private final HttpServletRequest httpServletRequest;
     private final JwtService jwtService;
     private final NotificationService notificationService;
+
     private User getUserToken() throws BadRequestException {
         return jwtService.getUser(httpServletRequest);
     }
@@ -39,10 +40,10 @@ public class NotificationController {
         return ResponseEntity.ok(notificationService.getUnreadNotification(getUserToken(), PageRequest.of(page, pageSize)));
     }
 
-    @PutMapping({"/{id}"})
-    public ResponseEntity<Notification> updateNotification(@PathVariable("id") Long id) throws BadRequestException {
+    @PutMapping({"/mark-as-read/{id}"})
+    public ResponseEntity<Notification> markAsRead(@PathVariable("id") Long id) throws BadRequestException {
 
-        return ResponseEntity.ok(notificationService.updateNotification(id));
+        return ResponseEntity.ok(notificationService.markAsRead(id));
     }
 
     @DeleteMapping({"/{id}"})
