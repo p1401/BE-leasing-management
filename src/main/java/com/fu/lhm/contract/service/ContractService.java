@@ -1,18 +1,16 @@
 package com.fu.lhm.contract.service;
 
-import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.entity.BillContent;
 import com.fu.lhm.bill.entity.BillType;
 import com.fu.lhm.bill.modal.BillReceiveRequest;
-import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.bill.service.BillService;
+import com.fu.lhm.contract.entity.Contract;
+import com.fu.lhm.contract.model.ContractRequest;
 import com.fu.lhm.contract.repository.ContractRepository;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
-import com.fu.lhm.contract.entity.Contract;
 import com.fu.lhm.tenant.entity.Tenant;
-import com.fu.lhm.contract.model.ContractRequest;
 import com.fu.lhm.tenant.repository.TenantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +44,7 @@ public class ContractService {
         Date toDate = contractRequest.getToDate();
 
         Room room = roomrepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
-        room.setCurrentTenant(room.getCurrentTenant()+1);
+        room.setCurrentTenant(room.getCurrentTenant() + 1);
         roomrepository.save(room);
         //create tenant
         Tenant tenant = contractRequest.getTenant();
@@ -77,8 +74,8 @@ public class ContractService {
         bill.setDateCreate(contractRequest.getFromDate());
         bill.setPayer(tenant.getName());
         bill.setIsPay(true);
-        bill.setDescription("Tiền cọc của khách "+tenant.getName());
-        billService.createBillReceive(roomId,bill);
+        bill.setDescription("Tiền cọc của khách " + tenant.getName());
+        billService.createBillReceive(roomId, bill);
 
         return contractRepository.save(contract);
     }
@@ -110,22 +107,23 @@ public class ContractService {
         oldContract.setIsActive(false);
         contractRepository.save(oldContract);
         List<Tenant> listTenantInRoom = tenantRepository.findAllByRoom_IdAndIsStayTrue(oldContract.getTenant().getRoom().getId());
-        for(Tenant tenant : listTenantInRoom){
+        for (Tenant tenant : listTenantInRoom) {
             tenant.setIsStay(false);
             tenantRepository.save(tenant);
         }
         return oldContract;
     }
+
     public Page<Contract> getContracts(Long houseId,
-                                   Long roomId,
-                                   Boolean isActive,
-                                   Pageable page) {
+                                       Long roomId,
+                                       Boolean isActive,
+                                       Pageable page) {
         if (roomId != null) {
-            return contractRepository.findAllByTenant_Room_IdAndIsActive(roomId,isActive, page);
+            return contractRepository.findAllByTenant_Room_IdAndIsActive(roomId, isActive, page);
         }
 
         if (houseId != null) {
-            return contractRepository.findAllByTenant_Room_House_IdAndIsActive(houseId,isActive, page);
+            return contractRepository.findAllByTenant_Room_House_IdAndIsActive(houseId, isActive, page);
         }
 
         return Page.empty(page);
