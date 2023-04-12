@@ -1,5 +1,6 @@
 package com.fu.lhm.contract.model;
 
+import com.fu.lhm.tenant.entity.Tenant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,8 @@ public class ContractRequest {
     private int area;
     private Boolean isActive;
     private Long deposit;
-    private int autoBillDate;
+    private Integer autoBillDate;
+
     private String tenantName;
 
 }
