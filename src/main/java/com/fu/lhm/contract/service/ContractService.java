@@ -67,7 +67,7 @@ public class ContractService {
         contract.setRoomName(room.getName());
         contract.setHouseName(room.getHouse().getName());
         contract.setTenantName(tenant.getName());
-        contract.setAutoBillDate(contract.getAutoBillDate());
+        contract.setAutoBillDate(contractRequest.getAutoBillDate());
 
         //Create bill TIENCOC
         BillReceiveRequest bill = new BillReceiveRequest();
