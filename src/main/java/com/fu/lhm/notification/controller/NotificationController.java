@@ -40,9 +40,9 @@ public class NotificationController {
     }
 
     @PutMapping({"/{id}"})
-    public ResponseEntity<Notification> updateNotification(@PathVariable("id") Long id, @RequestBody Notification notification) throws BadRequestException {
+    public ResponseEntity<Notification> updateNotification(@PathVariable("id") Long id) throws BadRequestException {
 
-        return ResponseEntity.ok(notificationService.updateNotification(id, notification));
+        return ResponseEntity.ok(notificationService.updateNotification(id));
     }
 
     @DeleteMapping({"/{id}"})
