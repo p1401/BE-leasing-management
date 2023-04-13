@@ -14,6 +14,7 @@ public interface HouseRepository extends JpaRepository<House, Long> {
 
     Integer countByUser(User user);
 
+    House findByNameExists(String name);
     List<House> findAllByUser(User user);
     Page<House> findAllByUser(User user, Pageable pageable);
 
