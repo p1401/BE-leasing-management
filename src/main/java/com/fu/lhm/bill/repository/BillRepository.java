@@ -3,6 +3,7 @@ package com.fu.lhm.bill.repository;
 import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.entity.BillContent;
 import com.fu.lhm.bill.entity.BillType;
+import com.fu.lhm.house.entity.House;
 import com.fu.lhm.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +31,9 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     List<Bill> findAllByRoomIdAndBillType(Long roomId, BillType billType);
 
-    List<Bill> findAllByContract_Tenant_Room_House_User(User user);
+    List<Bill> findAllByUser(User user);
+
+    List<Bill> findAllByHouseId(House house);
 
     List<Bill> findAllByContract_Tenant_Room_House_Id(Long houseId);
 

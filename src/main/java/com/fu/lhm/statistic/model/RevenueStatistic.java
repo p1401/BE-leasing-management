@@ -2,6 +2,8 @@ package com.fu.lhm.statistic.model;
 
 import lombok.*;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @Data
@@ -16,6 +18,6 @@ public class RevenueStatistic {
 
     private int revenue;
 
-    private String monthYear;
+    private Date date;
 
 }

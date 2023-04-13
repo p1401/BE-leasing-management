@@ -1,8 +1,10 @@
 package com.fu.lhm.bill.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fu.lhm.house.entity.House;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.contract.entity.Contract;
+import com.fu.lhm.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -65,6 +67,12 @@ public class Bill {
     @JoinColumn(name = "contractId")
     @JsonBackReference
     private Contract contract;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "userId")
+    @JsonBackReference
+    private User user;
+
 
 
 }
