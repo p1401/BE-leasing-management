@@ -7,13 +7,16 @@ import com.fu.lhm.bill.service.BillService;
 import com.fu.lhm.contract.model.ContractRequest;
 import com.fu.lhm.contract.repository.ContractRepository;
 import com.fu.lhm.exception.BadRequestException;
+import com.fu.lhm.jwt.service.JwtService;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.contract.entity.Contract;
 import com.fu.lhm.tenant.entity.Tenant;
 import com.fu.lhm.contract.model.CreateContractRequest;
 import com.fu.lhm.tenant.repository.TenantRepository;
+import com.fu.lhm.user.entity.User;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +36,12 @@ public class ContractService {
     private final RoomRepository roomrepository;
     private final BillService billService;
 
+    private final HttpServletRequest httpServletRequest;
+    private final JwtService jwtService;
+    private User getUserToken() throws BadRequestException {
+        return jwtService.getUser(httpServletRequest);
+    }
+
     public Contract getContractById(Long contractId) {
 
         return contractRepository.findById(contractId).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
@@ -49,6 +58,7 @@ public class ContractService {
         roomrepository.save(room);
         //create tenant
         Tenant tenant = contractRequest.getTenant();
+        tenant.setName(contractRequest.getTenant().getName());
         tenant.setIsContractHolder(true);
         tenant.setRoomName(room.getName());
         tenant.setHouseName(room.getHouse().getName());
@@ -62,12 +72,12 @@ public class ContractService {
         contract.setDeposit(contractRequest.getDeposit());
         contract.setFromDate(fromDate);
         contract.setToDate(toDate);
-        contract.setTenant(tenantRepository.save(tenant));
+
         contract.setRoomName(room.getName());
         contract.setHouseName(room.getHouse().getName());
         contract.setTenantName(tenant.getName());
         contract.setAutoBillDate(contractRequest.getAutoBillDate());
-
+        contract.setTenant(tenantRepository.save(tenant));
         //Create bill TIENCOC
         BillReceiveRequest bill = new BillReceiveRequest();
         bill.setBillType(BillType.RECEIVE);
@@ -77,7 +87,7 @@ public class ContractService {
         bill.setPayer(tenant.getName());
         bill.setIsPay(true);
         bill.setDescription("Tiền cọc của khách "+tenant.getName());
-        billService.createBillReceive(roomId,bill);
+        billService.createBillReceive(getUserToken(),roomId,bill);
 
         return contractRepository.save(contract);
     }

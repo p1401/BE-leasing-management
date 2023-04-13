@@ -35,7 +35,7 @@ public class BillService {
 
     private final RoomRepository roomRepository;
 
-    public Bill createBillReceive(Long roomId, BillReceiveRequest billRequest) throws BadRequestException {
+    public Bill createBillReceive(User user, Long roomId, BillReceiveRequest billRequest) throws BadRequestException {
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
         Contract contract = contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
@@ -45,10 +45,11 @@ public class BillService {
         bill.setContract(contract);
         bill.setRoomId(roomId);
         bill.setHouseId(room.getHouse().getId());
+        bill.setUser(user);
         return billRepository.save(bill);
     }
 
-    public Bill createBillSpend(Long roomId, BillSpendRequest billRequest) throws BadRequestException {
+    public Bill createBillSpend(User user,Long roomId, BillSpendRequest billRequest) throws BadRequestException {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         Bill bill = mapToBillSpend(billRequest);
@@ -57,6 +58,7 @@ public class BillService {
         bill.setIsPay(true);
         bill.setRoomId(roomId);
         bill.setHouseId(room.getHouse().getId());
+        bill.setUser(user);
         return billRepository.save(bill);
     }
 

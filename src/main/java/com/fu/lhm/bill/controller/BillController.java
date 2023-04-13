@@ -52,13 +52,13 @@ public class BillController {
         } else if (bill.getBillContent().name().equalsIgnoreCase("TIENPHUTROI") && bill.getBillType().name().equalsIgnoreCase("RECEIVE")) {
             billValidate.validateForCreateBillTienPhuTroi(bill);
         }
-        return ResponseEntity.ok(billService.createBillReceive(roomId, bill));
+        return ResponseEntity.ok(billService.createBillReceive(getUserToken(),roomId, bill));
     }
 
     @PostMapping("/spend/{roomId}")
     public ResponseEntity<Bill> createSpendBill(@PathVariable("roomId") Long roomId, @RequestBody BillSpendRequest bill) throws BadRequestException {
         billValidate.validateforCreateBillSpend(bill);
-        return ResponseEntity.ok(billService.createBillSpend(roomId, bill));
+        return ResponseEntity.ok(billService.createBillSpend(getUserToken(),roomId, bill));
     }
 
     @PutMapping("/pay/{billId}")
