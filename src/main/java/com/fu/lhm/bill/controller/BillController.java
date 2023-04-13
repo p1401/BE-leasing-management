@@ -1,18 +1,22 @@
 package com.fu.lhm.bill.controller;
 
 import com.fu.lhm.bill.entity.Bill;
-import com.fu.lhm.bill.modal.BillReceiveRequest;
-import com.fu.lhm.bill.modal.BillSpendRequest;
+import com.fu.lhm.bill.model.BillReceiveRequest;
+import com.fu.lhm.bill.model.BillRequest;
+import com.fu.lhm.bill.model.BillSpendRequest;
 import com.fu.lhm.bill.service.BillService;
 import com.fu.lhm.bill.validate.BillValidate;
 import com.fu.lhm.exception.BadRequestException;
-import com.fu.lhm.contract.entity.Contract;
+import com.fu.lhm.jwt.service.JwtService;
+import com.fu.lhm.user.entity.User;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -23,6 +27,12 @@ public class BillController {
     private final BillService billService;
 
     private final BillValidate billValidate;
+
+    private final HttpServletRequest httpServletRequest;
+    private final JwtService jwtService;
+    private User getUserToken() throws BadRequestException {
+        return jwtService.getUser(httpServletRequest);
+    }
 
     @PostMapping("/createAllbill")
     public ResponseEntity<List<Bill>> createAllTienPhong() {
@@ -67,21 +77,34 @@ public class BillController {
         return ResponseEntity.ok(billService.getListBillByRoomId(roomId, PageRequest.of(page, pageSize)));
     }
 
-    @GetMapping("")
-    public ResponseEntity<Page<Bill>> getBills(@RequestParam(name = "houseId", required = false) Long houseId,
-                                                       @RequestParam(name = "roomId", required = false) Long roomId,
-                                                       @RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                       @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-
-        Page<Bill> listBill = billService.getBills(houseId, roomId, PageRequest.of(page, pageSize));
-
-        return ResponseEntity.ok(listBill);
-    }
+//    @GetMapping("")
+//    public ResponseEntity<Page<Bill>> getBills(@RequestParam(name = "houseId", required = false) Long houseId,
+//                                                       @RequestParam(name = "roomId", required = false) Long roomId,
+//                                                       @RequestParam(name = "page", defaultValue = "0") Integer page,
+//                                                       @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+//
+//        Page<Bill> listBill = billService.getBills(houseId, roomId, PageRequest.of(page, pageSize));
+//
+//        return ResponseEntity.ok(listBill);
+//    }
 
     @DeleteMapping ("/{billId}")
     public void deleteBillById(@PathVariable("billId") Long billId) {
 
          billService.deleteBill(billId);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<BillRequest> getBills(@RequestParam(name = "houseId", required = false) Long houseId,
+                                                      @RequestParam(name = "roomId", required = false) Long roomId,
+                                                      @RequestParam(name = "fromDate", required = false) Date fromDate,
+                                                      @RequestParam(name = "toDate", required = false) Date toDate,
+                                                      @RequestParam(name = "billType", required = false) String billType,
+                                                      @RequestParam(name = "isPay", required = false) Boolean isPay,
+                                                      @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                      @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) throws BadRequestException {
+        BillRequest billRequest =  billService.getBills(getUserToken().getId(),houseId, roomId,fromDate,toDate,billType,isPay, PageRequest.of(page, pageSize));
+        return ResponseEntity.ok(billRequest);
     }
 }
 

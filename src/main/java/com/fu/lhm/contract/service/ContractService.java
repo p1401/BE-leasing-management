@@ -2,7 +2,7 @@ package com.fu.lhm.contract.service;
 
 import com.fu.lhm.bill.entity.BillContent;
 import com.fu.lhm.bill.entity.BillType;
-import com.fu.lhm.bill.modal.BillReceiveRequest;
+import com.fu.lhm.bill.model.BillReceiveRequest;
 import com.fu.lhm.bill.service.BillService;
 import com.fu.lhm.contract.model.ContractRequest;
 import com.fu.lhm.contract.repository.ContractRepository;
@@ -16,7 +16,6 @@ import com.fu.lhm.tenant.repository.TenantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

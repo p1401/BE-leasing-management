@@ -1,4 +1,4 @@
-package com.fu.lhm.bill.modal;
+package com.fu.lhm.bill.model;
 
 import com.fu.lhm.bill.entity.BillContent;
 import com.fu.lhm.bill.entity.BillType;

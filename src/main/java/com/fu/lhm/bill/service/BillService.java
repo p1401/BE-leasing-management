@@ -1,7 +1,8 @@
 package com.fu.lhm.bill.service;
 
-import com.fu.lhm.bill.modal.BillReceiveRequest;
-import com.fu.lhm.bill.modal.BillSpendRequest;
+import com.fu.lhm.bill.model.BillReceiveRequest;
+import com.fu.lhm.bill.model.BillRequest;
+import com.fu.lhm.bill.model.BillSpendRequest;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.entity.BillContent;
@@ -12,6 +13,7 @@ import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.contract.entity.Contract;
 import com.fu.lhm.contract.repository.ContractRepository;
+import com.fu.lhm.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +41,7 @@ public class BillService {
         Contract contract = contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
         Bill bill = mapToBillReceive(billRequest);
         bill.setBillCode("PT"+randomNumber);
+        bill.setPayer(contract.getTenantName());
         bill.setContract(contract);
         bill.setRoomId(roomId);
         bill.setHouseId(room.getHouse().getId());
@@ -90,8 +93,6 @@ public class BillService {
         bill.setBillType(billRE.getBillType());
         return bill;
     }
-
-
 
     public Page<Bill> getListBillByRoomId(Long roomId, Pageable pageable) {
 
@@ -173,17 +174,59 @@ public class BillService {
         return newListBill;
     }
 
-    public Page<Bill> getBills(Long houseId,
-                                       Long roomId,
-                                       Pageable page) {
-        if (roomId != null) {
-            return billRepository.findAllByRoomId(roomId, page);
-        }
+//    public Page<Bill> getBills(Long houseId,
+//                                       Long roomId,
+//                                       Pageable page) {
+//        if (roomId != null) {
+//            return billRepository.findAllByRoomId(roomId, page);
+//        }
+//
+//        if (houseId != null) {
+//            return billRepository.findAllByHouseId(houseId, page);
+//        }
+//
+//        return Page.empty(page);
+//    }
 
-        if (houseId != null) {
-            return billRepository.findAllByHouseId(houseId, page);
-        }
 
-        return Page.empty(page);
+
+    public BillRequest getBills(Long userId,
+                            Long houseId,
+                            Long roomId,
+                            Date fromDate,
+                            Date toDate,
+                            String billType,
+                            Boolean isPay,
+                            Pageable page) {
+        BillRequest billRequest = new BillRequest();
+        Integer receive = 0;
+        Integer spend=0;
+        Integer revenue = 0;
+            Page<Bill> listBills = billRepository.findBills(userId,houseId,roomId,fromDate,toDate,billType,isPay,page);
+            List<Bill> list =  billRepository.findBills(userId,houseId,roomId,fromDate,toDate,billType,isPay,Pageable.unpaged()).toList();
+            for(Bill bill :list){
+
+                if(bill.getBillType().equals(BillType.RECEIVE)
+                        && !bill.getBillContent().equals(BillContent.TIENCOC)
+                        && bill.getIsPay()==true){
+
+                    receive = receive+bill.getTotalMoney();
+
+                }
+                if(bill.getBillType().equals(BillType.SPEND)){
+
+                    spend = spend + bill.getTotalMoney();
+
+                }
+            }
+
+            revenue = receive-spend;
+
+            billRequest.setReceive(receive);
+            billRequest.setSpend(spend);
+            billRequest.setRevenue(revenue);
+            billRequest.setListBill(listBills);
+            return billRequest;
+
     }
 }
