@@ -227,6 +227,5 @@ public class BillService {
             billRequest.setRevenue(revenue);
             billRequest.setListBill(listBills);
             return billRequest;
-
     }
 }

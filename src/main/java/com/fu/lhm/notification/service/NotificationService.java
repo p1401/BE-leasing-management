@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -19,8 +21,8 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    public Page<Notification> getAllNotification(User user, Pageable page) {
-        return notificationRepository.findAllByUser(user, page);
+    public Page<Notification> getNotifications(User user, Long houseId, Long roomId, Date fromDate, Date toDate, Pageable page) {
+        return notificationRepository.findNotifications(user.getId(),houseId,roomId,fromDate,toDate, page);
     }
 
     public Page<Notification> getUnreadNotification(User user, Pageable page) {

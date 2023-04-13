@@ -54,6 +54,8 @@ public class RoomSchedule {
         notification.setDateCreate(new Date());
         notification.setMessage("Chưa cập nhật điện nước ở nhà "+waterElectric.getRoom().getHouse().getName()+", phòng "+waterElectric.getRoom().getName()+" trong " + days + " ngày qua");
         notification.setIsRead(false);
+        notification.setRoomId(waterElectric.getRoom().getId());
+        notification.setHouseId(waterElectric.getRoom().getHouse().getId());
         notification.setUser(waterElectric.getRoom().getHouse().getUser());
         System.out.println("Chưa cập nhật điện nước ở nhà "+waterElectric.getRoom().getHouse().getName()+", phòng "+waterElectric.getRoom().getName()+" trong " + days + " ngày qua");
         notificationRepository.save(notification);

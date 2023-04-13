@@ -28,8 +28,6 @@ public class BillSchedule {
 
     private final BillRepository billRepository;
 
-    private final TenantRepository tenantRepository;
-
     private final NotificationRepository notificationRepository;
     private final ContractRepository contractRepository;
 
@@ -45,7 +43,6 @@ public class BillSchedule {
         LocalDate today = LocalDate.now();
         List<Bill> listBill = billRepository.findAllByIsPayFalse();
         for (Bill bill : listBill) {
-            //            LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
             long days = today.until(bill.getDateCreate(), ChronoUnit.DAYS);
 
             //neu qua 15 ngay chưa thanh toán
@@ -83,6 +80,8 @@ public class BillSchedule {
         notification.setMessage("Hóa đơn "+billType+" ở phòng " + bill.getContract().getTenant().getRoom().getName()+" đã "+days+" chưa thanh toán");
         notification.setDateCreate(new Date());
         notification.setIsRead(false);
+        notification.setRoomId(bill.getRoomId());
+        notification.setHouseId(bill.getHouseId());
         notification.setUser(bill.getContract().getTenant().getRoom().getHouse().getUser());
         notificationRepository.save(notification);
     }
@@ -105,6 +104,9 @@ public class BillSchedule {
         bill.setTotalMoney(room.getRoomMoney() + room.getWaterElectric().getNumberElectric() * house.getElectricPrice() + room.getWaterElectric().getNumberWater() * house.getWaterPrice());
         bill.setBillContent(BillContent.TIENPHONG);
         bill.setBillType(BillType.RECEIVE);
+        bill.setRoomId(contract.getTenant().getRoom().getId());
+        bill.setHouseId(contract.getTenant().getRoom().getHouse().getId());
+
         bill.setContract(contract);
 
         billRepository.save(bill);

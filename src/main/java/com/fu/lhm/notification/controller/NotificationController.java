@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 
 @RestController
 @RequestMapping("api/v1/notifications")
@@ -27,10 +29,13 @@ public class NotificationController {
     }
 
     @GetMapping({""})
-    public ResponseEntity<Page<Notification>> getAllNotification(
-            @RequestParam(name = "page", defaultValue = "0") Integer page,
-            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) throws BadRequestException {
-        return ResponseEntity.ok(notificationService.getAllNotification(getUserToken(), PageRequest.of(page, pageSize)));
+    public ResponseEntity<Page<Notification>> getNotifications(@RequestParam(name = "houseId", required = false) Long houseId,
+                                                               @RequestParam(name = "roomId", required = false) Long roomId,
+                                                               @RequestParam(name = "fromDate", required = false) Date fromDate,
+                                                               @RequestParam(name = "toDate", required = false) Date toDate,
+                                                               @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                               @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) throws BadRequestException {
+        return ResponseEntity.ok(notificationService.getNotifications(getUserToken(),houseId,roomId,fromDate,toDate, PageRequest.of(page, pageSize)));
     }
 
     @GetMapping({"/unread"})

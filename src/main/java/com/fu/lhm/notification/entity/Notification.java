@@ -25,6 +25,10 @@ public class Notification {
 
     private Boolean isRead;
 
+    private Long roomId;
+
+    private Long houseId;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @JsonBackReference

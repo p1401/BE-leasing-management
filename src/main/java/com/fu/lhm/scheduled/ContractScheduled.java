@@ -76,6 +76,8 @@ public class ContractScheduled {
         notification.setDateCreate(new Date());
         notification.setMessage("Hợp đồng nhà "+contract.getTenant().getRoom().getHouse().getName()+", phòng "+contract.getRoomName()+" còn " + days + " ngày sẽ hết hạn");
         notification.setIsRead(false);
+        notification.setRoomId(contract.getTenant().getRoom().getId());
+        notification.setHouseId(contract.getTenant().getRoom().getHouse().getId());
         notification.setUser(contract.getTenant().getRoom().getHouse().getUser());
         System.out.println("Hop dong phong "+contract.getTenant().getRoom().getHouse().getName()+", phong "+contract.getRoomName()+" con " + days + " ngay se het han");
         notificationRepository.save(notification);
