@@ -78,6 +78,7 @@ public class ContractService {
         contract.setTenantName(tenant.getName());
         contract.setAutoBillDate(contractRequest.getAutoBillDate());
         contract.setTenant(tenantRepository.save(tenant));
+        contractRepository.save(contract);
         //Create bill TIENCOC
         BillReceiveRequest bill = new BillReceiveRequest();
         bill.setBillType(BillType.RECEIVE);
@@ -89,7 +90,7 @@ public class ContractService {
         bill.setDescription("Tiền cọc của khách "+tenant.getName());
         billService.createBillReceive(getUserToken(),roomId,bill);
 
-        return contractRepository.save(contract);
+        return contract;
     }
 
 
@@ -120,12 +121,17 @@ public class ContractService {
     public Contract liquidationContract(Long contractId) throws BadRequestException {
         Contract oldContract = contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
         oldContract.setIsActive(false);
+        Room room = roomrepository.findById(oldContract.getTenant().getRoom().getId()).get();
+        room.setCurrentTenant(0);
+        roomrepository.save(room);
         contractRepository.save(oldContract);
+
         List<Tenant> listTenantInRoom = tenantRepository.findAllByRoom_IdAndIsStayTrue(oldContract.getTenant().getRoom().getId());
         for(Tenant tenant : listTenantInRoom){
             tenant.setIsStay(false);
             tenantRepository.save(tenant);
         }
+
         return oldContract;
     }
     public Page<Contract> getContracts(Long houseId,

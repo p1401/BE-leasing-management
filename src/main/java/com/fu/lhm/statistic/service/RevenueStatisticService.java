@@ -24,7 +24,7 @@ public class RevenueStatisticService {
     private final BillRepository billRepository;
 
     public List<RevenueStatistic> getTotalRevenueStatistic(User user, int year){
-        List<Bill> bills = billRepository.findAllByUser(user);
+        List<Bill> bills = billRepository.findAllByUserId(user.getId());
         List<RevenueStatistic> revenueStatisticList = new ArrayList<>();
 
         for(Month month : Month.values()){

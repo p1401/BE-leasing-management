@@ -11,9 +11,7 @@ import java.util.List;
 
 public interface HouseRepository extends JpaRepository<House, Long> {
     boolean existsByNameAndUser(String name, User user);
-
     Integer countByUser(User user);
-
     List<House> findAllByUser(User user);
     Page<House> findAllByUser(User user, Pageable pageable);
 

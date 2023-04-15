@@ -45,7 +45,7 @@ public class BillService {
         bill.setContract(contract);
         bill.setRoomId(roomId);
         bill.setHouseId(room.getHouse().getId());
-        bill.setUser(user);
+        bill.setUserId(user.getId());
         return billRepository.save(bill);
     }
 
@@ -58,7 +58,7 @@ public class BillService {
         bill.setIsPay(true);
         bill.setRoomId(roomId);
         bill.setHouseId(room.getHouse().getId());
-        bill.setUser(user);
+        bill.setUserId(user.getId());
         return billRepository.save(bill);
     }
 
@@ -204,6 +204,9 @@ public class BillService {
         Integer receive = 0;
         Integer spend=0;
         Integer revenue = 0;
+        if(billType.equalsIgnoreCase("")){
+            billType=null;
+        }
             Page<Bill> listBills = billRepository.findBills(userId,houseId,roomId,fromDate,toDate,billType,isPay,page);
             List<Bill> list =  billRepository.findBills(userId,houseId,roomId,fromDate,toDate,billType,isPay,Pageable.unpaged()).toList();
             for(Bill bill :list){

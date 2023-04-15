@@ -34,7 +34,7 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     List<Bill> findAllByRoomIdAndBillType(Long roomId, BillType billType);
 
-    List<Bill> findAllByUser(User user);
+    List<Bill> findAllByUserId(Long userId);
 
 //    List<Bill> findAllByHouseId(House house);
 //
