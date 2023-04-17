@@ -35,7 +35,7 @@ public class HouseServiceTest {
     }
 
     @Test
-    public void testCreateHouseWithInvalidData() {
+    public void testCreateHouseWithValidData_1() throws BadRequestException {
         // given
         User user = new User();
         user.setId(1L);
@@ -49,14 +49,143 @@ public class HouseServiceTest {
         house.setWaterPrice(50);
         house.setFloor(2);
 
-        when(houseRepository.save(any(House.class))).thenReturn(house);
-        when(houseService.createHouse(any(House.class))).thenReturn(house);
+        when(houseService.createHouse(any(House.class),any(User.class))).thenReturn(house);
 
-        House createdHouse = houseService.createHouse(house);
+        House createdHouse = houseService.createHouse(house, user);
 
         Assert.assertNotNull(createdHouse);
         Assert.assertEquals(house, createdHouse);
+        Assert.assertEquals(house.getId(), createdHouse.getId());
+        Assert.assertEquals(house.getName(), createdHouse.getName());
+        Assert.assertEquals(house.getCity(), createdHouse.getCity());
+        Assert.assertEquals(house.getDistrict(), createdHouse.getDistrict());
+        Assert.assertEquals(house.getFloor(), createdHouse.getFloor());
+        Assert.assertEquals(house.getWaterPrice(), createdHouse.getWaterPrice());
+        Assert.assertEquals(house.getElectricPrice(), createdHouse.getElectricPrice());
+        Assert.assertEquals(house.getUser(), createdHouse.getUser());
+    }
 
+    @Test
+    public void testCreateHouseWithValidData_2() throws BadRequestException {
+        // given
+        User user = new User();
+        user.setId(1L);
 
+        House house = new House();
+        house.setName("Test House");
+        house.setCity("Test City");
+        house.setDistrict("Test District");
+        house.setAddress("Test Address");
+        house.setElectricPrice(100);
+        house.setWaterPrice(50);
+        house.setFloor(2);
+
+        when(houseService.createHouse(any(House.class),any(User.class))).thenReturn(house);
+
+        House createdHouse = houseService.createHouse(house, user);
+
+        Assert.assertNotNull(createdHouse);
+        Assert.assertEquals(house, createdHouse);
+        Assert.assertEquals(house.getId(), createdHouse.getId());
+        Assert.assertEquals(house.getName(), createdHouse.getName());
+        Assert.assertEquals(house.getCity(), createdHouse.getCity());
+        Assert.assertEquals(house.getDistrict(), createdHouse.getDistrict());
+        Assert.assertEquals(house.getFloor(), createdHouse.getFloor());
+        Assert.assertEquals(house.getWaterPrice(), createdHouse.getWaterPrice());
+        Assert.assertEquals(house.getElectricPrice(), createdHouse.getElectricPrice());
+        Assert.assertEquals(house.getUser(), createdHouse.getUser());
+    }
+
+    @Test
+    public void testCreateHouseWithValidData_3() throws BadRequestException {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House house = new House();
+        house.setName("Test House");
+        house.setCity("Test City");
+        house.setDistrict("Test District");
+        house.setAddress("Test Address");
+        house.setElectricPrice(100);
+        house.setWaterPrice(50);
+        house.setFloor(2);
+
+        when(houseService.createHouse(any(House.class),any(User.class))).thenReturn(house);
+
+        House createdHouse = houseService.createHouse(house, user);
+
+        Assert.assertNotNull(createdHouse);
+        Assert.assertEquals(house, createdHouse);
+        Assert.assertEquals(house.getId(), createdHouse.getId());
+        Assert.assertEquals(house.getName(), createdHouse.getName());
+        Assert.assertEquals(house.getCity(), createdHouse.getCity());
+        Assert.assertEquals(house.getDistrict(), createdHouse.getDistrict());
+        Assert.assertEquals(house.getFloor(), createdHouse.getFloor());
+        Assert.assertEquals(house.getWaterPrice(), createdHouse.getWaterPrice());
+        Assert.assertEquals(house.getElectricPrice(), createdHouse.getElectricPrice());
+        Assert.assertEquals(house.getUser(), createdHouse.getUser());
+    }
+
+    @Test
+    public void testCreateHouseWithValidData_4() throws BadRequestException {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House house = new House();
+        house.setName("Test House");
+        house.setCity("Test City");
+        house.setDistrict("Test District");
+        house.setAddress("Test Address");
+        house.setElectricPrice(100);
+        house.setWaterPrice(50);
+        house.setFloor(2);
+
+        when(houseService.createHouse(any(House.class),any(User.class))).thenReturn(house);
+
+        House createdHouse = houseService.createHouse(house, user);
+
+        Assert.assertNotNull(createdHouse);
+        Assert.assertEquals(house, createdHouse);
+        Assert.assertEquals(house.getId(), createdHouse.getId());
+        Assert.assertEquals(house.getName(), createdHouse.getName());
+        Assert.assertEquals(house.getCity(), createdHouse.getCity());
+        Assert.assertEquals(house.getDistrict(), createdHouse.getDistrict());
+        Assert.assertEquals(house.getFloor(), createdHouse.getFloor());
+        Assert.assertEquals(house.getWaterPrice(), createdHouse.getWaterPrice());
+        Assert.assertEquals(house.getElectricPrice(), createdHouse.getElectricPrice());
+        Assert.assertEquals(house.getUser(), createdHouse.getUser());
+    }
+
+    @Test
+    public void testCreateHouseWithValidData_5() throws BadRequestException {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House house = new House();
+        house.setName("Test House");
+        house.setCity("Test City");
+        house.setDistrict("Test District");
+        house.setAddress("Test Address");
+        house.setElectricPrice(100);
+        house.setWaterPrice(50);
+        house.setFloor(2);
+
+        when(houseService.createHouse(any(House.class),any(User.class))).thenReturn(house);
+
+        House createdHouse = houseService.createHouse(house, user);
+
+        Assert.assertNotNull(createdHouse);
+        Assert.assertEquals(house, createdHouse);
+        Assert.assertEquals(house.getId(), createdHouse.getId());
+        Assert.assertEquals(house.getName(), createdHouse.getName());
+        Assert.assertEquals(house.getCity(), createdHouse.getCity());
+        Assert.assertEquals(house.getDistrict(), createdHouse.getDistrict());
+        Assert.assertEquals(house.getFloor(), createdHouse.getFloor());
+        Assert.assertEquals(house.getWaterPrice(), createdHouse.getWaterPrice());
+        Assert.assertEquals(house.getElectricPrice(), createdHouse.getElectricPrice());
+        Assert.assertEquals(house.getUser(), createdHouse.getUser());
     }
 }

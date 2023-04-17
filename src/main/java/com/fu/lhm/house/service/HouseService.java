@@ -3,6 +3,7 @@ package com.fu.lhm.house.service;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
+import com.fu.lhm.house.validate.HouseValidate;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.user.entity.User;
@@ -19,8 +20,9 @@ import java.util.List;
 public class HouseService {
     private final HouseRepository houseRepository;
     private final RoomRepository roomRepository;
-    public House createHouse(House house) {
-
+    private final HouseValidate houseValidate;
+    public House createHouse(House house, User user) throws BadRequestException {
+        houseValidate.validateCreateHouse(house, user);
         house.setRoomNumber(0);
         house.setEmptyRoom(0);
         return houseRepository.save(house);
