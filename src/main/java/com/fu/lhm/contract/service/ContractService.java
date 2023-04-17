@@ -22,8 +22,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+
+
+import java.time.ZoneId;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -148,4 +162,98 @@ public class ContractService {
 
         return Page.empty(page);
     }
+
+    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
+    public void replaceTextsInWordDocument(Long contractId, String inputFilePath, String outputFilePath) throws Exception {
+        Contract contract = this.getContractById(contractId);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        LocalDate date1 = contract.getFromDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        String day1 = String.valueOf(date1.getDayOfMonth());
+        String month1 = String.valueOf(date1.getMonthValue());
+        String year1 = String.valueOf(date1.getYear());
+        String name1 = contract.getTenant().getRoom().getHouse().getUser().getName();
+
+        String dob1 =  dateFormat.format(contract.getTenant().getRoom().getHouse().getUser().getBirth());
+        String address1 = contract.getTenant().getRoom().getHouse().getUser().getAddress();
+        String idcard1 = contract.getTenant().getRoom().getHouse().getUser().getIdentityNumber();
+        String sdt1 = contract.getTenant().getRoom().getHouse().getUser().getPhone();
+        String name2 = contract.getTenant().getName();
+
+        String dob2 = dateFormat.format(contract.getTenant().getBirth());
+        String address2 = contract.getTenant().getAddress();
+        String idcard2 = contract.getTenant().getIdentifyNumber();
+        String sdt2 = contract.getTenant().getPhone();
+        String address3 = contract.getTenant().getRoom().getHouse().getAddress() +
+                ", " + contract.getTenant().getRoom().getHouse().getDistrict() +
+                ", " + contract.getTenant().getRoom().getHouse().getCity();
+        String price1 = String.format("%,d", contract.getTenant().getRoom().getRoomMoney());
+        String price2 = String.format("%,d", contract.getTenant().getRoom().getHouse().getElectricPrice());
+        String price3 = String.format("%,d", contract.getTenant().getRoom().getHouse().getWaterPrice());
+        String price4 = String.format("%,d", contract.getDeposit());
+        LocalDate date2 = contract.getToDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        String day2 = String.valueOf(date2.getDayOfMonth());
+        String month2 = String.valueOf(date2.getMonthValue());
+        String year2 = String.valueOf(date2.getYear());
+
+        // Load the Word document
+        Map<String, String> replacements = new HashMap<>();
+        replacements.put("day1", day1);
+        replacements.put("month1", month1);
+        replacements.put("year1", year1);
+        replacements.put("name1", name1);
+        replacements.put("dob1", dob1);
+        replacements.put("address1", address1);
+        replacements.put("idcard1", idcard1);
+        replacements.put("sdt1", sdt1);
+        replacements.put("name2", name2);
+        replacements.put("dob2", dob2);
+        replacements.put("address2", address2);
+        replacements.put("idcard2", idcard2);
+        replacements.put("sdt2", sdt2);
+        replacements.put("address3", address3);
+        replacements.put("price1", price1);
+        replacements.put("price2", price2);
+        replacements.put("price3", price3);
+        replacements.put("price4", price4);
+        replacements.put("day2", day2);
+        replacements.put("month2", month2);
+        replacements.put("year2", year2);
+
+        // Load the Word document
+        FileInputStream fis = new FileInputStream(inputFilePath);
+        XWPFDocument document = new XWPFDocument(fis);
+
+        // Get all paragraphs in the document
+        for (XWPFParagraph paragraph : document.getParagraphs()) {
+            // Get all runs in the paragraph
+            for (XWPFRun run : paragraph.getRuns()) {
+                // Replace all occurrences of the old text with the new text
+                String text = run.getText(0);
+                if (text != null) {
+                    for (Map.Entry<String, String> entry : replacements.entrySet()) {
+                        String oldText = entry.getKey();
+                        String newText = entry.getValue();
+                        if (text.contains(oldText)) {
+                            text = text.replace(oldText, newText);
+                        }
+                    }
+                    run.setText(text, 0);
+                }
+            }
+        }
+
+        // Save the modified document
+        FileOutputStream fos = new FileOutputStream(outputFilePath);
+        document.write(fos);
+
+        // Close the document
+        fos.close();
+        document.close();
+    }
+
 }

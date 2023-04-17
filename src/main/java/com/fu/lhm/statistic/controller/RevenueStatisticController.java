@@ -26,16 +26,10 @@ public class RevenueStatisticController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<RevenueStatistic>> getTotalRevenueStatistic(@RequestParam(name = "year", required = false) int year) throws BadRequestException {
-
-        return ResponseEntity.ok(revenueStatisticService.getTotalRevenueStatistic(getUserToken(), year));
-    }
-
-    @GetMapping("/{houseId}")
     public ResponseEntity<List<RevenueStatistic>> getHouseRevenueStatistic(@RequestParam(name = "year", required = false) int year,
-                                                                           @PathVariable("houseId") Long houseId) {
+                                                                           @RequestParam(name = "houseId", required = false) Long houseId) throws BadRequestException {
 
-        return ResponseEntity.ok(revenueStatisticService.getHouseRevenueStatistic(houseId, year));
+        return ResponseEntity.ok(revenueStatisticService.getHouseRevenueStatistic(getUserToken(),houseId, year));
     }
 
 

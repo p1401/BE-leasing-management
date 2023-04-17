@@ -9,8 +9,16 @@ import com.fu.lhm.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 
 @RestController
 @RequestMapping("api/v1/contracts")
@@ -67,6 +75,27 @@ public class ContractController {
 
         return ResponseEntity.ok(listContract);
     }
+
+    @GetMapping("/generateDoc/{contractId}")
+    public ResponseEntity<byte[]> generateDoc(@PathVariable("contractId") Long contractId) throws Exception {
+        // Set the paths for the template and output documents
+        String templatePath = "C:\\Users\\NC\\Desktop\\DA\\contract_template.docx";
+        String outputPath = "C:\\Users\\NC\\Desktop\\DA\\output.docx";
+        try {
+            // Generate the modified document using the service method
+            contractService.replaceTextsInWordDocument(contractId, templatePath, outputPath);
+
+            // Return the modified document as a byte array
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "CONTRACT_#" + contractId + ".docx");
+            return new ResponseEntity<>(Files.readAllBytes(Paths.get(outputPath)), headers, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 
 }

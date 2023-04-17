@@ -91,7 +91,19 @@
             <version>3.1.0</version>
         </dependency>
 
-<!--        test-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>de.phip1611</groupId>
+            <artifactId>docx4j-search-and-replace-util</artifactId>
+            <version>1.0.7</version>
+        </dependency>
+
+
+        <!--        test-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

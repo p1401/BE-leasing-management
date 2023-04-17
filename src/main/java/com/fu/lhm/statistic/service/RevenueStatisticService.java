@@ -61,8 +61,8 @@ public class RevenueStatisticService {
         return revenueStatisticList;
     }
 
-    public List<RevenueStatistic> getHouseRevenueStatistic(long houseId, int year){
-        List<Bill> bills = billRepository.findAllByHouseId(houseId, Pageable.unpaged()).toList();
+    public List<RevenueStatistic> getHouseRevenueStatistic(User user, Long houseId, int year){
+        List<Bill> bills = billRepository.findBills(user.getId(),houseId,null, null, null, null, null, Pageable.unpaged()).toList();
         List<RevenueStatistic> revenueStatisticList = new ArrayList<>();
 
 

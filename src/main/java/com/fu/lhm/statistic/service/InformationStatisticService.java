@@ -34,14 +34,14 @@ public class InformationStatisticService {
                 .toLocalDate();
     }
 
-    public InformationStatistic getTotalInfor(User user){
+    public InformationStatistic getInfor(User user, Long houseId){
 
         Integer numberHouse = 0;
         Integer numberRoom = 0;
         Integer numberRoomEmpty =0;
         Integer numberContractExpired30days=0;
 
-        List<House> listHouse = houseRepository.findAllByUser(user);
+        List<House> listHouse = houseRepository.findHouses(user.getId(),houseId);
         LocalDate today = LocalDate.now();
         for(House house : listHouse){
             numberHouse=numberHouse+1;
@@ -64,45 +64,6 @@ public class InformationStatisticService {
                 }
             }
         }
-
-        InformationStatistic informationStatistic = new InformationStatistic();
-        informationStatistic.setNumberHouse(numberHouse);
-        informationStatistic.setNumberRoom(numberRoom);
-        informationStatistic.setNumberEmptyRoom(numberRoomEmpty);
-        informationStatistic.setNumberContractExpired30days(numberContractExpired30days);
-
-        return informationStatistic;
-    }
-
-    public InformationStatistic getHouseInfor(long houseId) throws BadRequestException {
-
-        Integer numberHouse = 1;
-        Integer numberRoom = 0;
-        Integer numberRoomEmpty =0;
-        Integer numberContractExpired30days=0;
-
-        LocalDate today = LocalDate.now();
-
-        House house = houseRepository.findById(houseId).orElseThrow(() -> new BadRequestException("Nhà không tồn tại!"));
-
-            numberRoom = numberRoom+roomRepository.countByHouse_Id(house.getId());
-            List<Room> listRoom = roomRepository.findAllByHouse_Id(house.getId());
-            for(Room room : listRoom){
-                if(room.getCurrentTenant()==0){
-                    numberRoomEmpty=numberRoomEmpty+1;
-                }
-            }
-
-            List<Contract>  listContact = contractRepository.findAllByIsActiveTrueAndTenant_Room_House_Id(house.getId());
-            for (Contract contract : listContact) {
-                LocalDate toDate = convertToLocalDateViaInstant(contract.getToDate());
-                long days = today.until(toDate, ChronoUnit.DAYS);
-                //neu hop sap het han
-                if (days<=30 && days>0) {
-                    numberContractExpired30days=numberContractExpired30days+1;
-                }
-            }
-
 
         InformationStatistic informationStatistic = new InformationStatistic();
         informationStatistic.setNumberHouse(numberHouse);
