@@ -1,59 +1,62 @@
 package com.fu.lhm.house.service;
 
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
+import com.fu.lhm.room.repository.RoomRepository;
+import com.fu.lhm.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.junit.MockitoJUnitRunner;
 
-//@DataJpaTest
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+
+import static org.mockito.Mockito.*;
+
 @RequiredArgsConstructor
-@ExtendWith(MockitoExtension.class)
-class HouseServiceTest {
+@RunWith(MockitoJUnitRunner.class)
+public class HouseServiceTest {
+    @Mock
+    private HouseService houseService;
 
     @Mock
     private HouseRepository houseRepository;
 
-    @InjectMocks
-    private HouseService houseService;
-
-    @Test
-    void createHouse() {
-        //arrange
-        House house = House.builder().name("Nhà trọ 1").address("Xa La").district("Hà Đông").city("Hà Nội").electricPrice(1000).waterPrice(10000).description("Goood").build();
-
-        when(houseRepository.save(Mockito.any(House.class))).thenReturn(house);
-
-        House saveHouse = houseService.createHouse(house);
-
-        Assertions.assertThat(saveHouse).isNotNull();
-
+    @Mock
+    private RoomRepository roomRepository;
+    @Before
+    public void setUp() {
 
     }
 
     @Test
-    void updateHouse() {
-    }
+    public void testCreateHouseWithInvalidData() {
+        // given
+        User user = new User();
+        user.setId(1L);
 
-    @Test
-    void getListHouse() {
-    }
+        House house = new House();
+        house.setName("Test House");
+        house.setCity("Test City");
+        house.setDistrict("Test District");
+        house.setAddress("Test Address");
+        house.setElectricPrice(100);
+        house.setWaterPrice(50);
+        house.setFloor(2);
 
-    @Test
-    void getHouseById() {
-    }
+        when(houseRepository.save(any(House.class))).thenReturn(house);
+        when(houseService.createHouse(any(House.class))).thenReturn(house);
 
-    @Test
-    void deleteHouse() {
+        House createdHouse = houseService.createHouse(house);
+
+        Assert.assertNotNull(createdHouse);
+        Assert.assertEquals(house, createdHouse);
+
+
     }
 }

@@ -7,6 +7,7 @@ import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class HouseService {
-
     private final HouseRepository houseRepository;
     private final RoomRepository roomRepository;
-
-
     public House createHouse(House house) {
 
         house.setRoomNumber(0);
