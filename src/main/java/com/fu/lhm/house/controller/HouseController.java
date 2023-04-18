@@ -33,7 +33,7 @@ public class HouseController {
 
         house.setUser(getUserToken());
 
-        return ResponseEntity.ok(houseService.createHouse(house));
+        return ResponseEntity.ok(houseService.createHouse(house, getUserToken()));
     }
 
     @PutMapping({"/{id}"})

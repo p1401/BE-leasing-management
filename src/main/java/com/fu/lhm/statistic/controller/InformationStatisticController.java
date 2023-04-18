@@ -24,13 +24,9 @@ public class InformationStatisticController {
     }
 
     @GetMapping("")
-    public ResponseEntity<InformationStatistic> getTotalInformationStatistic() throws BadRequestException {
-        return ResponseEntity.ok(informationStatisticService.getTotalInfor(getUserToken()));
+    public ResponseEntity<InformationStatistic> getTotalInformationStatistic(@RequestParam(name = "houseId", required = false) Long houseId) throws BadRequestException {
+        return ResponseEntity.ok(informationStatisticService.getInfor(getUserToken(), houseId));
     }
 
-    @GetMapping("/{houseId}")
-    public ResponseEntity<InformationStatistic> getHouseInformationStatistic(@PathVariable("houseId") Long houseId) throws BadRequestException {
-        return ResponseEntity.ok(informationStatisticService.getHouseInfor(houseId));
-    }
 
 }

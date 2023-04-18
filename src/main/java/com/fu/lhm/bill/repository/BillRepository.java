@@ -36,9 +36,6 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     List<Bill> findAllByUserId(Long userId);
 
-//    List<Bill> findAllByHouseId(House house);
-//
-//    List<Bill> findAllByContract_Tenant_Room_House_Id(Long houseId);
 
     @Query(value = "SELECT * FROM bills b "
             + "WHERE (:userId IS NULL OR b.user_id = :userId) "

@@ -175,23 +175,6 @@ public class BillService {
 
         return newListBill;
     }
-
-//    public Page<Bill> getBills(Long houseId,
-//                                       Long roomId,
-//                                       Pageable page) {
-//        if (roomId != null) {
-//            return billRepository.findAllByRoomId(roomId, page);
-//        }
-//
-//        if (houseId != null) {
-//            return billRepository.findAllByHouseId(houseId, page);
-//        }
-//
-//        return Page.empty(page);
-//    }
-
-
-
     public BillRequest getBills(Long userId,
                             Long houseId,
                             Long roomId,
