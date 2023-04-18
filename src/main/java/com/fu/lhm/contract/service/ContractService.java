@@ -61,6 +61,11 @@ public class ContractService {
         return contractRepository.findById(contractId).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
     }
 
+    public Contract getContractByRoomId(Long roomId) {
+
+        return contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
+    }
+
     public Contract createContract(CreateContractRequest contractRequest) throws BadRequestException {
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         long roomId = contractRequest.getRoomId();

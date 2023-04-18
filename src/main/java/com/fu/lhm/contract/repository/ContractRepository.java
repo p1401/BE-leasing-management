@@ -14,6 +14,7 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
 
      Contract findByTenant_Room_IdAndIsActiveTrue(Long roomId);
 
+
      List<Contract> findAllByTenant_Room_Id(Long roomId);
 
      List<Contract> findAllByIsActiveTrue();
