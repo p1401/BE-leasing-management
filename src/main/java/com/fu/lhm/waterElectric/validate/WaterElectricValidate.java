@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class WaterElectricValidate {
 
-    public void validateUpdateWaterElectric(WaterElectric waterElectric) {
+    public void validateUpdateWaterElectric(WaterElectric waterElectric) throws BadRequestException {
         isNotPopulated(waterElectric.getChiSoDauDien()+"","Vui lòng nhập Chỉ số đầu của điện");
         isNotPopulated(waterElectric.getChiSoDauNuoc()+"","Vui lòng nhập chỉ số đầu của nước");
         isNotPopulated(waterElectric.getChiSoCuoiDien()+"","Vui lòng nhập chỉ số cuối của điện");
@@ -24,13 +24,13 @@ public class WaterElectricValidate {
 
     }
 
-    public void isNotPopulated(String value, String errorMsg) {
+    public void isNotPopulated(String value, String errorMsg) throws BadRequestException {
         if (null == value || value.trim().isEmpty() || value.equalsIgnoreCase("")) {
             throw new BadRequestException(errorMsg);
         }
     }
 
-    public void validateForChiSoDien(int chiSoDauDien, int chiSoCuoiDien) {
+    public void validateForChiSoDien(int chiSoDauDien, int chiSoCuoiDien) throws BadRequestException {
         if(chiSoDauDien>chiSoCuoiDien){
             throw new BadRequestException("Chỉ số đầu của điện phải nhỏ hơn chỉ số cuối");
         }else if(chiSoDauDien<0 || chiSoCuoiDien<0){
@@ -38,7 +38,7 @@ public class WaterElectricValidate {
         }
     }
 
-    public void validateForChiSoNuoc(int chiSoDauNuoc, int chiSoCuoiNuoc) {
+    public void validateForChiSoNuoc(int chiSoDauNuoc, int chiSoCuoiNuoc) throws BadRequestException {
         if(chiSoDauNuoc>chiSoCuoiNuoc){
             throw new BadRequestException("Chỉ số đầu của nước phải nhỏ hơn chỉ số cuối");
         }else if(chiSoDauNuoc<0 || chiSoCuoiNuoc<0){
@@ -46,13 +46,13 @@ public class WaterElectricValidate {
         }
     }
 
-    public void validateForNumberElectric(int numberElectrict){
+    public void validateForNumberElectric(int numberElectrict) throws BadRequestException {
         if(numberElectrict<0){
             throw new BadRequestException("Lượng điện sử dụng phải >=0");
         }
     }
 
-    public void validateForNumberWater(int numberWater){
+    public void validateForNumberWater(int numberWater) throws BadRequestException {
         if(numberWater<0){
             throw new BadRequestException("Lượng nước sử dụng phải >=0");
         }

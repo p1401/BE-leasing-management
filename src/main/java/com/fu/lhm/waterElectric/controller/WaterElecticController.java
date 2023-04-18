@@ -1,6 +1,7 @@
 package com.fu.lhm.waterElectric.controller;
 
 
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.waterElectric.service.WaterElectricSerice;
 import com.fu.lhm.waterElectric.validate.WaterElectricValidate;
 import com.fu.lhm.waterElectric.entity.WaterElectric;
@@ -19,7 +20,7 @@ public class WaterElecticController {
     private final WaterElectricValidate waterElectricValidate;
 
     @PutMapping({""})
-    public ResponseEntity<WaterElectric> updateWaterElectrictByRoomId(@PathVariable("roomId") Long id, @RequestBody WaterElectric waterElectric) {
+    public ResponseEntity<WaterElectric> updateWaterElectrictByRoomId(@PathVariable("roomId") Long id, @RequestBody WaterElectric waterElectric) throws BadRequestException {
 
         waterElectricValidate.validateUpdateWaterElectric(waterElectric);
 

@@ -1,9 +1,10 @@
 package com.fu.lhm.contract.validate;
 
+import com.fu.lhm.contract.model.ContractRequest;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.contract.entity.Contract;
-import com.fu.lhm.contract.model.ContractRequest;
+import com.fu.lhm.contract.model.CreateContractRequest;
 import com.fu.lhm.contract.repository.ContractRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class ContractValidate {
     private final RoomRepository roomRepository;
     private final ContractRepository contractRepository;
 
-    public void validateForCreateContract(ContractRequest contract) {
+    public void validateForCreateContract(CreateContractRequest contract) throws BadRequestException {
 
         long roomId = contract.getRoomId();
 
@@ -33,11 +34,26 @@ public class ContractValidate {
         isNotPopulated(contract.getTenant().getName(), "Hợp đồng phải có người ký");
         isNotPopulated(contract.getFromDate().toString(), "Vui lòng nhập ngày bắt đầu ký hợp đồng");
         isNotPopulated(contract.getToDate().toString(), "Vui lòng nhập ngày kết thúc hơp đồng");
+        isNotPopulated(contract.getAutoBillDate()+"", "Vui lòng nhập ngày chốt tiền phòng");
         isNotPopulated(String.valueOf(contract.getDeposit()), "Vui lòng nhập Tiền cọc");
         checkInputToDate(fromDate, toDate);
     }
 
-    private void validateRoomHaveContractActive(Long roomId) {
+    public void validateForUpdateContract(Long contractId, ContractRequest contract) throws BadRequestException {
+
+        Contract oldContract = contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
+
+        Date fromDate = contract.getFromDate();
+        Date toDate = contract.getToDate();
+
+        isNotPopulated(contract.getFromDate().toString(), "Vui lòng nhập ngày bắt đầu ký hợp đồng");
+        isNotPopulated(contract.getToDate().toString(), "Vui lòng nhập ngày kết thúc hơp đồng");
+        isNotPopulated(contract.getAutoBillDate()+"", "Vui lòng nhập ngày chốt tiền phòng");
+        isNotPopulated(String.valueOf(contract.getDeposit()), "Vui lòng nhập Tiền cọc");
+        checkInputToDate(fromDate, toDate);
+    }
+
+    private void validateRoomHaveContractActive(Long roomId) throws BadRequestException {
         List<Contract> listContract = contractRepository.findAllByTenant_Room_Id(roomId);
 
         for (Contract contract : listContract) {
@@ -47,18 +63,24 @@ public class ContractValidate {
         }
     }
 
-    private void isNotPopulated(String value, String errorMsg) {
+    private void isNotPopulated(String value, String errorMsg) throws BadRequestException {
         if (null == value || value.trim().isEmpty() || value.equalsIgnoreCase("")) {
             throw new BadRequestException(errorMsg);
         }
     }
 
-    private void checkInputToDate(Date fromDate, Date toDate) {
+    private void checkInputToDate(Date fromDate, Date toDate) throws BadRequestException {
 
         if (fromDate.compareTo(toDate) > 0) {
             throw new BadRequestException("Ngày kết thúc phải lớn hơn ngày ký");
         }
+    }
 
+    private void checkInputToDateUpdate(Date oldToDate, Date newToDate) throws BadRequestException {
+
+        if (oldToDate.compareTo(newToDate) > 0) {
+            throw new BadRequestException("Ngày gia hạn phải lớn hơn hạn ngày cũ");
+        }
     }
 
 

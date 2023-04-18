@@ -1,5 +1,6 @@
 package com.fu.lhm.notification.controller;
 
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.jwt.service.JwtService;
 import com.fu.lhm.notification.entity.Notification;
 import com.fu.lhm.notification.service.NotificationService;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 
 @RestController
 @RequestMapping("api/v1/notifications")
@@ -20,28 +23,32 @@ public class NotificationController {
     private final HttpServletRequest httpServletRequest;
     private final JwtService jwtService;
     private final NotificationService notificationService;
-    private User getUserToken() {
+
+    private User getUserToken() throws BadRequestException {
         return jwtService.getUser(httpServletRequest);
     }
 
     @GetMapping({""})
-    public ResponseEntity<Page<Notification>> getAllNotification(
-            @RequestParam(name = "page", defaultValue = "0") Integer page,
-            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-        return ResponseEntity.ok(notificationService.getAllNotification(getUserToken(), PageRequest.of(page, pageSize)));
+    public ResponseEntity<Page<Notification>> getNotifications(@RequestParam(name = "houseId", required = false) Long houseId,
+                                                               @RequestParam(name = "roomId", required = false) Long roomId,
+                                                               @RequestParam(name = "fromDate", required = false) Date fromDate,
+                                                               @RequestParam(name = "toDate", required = false) Date toDate,
+                                                               @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                               @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) throws BadRequestException {
+        return ResponseEntity.ok(notificationService.getNotifications(getUserToken(),houseId,roomId,fromDate,toDate, PageRequest.of(page, pageSize)));
     }
 
     @GetMapping({"/unread"})
     public ResponseEntity<Page<Notification>> getUnreadNotification(
             @RequestParam(name = "page", defaultValue = "0") Integer page,
-            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) throws BadRequestException {
         return ResponseEntity.ok(notificationService.getUnreadNotification(getUserToken(), PageRequest.of(page, pageSize)));
     }
 
-    @PutMapping({"/{id}"})
-    public ResponseEntity<Notification> updateNotification(@PathVariable("id") Long id, @RequestBody Notification notification) {
+    @PutMapping({"/mark-as-read/{id}"})
+    public ResponseEntity<Notification> markAsRead(@PathVariable("id") Long id) throws BadRequestException {
 
-        return ResponseEntity.ok(notificationService.updateNotification(id, notification));
+        return ResponseEntity.ok(notificationService.markAsRead(id));
     }
 
     @DeleteMapping({"/{id}"})

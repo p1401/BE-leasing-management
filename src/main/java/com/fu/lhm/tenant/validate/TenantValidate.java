@@ -16,7 +16,7 @@ public class TenantValidate {
 
     private final RoomRepository roomRepository;
 
-    public void validateForCreateTenant(Long roomId, Tenant tenant){
+    public void validateForCreateTenant(Long roomId, Tenant tenant) throws BadRequestException {
         checkCurrentNumberTenantInRoom(roomId);
 
 
@@ -30,33 +30,33 @@ public class TenantValidate {
         this.isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
     }
 
-    public void validateForUpdateTenant(Tenant tenant){
+    public void validateForUpdateTenant(Tenant tenant) throws BadRequestException {
         this.isNotPopulated(tenant.getName(),"Vui lòng nhập họ tên");
         this.validateForValidEmail(tenant.getEmail());
         this.validateForValidPhone(tenant.getPhone()+"");
         this.isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
     }
 
-    private void checkCurrentNumberTenantInRoom(Long roomId){
+    private void checkCurrentNumberTenantInRoom(Long roomId) throws BadRequestException {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
         if(room.getMaxTenant()==room.getCurrentTenant()){
             throw new BadRequestException("Phòng đã hết chỗ");
         }
     }
 
-    private void isNotPopulated(String value, String errorMsg) {
+    private void isNotPopulated(String value, String errorMsg) throws BadRequestException {
         if (null == value || value.trim().isEmpty() || value.equalsIgnoreCase("")) {
             throw new BadRequestException(errorMsg);
         }
     }
 
-    public void validateForValidEmail(String email) {
+    public void validateForValidEmail(String email) throws BadRequestException {
         if (email != null) {
             this.validatorRegexField(email, "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", "Email không đúng định dạng!");
         }
     }
 
-    public void validateForValidPhone(String phone) {
+    public void validateForValidPhone(String phone) throws BadRequestException {
         if (phone != null) {
             this.validatorRegexField(phone, "^[0-9]{10}$", "Số điện thoại không đúng định dạng!");
         }

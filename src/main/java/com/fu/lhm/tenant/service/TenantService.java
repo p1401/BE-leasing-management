@@ -32,6 +32,7 @@ public class TenantService {
         tenant.setRoomName(room.getName());
         tenant.setHouseName(room.getHouse().getName());
         tenant.setIsContractHolder(false);
+        tenant.setIsStay(true);
 
         return tenantRepository.save(tenant);
 
@@ -51,50 +52,22 @@ public class TenantService {
         return tenantRepository.save(oldTenant);
     }
 
-//    public TenantRequest tenantMapper(Tenant tenant){
-//        TenantRequest tenantRequest = new TenantRequest();
-//        tenantRequest.setId(tenant.getId());
-//        tenantRequest.setName(tenant.getName());
-//        tenantRequest.setEmail(tenant.getEmail());
-//        tenantRequest.setPhone(tenant.getPhone());
-//        tenantRequest.setIdentifyNumber(tenant.getIdentifyNumber());
-//        tenantRequest.setBirth(tenant.getBirth());
-//        tenantRequest.setAddress(tenant.getAddress());
-//        tenantRequest.setIsStay(tenant.getIsStay());
-//        tenantRequest.setIsContractHolder(tenant.getIsContractHolder());
-//        tenantRequest.setRoom(tenant.getRoom());
-//        tenantRequest.setHouse(tenant.getRoom().getHouse());
-//        tenantRequest.setContracts(tenant.getContracts());
-//        return  tenantRequest;
-//    }
-
-
     public Page<Tenant> getListTenantByRoomId(Long id, Pageable page) {
 
-        return tenantRepository.findAllByRoom_Id(id, page);
+        return tenantRepository.findAllByRoom_IdAndIsStay(id,true, page);
     }
 
-    public Page<Tenant> getListTenantByHouseId(Long id, Pageable page) {
-
-//        List<Tenant> listTenant = tenantRepository.findAllByRoom_House_Id(id, page).toList();
-//
-//        List<TenantRequest> tenantRequestList = new ArrayList<>();
-//        for(Tenant tenant : listTenant){
-//            TenantRequest tenantRequest = tenantMapper(tenant);
-//            tenantRequestList.add(tenantRequest);
-//        }
-        return tenantRepository.findAllByRoom_House_Id(id, page);
-    }
 
     public Page<Tenant> getTenants(Long houseId,
                                    Long roomId,
+                                   Boolean isStay,
                                    Pageable page) {
         if (roomId != null) {
-            return tenantRepository.findAllByRoom_Id(roomId, page);
+            return tenantRepository.findAllByRoom_IdAndIsStay(roomId,isStay, page);
         }
 
         if (houseId != null) {
-            return tenantRepository.findAllByRoom_House_Id(houseId, page);
+            return tenantRepository.findAllByRoom_House_IdAndIsStay(houseId,isStay, page);
         }
 
         return Page.empty(page);

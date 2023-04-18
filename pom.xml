@@ -84,16 +84,37 @@
             <version>13.0</version>
             <scope>compile</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
         <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>5.2.3</version>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+<!--        test-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>de.phip1611</groupId>
-            <artifactId>docx4j-search-and-replace-util</artifactId>
-            <version>1.0.7</version>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.mockito</groupId>-->
+<!--            <artifactId>mockito-all</artifactId>-->
+<!--            <version>1.9.5</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
+
     </dependencies>
 
     <build>

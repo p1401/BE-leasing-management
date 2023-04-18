@@ -12,9 +12,12 @@ import java.util.List;
 @Repository
 public interface TenantRepository extends JpaRepository<Tenant, Long> {
 
-    Page<Tenant> findAllByRoom_Id(Long roomId, Pageable page);
+    Page<Tenant> findAllByRoom_IdAndIsStay(Long roomId,Boolean isStay, Pageable page);
 
-    Page<Tenant> findAllByRoom_House_Id(Long houseId, Pageable pagee);
+
+    Page<Tenant> findAllByRoom_House_IdAndIsStay(Long houseId,Boolean isStay, Pageable pagee);
+
 
     List<Tenant> findAllByRoom_IdAndIsStayTrue(Long id);
+
 }

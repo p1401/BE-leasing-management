@@ -20,8 +20,8 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
 
      List<Contract> findAllByIsActiveTrueAndTenant_Room_House_Id(long houseId);
 
-     Page<Contract> findAllByTenant_Room_Id(Long id, Pageable page);
+     Page<Contract> findAllByTenant_Room_IdAndIsActive(Long id,Boolean isActive, Pageable page);
 
-     Page<Contract> findAllByTenant_Room_House_Id(Long id, Pageable page);
+     Page<Contract> findAllByTenant_Room_House_IdAndIsActive(Long id,Boolean isActive,  Pageable page);
 
 }

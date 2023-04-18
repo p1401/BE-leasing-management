@@ -1,7 +1,8 @@
 package com.fu.lhm.bill.service;
 
-import com.fu.lhm.bill.modal.BillReceiveRequest;
-import com.fu.lhm.bill.modal.BillSpendRequest;
+import com.fu.lhm.bill.model.BillReceiveRequest;
+import com.fu.lhm.bill.model.BillRequest;
+import com.fu.lhm.bill.model.BillSpendRequest;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.entity.BillContent;
@@ -12,6 +13,7 @@ import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.contract.entity.Contract;
 import com.fu.lhm.contract.repository.ContractRepository;
+import com.fu.lhm.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,19 +35,21 @@ public class BillService {
 
     private final RoomRepository roomRepository;
 
-    public Bill createBillReceive(Long roomId, BillReceiveRequest billRequest) {
+    public Bill createBillReceive(User user, Long roomId, BillReceiveRequest billRequest) throws BadRequestException {
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
         Contract contract = contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
         Bill bill = mapToBillReceive(billRequest);
         bill.setBillCode("PT"+randomNumber);
+        bill.setPayer(contract.getTenantName());
         bill.setContract(contract);
         bill.setRoomId(roomId);
         bill.setHouseId(room.getHouse().getId());
+        bill.setUserId(user.getId());
         return billRepository.save(bill);
     }
 
-    public Bill createBillSpend(Long roomId, BillSpendRequest billRequest) {
+    public Bill createBillSpend(User user,Long roomId, BillSpendRequest billRequest) throws BadRequestException {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         Bill bill = mapToBillSpend(billRequest);
@@ -54,6 +58,7 @@ public class BillService {
         bill.setIsPay(true);
         bill.setRoomId(roomId);
         bill.setHouseId(room.getHouse().getId());
+        bill.setUserId(user.getId());
         return billRepository.save(bill);
     }
 
@@ -91,8 +96,6 @@ public class BillService {
         return bill;
     }
 
-
-
     public Page<Bill> getListBillByRoomId(Long roomId, Pageable pageable) {
 
         return billRepository.findAllByRoomId(roomId, pageable);
@@ -102,11 +105,11 @@ public class BillService {
         billRepository.delete(billRepository.findById(billId).get());
     }
 
-    public Bill getBillById(Long billId) {
+    public Bill getBillById(Long billId) throws BadRequestException {
         return billRepository.findById(billId).orElseThrow(() -> new BadRequestException("Hóa đơn không tồn tại!"));
     }
 
-    public Bill payBill(Long billId) {
+    public Bill payBill(Long billId) throws BadRequestException {
         Bill bill = billRepository.findById(billId).orElseThrow(() -> new BadRequestException("Hóa đơn không tồn tại!"));
         bill.setIsPay(true);
 
@@ -158,7 +161,7 @@ public class BillService {
                 bill.setWaterMoney(room.getWaterElectric().getNumberWater() * house.getWaterPrice());
                 bill.setPayer(contract.getTenant().getName());
                 bill.setIsPay(false);
-//                bill.setDateCreate(new Date());
+                bill.setDateCreate(LocalDate.now());
                 bill.setDescription("Tiền phòng " + contract.getTenant().getRoom().getName() + " tháng " + month);
                 bill.setTotalMoney(room.getRoomMoney() + room.getWaterElectric().getNumberElectric() * house.getElectricPrice() + room.getWaterElectric().getNumberWater() * house.getWaterPrice());
                 bill.setBillContent(BillContent.TIENPHONG);
@@ -173,17 +176,61 @@ public class BillService {
         return newListBill;
     }
 
-    public Page<Bill> getBills(Long houseId,
-                                       Long roomId,
-                                       Pageable page) {
-        if (roomId != null) {
-            return billRepository.findAllByRoomId(roomId, page);
-        }
+//    public Page<Bill> getBills(Long houseId,
+//                                       Long roomId,
+//                                       Pageable page) {
+//        if (roomId != null) {
+//            return billRepository.findAllByRoomId(roomId, page);
+//        }
+//
+//        if (houseId != null) {
+//            return billRepository.findAllByHouseId(houseId, page);
+//        }
+//
+//        return Page.empty(page);
+//    }
 
-        if (houseId != null) {
-            return billRepository.findAllByHouseId(houseId, page);
-        }
 
-        return Page.empty(page);
+
+    public BillRequest getBills(Long userId,
+                            Long houseId,
+                            Long roomId,
+                            Date fromDate,
+                            Date toDate,
+                            String billType,
+                            Boolean isPay,
+                            Pageable page) {
+        BillRequest billRequest = new BillRequest();
+        Integer receive = 0;
+        Integer spend=0;
+        Integer revenue = 0;
+        if(billType.equalsIgnoreCase("")){
+            billType=null;
+        }
+            Page<Bill> listBills = billRepository.findBills(userId,houseId,roomId,fromDate,toDate,billType,isPay,page);
+            List<Bill> list =  billRepository.findBills(userId,houseId,roomId,fromDate,toDate,billType,isPay,Pageable.unpaged()).toList();
+            for(Bill bill :list){
+
+                if(bill.getBillType().equals(BillType.RECEIVE)
+                        && !bill.getBillContent().equals(BillContent.TIENCOC)
+                        && bill.getIsPay()==true){
+
+                    receive = receive+bill.getTotalMoney();
+
+                }
+                if(bill.getBillType().equals(BillType.SPEND)){
+
+                    spend = spend + bill.getTotalMoney();
+
+                }
+            }
+
+            revenue = receive-spend;
+
+            billRequest.setReceive(receive);
+            billRequest.setSpend(spend);
+            billRequest.setRevenue(revenue);
+            billRequest.setListBill(listBills);
+            return billRequest;
     }
 }

@@ -1,6 +1,7 @@
 package com.fu.lhm.tenant.controller;
 
 
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.tenant.entity.Tenant;
 import com.fu.lhm.tenant.model.TenantRequest;
 import com.fu.lhm.tenant.service.TenantService;
@@ -21,13 +22,13 @@ public class TenantController {
     private final TenantValidate tenantValidate;
 
     @PostMapping("")
-    public ResponseEntity<Tenant> createTenant(@RequestParam(name = "roomId") Long roomId, @RequestBody Tenant tenant) {
+    public ResponseEntity<Tenant> createTenant(@RequestParam(name = "roomId") Long roomId, @RequestBody Tenant tenant) throws BadRequestException {
         tenantValidate.validateForCreateTenant(roomId, tenant);
         return ResponseEntity.ok(tenantService.createTenant(roomId, tenant));
     }
 
     @PutMapping({"/{tenantId}"})
-    public ResponseEntity<Tenant> updateTenant(@PathVariable("tenantId") Long id, @RequestBody Tenant tenant) {
+    public ResponseEntity<Tenant> updateTenant(@PathVariable("tenantId") Long id, @RequestBody Tenant tenant) throws BadRequestException {
         tenantValidate.validateForUpdateTenant(tenant);
         return ResponseEntity.ok(tenantService.updateTenant(id, tenant));
     }
@@ -57,10 +58,11 @@ public class TenantController {
     @GetMapping("")
     public ResponseEntity<Page<Tenant>> getTenants(@RequestParam(name = "houseId", required = false) Long houseId,
                                                    @RequestParam(name = "roomId", required = false) Long roomId,
+                                                   @RequestParam(name = "isStay", required = false,defaultValue = "1") Boolean isStay,
                                                    @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        Page<Tenant> listTenant = tenantService.getTenants(houseId, roomId, PageRequest.of(page, pageSize));
+        Page<Tenant> listTenant = tenantService.getTenants(houseId, roomId, isStay, PageRequest.of(page, pageSize));
 
         return ResponseEntity.ok(listTenant);
     }

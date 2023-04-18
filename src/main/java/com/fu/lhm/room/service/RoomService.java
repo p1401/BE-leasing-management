@@ -47,7 +47,7 @@ public class RoomService {
         return listRoom;
     }
 
-    public Room createroom(Long houseId, Room room) {
+    public Room createroom(Long houseId, Room room) throws BadRequestException {
 
         House house = houseRepository.findById(houseId).orElseThrow(() -> new BadRequestException("Nha không tồn tại!"));
         Room newRoom = new Room();
@@ -71,7 +71,7 @@ public class RoomService {
     }
 
 
-    public Room updateRoom(Long roomId, Room updateRoom) {
+    public Room updateRoom(Long roomId, Room updateRoom) throws BadRequestException {
 
         Room oldRoom = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
         oldRoom.setFloor(updateRoom.getFloor());

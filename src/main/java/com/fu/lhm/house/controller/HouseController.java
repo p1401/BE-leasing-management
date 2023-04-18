@@ -1,6 +1,7 @@
 package com.fu.lhm.house.controller;
 
 
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.service.HouseService;
 import com.fu.lhm.house.validate.HouseValidate;
@@ -21,12 +22,12 @@ public class HouseController {
     private final HouseValidate houseValidate;
     private final HttpServletRequest httpServletRequest;
     private final JwtService jwtService;
-    private User getUserToken() {
+    private User getUserToken() throws BadRequestException {
         return jwtService.getUser(httpServletRequest);
     }
 
     @PostMapping({""})
-    public ResponseEntity<House> addHouse(@RequestBody House house) {
+    public ResponseEntity<House> addHouse(@RequestBody House house) throws BadRequestException {
 
         houseValidate.validateCreateHouse(house, getUserToken());
 
@@ -36,7 +37,7 @@ public class HouseController {
     }
 
     @PutMapping({"/{id}"})
-    public ResponseEntity<House> updateHouse(@PathVariable("id") Long id, @RequestBody House house) {
+    public ResponseEntity<House> updateHouse(@PathVariable("id") Long id, @RequestBody House house) throws BadRequestException {
         houseValidate.validateUpdateHouse(id, house, getUserToken());
         return ResponseEntity.ok(houseService.updateHouse(id, house));
     }
@@ -45,14 +46,14 @@ public class HouseController {
     public ResponseEntity<Page<House>> getListHouse(
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
-    ) {
+    ) throws BadRequestException {
         Page<House> listHouse = houseService.getListHouse(getUserToken(), PageRequest.of(page, pageSize));
 
         return ResponseEntity.ok(listHouse);
     }
 
     @GetMapping({"/{id}"})
-    public ResponseEntity<House> getHouseById(@PathVariable("id") Long id) {
+    public ResponseEntity<House> getHouseById(@PathVariable("id") Long id) throws BadRequestException {
 
         return ResponseEntity.ok(houseService.getHouseById(id));
     }
