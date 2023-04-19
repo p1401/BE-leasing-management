@@ -18,6 +18,8 @@ public interface HouseRepository extends JpaRepository<House, Long> {
     Integer countByUser(User user);
     List<House> findAllByUser(User user);
 
+    House findHouseByName(String name);
+
     @Query(value = "SELECT * FROM houses b "
             + "WHERE (:userId IS NULL OR b.user_id = :userId) "
             + "AND (:houseId IS NULL OR b.id = :houseId) ",
