@@ -35,6 +35,12 @@ public class ContractController {
         return ResponseEntity.ok(contractService.getContractById(contractId));
     }
 
+    @GetMapping("/rooms/{roomId}")
+    public ResponseEntity<Contract> getContractByRoomId(@PathVariable("roomId") Long roomId) {
+
+        return ResponseEntity.ok(contractService.getContractByRoomId(roomId));
+    }
+
     @PostMapping("")
     public ResponseEntity<Contract> createContract(@RequestBody CreateContractRequest contractRequest) throws BadRequestException {
 
