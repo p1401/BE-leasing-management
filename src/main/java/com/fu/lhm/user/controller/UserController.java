@@ -41,11 +41,11 @@ public class UserController {
     }
 
     @PutMapping("")
-    public ResponseEntity<User> updateUser(@RequestBody User newUser
+    public ResponseEntity<String> updateUser(@RequestBody UserRequest newUser
     ) throws BadRequestException {
         userValidate.validateUpdateUser(newUser);
-
-        return ResponseEntity.ok(service.updateUser(newUser));
+        service.updateUser(newUser);
+        return ResponseEntity.ok("Cập nhật thông tin thành công");
     }
 
     @GetMapping("")

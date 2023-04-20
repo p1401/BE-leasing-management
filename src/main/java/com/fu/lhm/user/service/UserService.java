@@ -69,14 +69,14 @@ public class UserService {
                 .build();
     }
 
-    public User updateUser(User user) throws BadRequestException {
+    public void updateUser(UserRequest user) throws BadRequestException {
         User oldUser = getUserToken();
         oldUser.setName(user.getName());
         oldUser.setAddress(user.getAddress());
         oldUser.setBirth(user.getBirth());
         oldUser.setPhone(user.getPhone());
         oldUser.setIdentityNumber(user.getIdentityNumber());
-        return repository.save(oldUser);
+        repository.save(oldUser);
 
     }
 
@@ -89,6 +89,7 @@ public class UserService {
     public UserRequest getUser() throws BadRequestException {
         User user = getUserToken();
         UserRequest userRequest = new UserRequest();
+        userRequest.setId(user.getId());
         userRequest.setEmail(user.getEmail());
         userRequest.setName(user.getName());
         userRequest.setAddress(user.getAddress());

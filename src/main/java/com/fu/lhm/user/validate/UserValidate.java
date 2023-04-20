@@ -5,6 +5,7 @@ import com.fu.lhm.house.entity.House;
 import com.fu.lhm.jwt.service.JwtService;
 import com.fu.lhm.user.entity.User;
 import com.fu.lhm.user.model.RegisterRequest;
+import com.fu.lhm.user.model.UserRequest;
 import com.fu.lhm.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -59,10 +60,9 @@ public class UserValidate {
 
     }
 
-    public void validateUpdateUser(User user) throws BadRequestException {
+    public void validateUpdateUser(UserRequest user) throws BadRequestException {
 
         isNotPopulated(user.getName(), "Nhập họ tên đầy đủ");
-        isNotPopulated(user.getPassword(),"Nhập password");
         isNotPopulated(user.getAddress(),"Nhập địa chỉ");
         isNotPopulated(user.getBirth()+"","Nhập ngày sinh");
         isNotPopulated(user.getIdentityNumber(),"Nhập CMND");
