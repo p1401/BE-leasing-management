@@ -7,6 +7,10 @@ import com.fu.lhm.contract.model.CreateContractRequest;
 import com.fu.lhm.contract.validate.ContractValidate;
 import com.fu.lhm.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.WritableResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -29,6 +37,7 @@ public class ContractController {
 
     private final ContractValidate contractValidate;
 
+    private final ResourceLoader resourceLoader;
     @GetMapping("/{contractId}")
     public ResponseEntity<Contract> getContractById(@PathVariable("contractId") Long contractId) {
 
@@ -85,8 +94,16 @@ public class ContractController {
     @GetMapping("/generateDoc/{contractId}")
     public ResponseEntity<byte[]> generateDoc(@PathVariable("contractId") Long contractId) throws Exception {
         // Set the paths for the template and output documents
-        String templatePath = "C:\\Users\\NC\\Desktop\\DA\\contract_template.docx";
-        String outputPath = "C:\\Users\\NC\\Desktop\\DA\\output.docx";
+//        Resource resource = resourceLoader.getResource("src/main/resources/contract_template.docx");
+//        InputStream templatePath = resource.getInputStream();
+//
+//        WritableResource writableResource = (WritableResource) resourceLoader.getResource("src/main/resources/output.docx");
+//        File file = writableResource.getFile();
+
+// Ghi dữ liệu vào tệp
+//        OutputStream outputPath = new FileOutputStream(file);
+        String templatePath = "src/main/resources/contract_template.docx";
+        String outputPath = "src/main/resources/output.docx";
         try {
             // Generate the modified document using the service method
             contractService.replaceTextsInWordDocument(contractId, templatePath, outputPath);
