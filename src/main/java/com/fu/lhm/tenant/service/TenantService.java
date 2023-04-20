@@ -58,7 +58,7 @@ public class TenantService {
     }
 
 
-    public Page<Tenant> getTenants(Long houseId,
+    public Page<Tenant> getListTenants(Long houseId,
                                    Long roomId,
                                    Boolean isStay,
                                    Pageable page) {

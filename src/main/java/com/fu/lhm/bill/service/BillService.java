@@ -35,6 +35,17 @@ public class BillService {
 
     private final RoomRepository roomRepository;
 
+
+    public Bill createBillReceive2(User user,Long houseId, Long roomId, BillReceiveRequest billRequest) throws BadRequestException {
+        int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
+        Bill bill = mapToBillReceive2(billRequest);
+        bill.setBillCode("PT"+randomNumber);
+        bill.setRoomId(roomId==null?0:roomId);
+        bill.setHouseId(houseId);
+        bill.setUserId(user.getId());
+        return billRepository.save(bill);
+    }
+
     public Bill createBillReceive(User user, Long roomId, BillReceiveRequest billRequest) throws BadRequestException {
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
@@ -62,6 +73,8 @@ public class BillService {
         return billRepository.save(bill);
     }
 
+
+
     public static Bill mapToBillReceive(BillReceiveRequest billRE) {
         Bill bill = new Bill();
         bill.setId(billRE.getId());
@@ -77,7 +90,19 @@ public class BillService {
         bill.setPayer(billRE.getPayer());
         bill.setIsPay(billRE.getIsPay());
         bill.setDateCreate(billRE.getDateCreate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-//        bill.setDateCreate(billRE.getDateCreate());
+        bill.setDescription(billRE.getDescription());
+        bill.setTotalMoney(billRE.getTotalMoney());
+        bill.setBillType(billRE.getBillType());
+        bill.setBillContent(billRE.getBillContent());
+        return bill;
+    }
+
+    public static Bill mapToBillReceive2(BillReceiveRequest billRE) {
+        Bill bill = new Bill();
+        bill.setId(billRE.getId());
+        bill.setPayer(billRE.getPayer());
+        bill.setIsPay(billRE.getIsPay());
+        bill.setDateCreate(billRE.getDateCreate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         bill.setDescription(billRE.getDescription());
         bill.setTotalMoney(billRE.getTotalMoney());
         bill.setBillType(billRE.getBillType());

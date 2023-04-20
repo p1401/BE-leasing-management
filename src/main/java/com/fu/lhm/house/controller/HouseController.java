@@ -53,7 +53,7 @@ public class HouseController {
     }
 
     @GetMapping({"/{id}"})
-    public ResponseEntity<House> getHouseById(@PathVariable("id") Long id) throws BadRequestException {
+    public ResponseEntity<House> getHouse(@PathVariable("id") Long id) throws BadRequestException {
 
         return ResponseEntity.ok(houseService.getHouseById(id));
     }

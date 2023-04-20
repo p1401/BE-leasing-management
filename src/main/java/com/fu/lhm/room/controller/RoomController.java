@@ -38,7 +38,7 @@ RoomController {
 
         roomValidate.validateCreateRoom(room, houseId);
 
-        return ResponseEntity.ok(roomService.createroom(houseId, room));
+        return ResponseEntity.ok(roomService.createRoom(houseId, room));
     }
 
     @PutMapping({"/{roomId}"})
@@ -52,7 +52,7 @@ RoomController {
     @GetMapping({"/{roomId}"})
     public ResponseEntity<Room> getRoomById(@PathVariable("roomId") Long id) {
 //        houseValidate.validateCreateUpdateHouse(house);
-        return ResponseEntity.ok(roomService.getRoomById(id));
+        return ResponseEntity.ok(roomService.getRoom(id));
     }
 
     @DeleteMapping("/{roomId}")

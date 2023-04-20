@@ -62,7 +62,7 @@ public class TenantController {
                                                    @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        Page<Tenant> listTenant = tenantService.getTenants(houseId, roomId, isStay, PageRequest.of(page, pageSize));
+        Page<Tenant> listTenant = tenantService.getListTenants(houseId, roomId, isStay, PageRequest.of(page, pageSize));
 
         return ResponseEntity.ok(listTenant);
     }

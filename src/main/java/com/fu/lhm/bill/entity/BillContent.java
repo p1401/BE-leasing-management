@@ -4,6 +4,8 @@ public enum BillContent {
 
     TIENPHONG,
     TIENPHUTROI,
-    TIENCOC
+    TIENCOC,
+    TIENCOC2
+
 
 }

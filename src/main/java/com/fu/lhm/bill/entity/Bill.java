@@ -50,11 +50,11 @@ public class Bill {
 
     private int totalMoney;
 
-    private long roomId;
+    private Long roomId;
 
-    private long houseId;
+    private Long houseId;
 
-    private long userId;
+    private Long userId;
 
     //Phieu thu, phieu chi
     @Enumerated(EnumType.STRING)

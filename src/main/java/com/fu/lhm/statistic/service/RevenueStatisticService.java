@@ -23,45 +23,7 @@ public class RevenueStatisticService {
 
     private final BillRepository billRepository;
 
-    public List<RevenueStatistic> getTotalRevenueStatistic(User user, int year){
-        List<Bill> bills = billRepository.findAllByUserId(user.getId());
-        List<RevenueStatistic> revenueStatisticList = new ArrayList<>();
-
-        for(Month month : Month.values()){
-            RevenueStatistic revenueStatistic = new RevenueStatistic();
-            int receive=0;
-            int spend=0;
-            LocalDate localDate = LocalDate.of(year, month, 2);
-            Date date = Date.from(localDate.atStartOfDay(ZoneId.of("Asia/Ho_Chi_Minh")).toInstant());
-            revenueStatistic.setDate(date);
-
-            for(Bill bill : bills){
-                if(bill.getDateCreate().getMonthValue()==month.getValue()
-                && bill.getDateCreate().getYear()==year
-                && bill.getBillType().equals(BillType.RECEIVE)
-                && !bill.getBillContent().equals(BillContent.TIENCOC)){
-
-                    receive=receive+bill.getTotalMoney();
-
-                }else if(bill.getDateCreate().getMonthValue()==month.getValue()
-                        && bill.getDateCreate().getYear()==year
-                        && bill.getBillType().equals(BillType.SPEND)){
-
-                   spend = spend + bill.getTotalMoney();
-
-                }
-            }
-            revenueStatistic.setReceive(receive);
-            revenueStatistic.setSpend(spend);
-            revenueStatistic.setRevenue(receive-spend);
-
-            revenueStatisticList.add(revenueStatistic);
-        }
-
-        return revenueStatisticList;
-    }
-
-    public List<RevenueStatistic> getHouseRevenueStatistic(User user, Long houseId, int year){
+    public List<RevenueStatistic> getRevenueStatistic(User user, Long houseId, int year){
         List<Bill> bills = billRepository.findBills(user.getId(),houseId,null, null, null, null, null, Pageable.unpaged()).toList();
         List<RevenueStatistic> revenueStatisticList = new ArrayList<>();
 
@@ -99,15 +61,5 @@ public class RevenueStatisticService {
 
         return revenueStatisticList;
     }
-
-    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
-        return dateToConvert.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-    }
-
-
-
-
 
 }

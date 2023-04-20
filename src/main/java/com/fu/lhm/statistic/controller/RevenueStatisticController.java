@@ -29,7 +29,7 @@ public class RevenueStatisticController {
     public ResponseEntity<List<RevenueStatistic>> getHouseRevenueStatistic(@RequestParam(name = "year", required = false) int year,
                                                                            @RequestParam(name = "houseId", required = false) Long houseId) throws BadRequestException {
 
-        return ResponseEntity.ok(revenueStatisticService.getHouseRevenueStatistic(getUserToken(),houseId, year));
+        return ResponseEntity.ok(revenueStatisticService.getRevenueStatistic(getUserToken(),houseId, year));
     }
 
 

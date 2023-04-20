@@ -29,6 +29,17 @@ public class BillValidate {
 
     private final RoomRepository roomRepository;
 
+    public void validateForCreateBill(Long houseId, BillReceiveRequest bill) throws BadRequestException {
+        isNotPopulated(houseId+"", "Chọn nhà để nhập");
+
+        isNotPopulated(bill.getTotalMoney() + "", "Nhập tiền phòng");
+        isNotPopulated(bill.getDateCreate() + "", "Nhập ngày tạo");
+        isNotPopulated(bill.getDescription(), "Nhập mô tả");
+        isNotPopulated(bill.getIsPay() + "", "Tích đã nộp hay chưa nộp");
+        isNotPopulated(bill.getBillContent().name(), "Nhập nội dung hóa đơn");
+        isNotPopulated(bill.getBillType().name(), "Nhập kiểu hóa đơn");
+    }
+
     public void validateForCreateBillTienPhong(Long roomId, BillReceiveRequest bill) throws BadRequestException {
 
         roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));

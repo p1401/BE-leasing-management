@@ -63,7 +63,11 @@ public class ContractService {
 
     public Contract getContractByRoomId(Long roomId) {
 
-        return contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
+        if(contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId)!=null){
+            return contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
+        }else{
+            return null;
+        }
     }
 
     public Contract createContract(CreateContractRequest contractRequest) throws BadRequestException {
