@@ -24,7 +24,7 @@ public class TenantValidate {
         isNotPopulated(tenant.getPhone()+"","Vui lòng nhập số điện thoại để liên hệ");
         isNotPopulated(tenant.getEmail(),"Vui lòng nhập email để liên hệ");
         isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
-
+        isNotPopulated(tenant.getIdentifyNumber()+"", "Vui lòng nhập CMND");
         this.validateForValidEmail(tenant.getEmail());
         this.validateForValidPhone(tenant.getPhone()+"");
         this.isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
