@@ -18,7 +18,7 @@ public class Token {
     @GeneratedValue
     public Long id;
 
-    @Column(unique = true, columnDefinition = "nvarchar(MAX)")
+    @Column(unique = true, columnDefinition = "nvarchar(500)")
     public String token;
 
     @Enumerated(EnumType.STRING)

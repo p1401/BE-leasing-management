@@ -1,5 +1,6 @@
 package com.fu.lhm.user.service;
 
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.jwt.service.JwtService;
 import com.fu.lhm.jwt.entity.Token;
 import com.fu.lhm.jwt.repository.TokenRepository;
@@ -9,7 +10,9 @@ import com.fu.lhm.user.entity.User;
 import com.fu.lhm.user.model.AuthenticationResponse;
 import com.fu.lhm.user.model.LoginRequest;
 import com.fu.lhm.user.model.RegisterRequest;
+import com.fu.lhm.user.model.UserRequest;
 import com.fu.lhm.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +27,11 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
+    private final HttpServletRequest httpServletRequest;
+    private User getUserToken() throws BadRequestException {
+        return jwtService.getUser(httpServletRequest);
+    }
 
     public AuthenticationResponse register(RegisterRequest request) {
         User user = User.builder()
@@ -59,6 +67,36 @@ public class UserService {
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
+    }
+
+    public User updateUser(User user) throws BadRequestException {
+        User oldUser = getUserToken();
+        oldUser.setName(user.getName());
+        oldUser.setAddress(user.getAddress());
+        oldUser.setBirth(user.getBirth());
+        oldUser.setPhone(user.getPhone());
+        oldUser.setIdentityNumber(user.getIdentityNumber());
+        return repository.save(oldUser);
+
+    }
+
+    public void changePassword(String newPassword) throws BadRequestException {
+        User user = getUserToken();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        repository.save(user);
+    }
+
+    public UserRequest getUser() throws BadRequestException {
+        User user = getUserToken();
+        UserRequest userRequest = new UserRequest();
+        userRequest.setEmail(user.getEmail());
+        userRequest.setName(user.getName());
+        userRequest.setAddress(user.getAddress());
+        userRequest.setBirth(user.getBirth());
+        userRequest.setIdentityNumber(user.getIdentityNumber());
+        userRequest.setPhone(user.getPhone());
+        userRequest.setPassword(userRequest.getPassword());
+        return  userRequest;
     }
 
     private void saveUserToken(User user, String jwtToken) {

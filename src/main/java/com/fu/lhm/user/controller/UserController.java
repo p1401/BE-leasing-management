@@ -1,17 +1,18 @@
 package com.fu.lhm.user.controller;
 
 import com.fu.lhm.exception.BadRequestException;
+import com.fu.lhm.jwt.service.JwtService;
+import com.fu.lhm.user.entity.User;
 import com.fu.lhm.user.model.AuthenticationResponse;
+import com.fu.lhm.user.model.UserRequest;
 import com.fu.lhm.user.service.UserService;
 import com.fu.lhm.user.model.LoginRequest;
 import com.fu.lhm.user.model.RegisterRequest;
 import com.fu.lhm.user.validate.UserValidate;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -19,6 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService service;
     private final UserValidate userValidate;
+    private final HttpServletRequest httpServletRequest;
+    private final JwtService jwtService;
+    private User getUserToken() throws BadRequestException {
+        return jwtService.getUser(httpServletRequest);
+    }
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
@@ -34,5 +40,26 @@ public class UserController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
+    @PutMapping("")
+    public ResponseEntity<User> updateUser(@RequestBody User newUser
+    ) throws BadRequestException {
+        userValidate.validateUpdateUser(newUser);
+
+        return ResponseEntity.ok(service.updateUser(newUser));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<UserRequest> getUser() throws BadRequestException {
+
+        return ResponseEntity.ok(service.getUser());
+    }
+
+
+    @PutMapping ("/changePassword")
+    public ResponseEntity<String> changePassword(@RequestParam("oldPassword") String oldpassword,@RequestParam("newPassword") String newPassword) throws BadRequestException {
+        userValidate.validateChangePassword(oldpassword,newPassword);
+        service.changePassword(newPassword);
+        return ResponseEntity.ok("Password changed successfully.");
+    }
 
 }
