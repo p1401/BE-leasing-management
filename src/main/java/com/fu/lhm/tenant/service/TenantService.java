@@ -33,9 +33,7 @@ public class TenantService {
         tenant.setHouseName(room.getHouse().getName());
         tenant.setIsContractHolder(false);
         tenant.setIsStay(true);
-
         return tenantRepository.save(tenant);
-
     }
 
     public Tenant updateTenant(Long tenantId, Tenant newTenant) {

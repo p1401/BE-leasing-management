@@ -13,7 +13,6 @@ import com.fu.lhm.waterElectric.entity.WaterElectric;
 import com.fu.lhm.waterElectric.repository.WaterElectricRepositoy;
 import lombok.RequiredArgsConstructor;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
