@@ -3,24 +3,17 @@ package com.fu.lhm.house.service;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
-import com.fu.lhm.house.validate.HouseValidate;
-import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.user.entity.User;
+
 import lombok.RequiredArgsConstructor;
-import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
-
 import java.util.Optional;
-
 import static org.mockito.Mockito.*;
 
 @RequiredArgsConstructor
@@ -48,7 +41,7 @@ public class HouseServiceTest {
     }
 
     @Test
-    public void testCreateHouseWithValidData_1() throws BadRequestException {
+    public void testCreateHouse_1() throws BadRequestException {
         // given
         User user = new User();
         user.setId(1L);
@@ -82,7 +75,7 @@ public class HouseServiceTest {
     }
 
     @Test
-    public void testCreateHouseWithValidData_2() throws BadRequestException {
+    public void testCreateHouse_2() throws BadRequestException {
         // given
         User user = new User();
         user.setId(1L);
@@ -116,7 +109,7 @@ public class HouseServiceTest {
     }
 
     @Test()
-    public void testCreateHouseWithValidData_3() throws BadRequestException {
+    public void testCreateHouse_3() throws BadRequestException {
         // given
         User user = new User();
         user.setId(1L);
@@ -150,7 +143,7 @@ public class HouseServiceTest {
     }
 
     @Test()
-    public void testUpdateHouseWithValidData_1() throws BadRequestException {
+    public void testUpdateHouse_1() throws BadRequestException {
         //given
         House existingHouse = new House();
         existingHouse.setId(1L);
@@ -186,7 +179,7 @@ public class HouseServiceTest {
     }
 
     @Test()
-    public void testUpdateHouseWithValidData_2() throws BadRequestException {
+    public void testUpdateHouse_2() throws BadRequestException {
         //given
         House existingHouse = new House();
         existingHouse.setId(1L);
@@ -222,7 +215,7 @@ public class HouseServiceTest {
     }
 
     @Test()
-    public void testUpdateHouseWithValidData_3() throws BadRequestException {
+    public void testUpdateHouse_3() throws BadRequestException {
         //given
         House existingHouse = new House();
         existingHouse.setId(1L);
@@ -256,6 +249,218 @@ public class HouseServiceTest {
         Assert.assertEquals(existingHouse.getElectricPrice(), updateHouseTest.getElectricPrice());
         Assert.assertEquals(existingHouse.getUser(), updateHouseTest.getUser());
     }
+
+    @Test()
+    public void testGetHouse_1() throws BadRequestException {
+        //given
+        House house = House.builder()
+                .id(1L)
+                .name("Test House")
+                .city("Test City")
+                .district("Test District")
+                .address("Test Address")
+                .electricPrice(1000)
+                .waterPrice(2000)
+                .floor(1)
+                .roomNumber(3)
+                .emptyRoom(2)
+                .description("Test Description")
+                .build();
+
+        //When
+        when(houseRepository.findById(1L)).thenReturn(Optional.of(house));
+
+
+        House result = houseService.getHouseById(1L);
+
+        //Assert
+
+        Assert.assertEquals(house, result);
+        Assert.assertNotNull(result);
+        Assert.assertEquals(result, house);
+        Assert.assertEquals(result.getId(), house.getId());
+        Assert.assertEquals(result.getName(), house.getName());
+        Assert.assertEquals(result.getCity(), house.getCity());
+        Assert.assertEquals(result.getDistrict(), house.getDistrict());
+        Assert.assertEquals(result.getFloor(), house.getFloor());
+        Assert.assertEquals(result.getWaterPrice(), house.getWaterPrice());
+        Assert.assertEquals(result.getElectricPrice(), house.getElectricPrice());
+        Assert.assertEquals(result.getUser(), house.getUser());
+    }
+
+    @Test()
+    public void testGetHouse_2() throws BadRequestException {
+        //given
+        House house = House.builder()
+                .id(2L)
+                .name("Test 2")
+                .city("Test 2")
+                .district("Test 2")
+                .address("Test 2")
+                .electricPrice(1000)
+                .waterPrice(2000)
+                .floor(1)
+                .roomNumber(3)
+                .emptyRoom(2)
+                .description("Test 2")
+                .build();
+
+        //When
+        when(houseRepository.findById(2L)).thenReturn(Optional.of(house));
+
+
+        House result = houseService.getHouseById(2L);
+
+        //Assert
+
+        Assert.assertEquals(house, result);
+        Assert.assertNotNull(result);
+        Assert.assertEquals(result, house);
+        Assert.assertEquals(result.getId(), house.getId());
+        Assert.assertEquals(result.getName(), house.getName());
+        Assert.assertEquals(result.getCity(), house.getCity());
+        Assert.assertEquals(result.getDistrict(), house.getDistrict());
+        Assert.assertEquals(result.getFloor(), house.getFloor());
+        Assert.assertEquals(result.getWaterPrice(), house.getWaterPrice());
+        Assert.assertEquals(result.getElectricPrice(), house.getElectricPrice());
+        Assert.assertEquals(result.getUser(), house.getUser());
+    }
+
+    @Test()
+    public void testGetHouse_3() throws BadRequestException {
+        //given
+        House house = House.builder()
+                .id(3L)
+                .name("Test 2")
+                .city("Test 2")
+                .district("Test 2")
+                .address("Test 2")
+                .electricPrice(1000)
+                .waterPrice(2000)
+                .floor(1)
+                .roomNumber(3)
+                .emptyRoom(2)
+                .description("Test 2")
+                .build();
+
+        //When
+        when(houseRepository.findById(3L)).thenReturn(Optional.of(house));
+
+
+        House result = houseService.getHouseById(3L);
+
+        //Assert
+
+        Assert.assertEquals(house, result);
+        Assert.assertNotNull(result);
+        Assert.assertEquals(result, house);
+        Assert.assertEquals(result.getId(), house.getId());
+        Assert.assertEquals(result.getName(), house.getName());
+        Assert.assertEquals(result.getCity(), house.getCity());
+        Assert.assertEquals(result.getDistrict(), house.getDistrict());
+        Assert.assertEquals(result.getFloor(), house.getFloor());
+        Assert.assertEquals(result.getWaterPrice(), house.getWaterPrice());
+        Assert.assertEquals(result.getElectricPrice(), house.getElectricPrice());
+        Assert.assertEquals(result.getUser(), house.getUser());
+    }
+
+//    @Test()
+//    public void testDeleteHouseSuccess() throws Exception {
+//        //given
+//        House house = House.builder()
+//                .id(3L)
+//                .name("Test 2")
+//                .city("Test 2")
+//                .district("Test 2")
+//                .address("Test 2")
+//                .electricPrice(1000)
+//                .waterPrice(2000)
+//                .floor(1)
+//                .roomNumber(3)
+//                .emptyRoom(2)
+//                .description("Test 2")
+//                .build();
+//        //When
+//        when(houseRepository.findById(3L)).thenReturn(Optional.of(house));
+//        when(houseRepository.deleteById(3L)).then("Xóa thành công");
+//
+//        // Act
+//        houseService.deleteHouse(house.getId());
+//
+//        House result = houseRepository.findById(3L).orElseThrow(() -> new BadRequestException("Nhà không tồn tại!"));
+//
+//        Assert.assertEquals(result,null);
+//        // Assert
+//
+//    }
+
+//    @Test
+//    public void testGetListHouse() {
+//
+//        // given
+//
+//        User user = new User();
+//        user.setId(1L);
+//
+//        List<House> houseList = new ArrayList<>();
+//        houseList.add(House.builder()
+//                        .id(1L)
+//                .name("My House")
+//                .city("Hanoi")
+//                .district("Ba Dinh")
+//                .address("123 Nguyen Chi Thanh")
+//                .electricPrice(4000)
+//                .waterPrice(20000)
+//                .floor(5)
+//                .roomNumber(10)
+//                .emptyRoom(5)
+//                .description("Nice house")
+//                .build());
+//        houseList.add(House.builder()
+//                .id(1L)
+//                .name("My House")
+//                .city("Hanoi")
+//                .district("Ba Dinh")
+//                .address("123 Nguyen Chi Thanh")
+//                .electricPrice(4000)
+//                .waterPrice(20000)
+//                .floor(5)
+//                .roomNumber(10)
+//                .emptyRoom(5)
+//                .description("Nice house")
+//                .build());
+//        houseList.add(House.builder()
+//                .id(1L)
+//                .name("My House")
+//                .city("Hanoi")
+//                .district("Ba Dinh")
+//                .address("123 Nguyen Chi Thanh")
+//                .electricPrice(4000)
+//                .waterPrice(20000)
+//                .floor(5)
+//                .roomNumber(10)
+//                .emptyRoom(5)
+//                .description("Nice house")
+//                .build());
+//
+//        Pageable pageable = PageRequest.of(0, 10); // phân trang, lấy trang đầu tiên và 10 kết quả trên mỗi trang
+//
+//        Page<House> pageHouse = new PageImpl<>(houseList, pageable, houseList.size()); // tạo đối tượng Page<House>
+//
+//        when(houseRepository.findAllByUser(user,pageable)).thenReturn(pageHouse);
+//
+//        // when
+//        List<House> result = houseService.getListHouse(user, Pageable.unpaged()).toList();
+//
+//        // then
+//        Assert.assertEquals(houseList.size(), result.size());
+//        for (int i = 0; i < houseList.size(); i++) {
+//            Assert.assertEquals(houseList.get(i).getId(), result.get(i).getId());
+//            Assert.assertEquals(houseList.get(i).getAddress(), result.get(i).getAddress());
+//            Assert.assertEquals(houseList.get(i).getRoomNumber(), result.get(i).getRoomNumber());
+//            Assert.assertEquals(houseList.get(i).getEmptyRoom(), result.get(i).getEmptyRoom());
+//        }
+//    }
 
 
 }

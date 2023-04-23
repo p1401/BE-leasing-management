@@ -68,7 +68,7 @@ public class RoomService {
         waterElectric.setDateUpdate(new Date());
         waterElectricRepositoy.save(waterElectric);
 
-        return newRoom;
+        return roomRepository.save(newRoom);
 
     }
 
