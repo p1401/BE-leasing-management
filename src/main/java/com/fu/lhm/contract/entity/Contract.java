@@ -34,12 +34,12 @@ public class Contract {
     private String tenantName;
     private Integer autoBillDate;
 
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Tenant.class, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tenantId")
     @JsonBackReference
     Tenant tenant;
 
-    @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "contract",cascade = CascadeType.REMOVE)
     @JsonManagedReference
     List<Bill> bills;
 }

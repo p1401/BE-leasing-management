@@ -73,8 +73,6 @@ public class BillController {
         return ResponseEntity.ok(billService.payBill(billId));
     }
 
-
-
     @GetMapping("/{roomId}")
     public ResponseEntity<Page<Bill>> getListBillByRoomId(@PathVariable("roomId") Long roomId,
                                                           @RequestParam(name = "page", defaultValue = "0") Integer page,

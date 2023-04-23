@@ -33,6 +33,7 @@ public class UserService {
         return jwtService.getUser(httpServletRequest);
     }
 
+    //Đăng ký thành công và trả về jwt token
     public AuthenticationResponse register(RegisterRequest request) {
         User user = User.builder()
                 .name(request.getName())
@@ -51,7 +52,7 @@ public class UserService {
                 .token(jwtToken)
                 .build();
     }
-
+    //Đăng nhập thành công và trả về jwt token
     public AuthenticationResponse authenticate(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -100,6 +101,7 @@ public class UserService {
         return  userRequest;
     }
 
+    //Lưu token vào db
     private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
                 .userId(user)
@@ -111,6 +113,7 @@ public class UserService {
         tokenRepository.save(token);
     }
 
+    //vô hiệu token hiện có
     private void revokeAllUserTokens(User user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())

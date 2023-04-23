@@ -53,7 +53,7 @@ public class HouseValidate {
 
 
     private void isNotPopulated(String value, String errorMsg) throws BadRequestException {
-        if (null == value || value.trim().isEmpty()) {
+        if (value == null || value.trim().isEmpty()) {
             throw new BadRequestException(errorMsg);
         }
     }

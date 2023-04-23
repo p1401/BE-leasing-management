@@ -78,8 +78,23 @@ public class TenantService {
         return tenantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Người thuê không tồn tại!"));
     }
 
+    public Tenant leaveRoom(Long tenantId) {
+        Tenant tenant = tenantRepository.findById(tenantId).orElseThrow(() -> new EntityNotFoundException("Người thuê không tồn tại!"));
+        tenant.setIsStay(false);
+        Room room = roomrepository.findById(tenant.getRoom().getId()).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
+        room.setCurrentTenant(room.getCurrentTenant()-1);
+        roomrepository.save(room);
+        return tenantRepository.save(tenant);
+    }
 
     public void deleteTenant(Long tenantId) {
+        Tenant tenant = tenantRepository.findById(tenantId).orElseThrow(() -> new EntityNotFoundException("Người thuê không tồn tại!"));
+        if(tenant.getIsStay()==true){
+            Room room = tenant.getRoom();
+            room.setCurrentTenant(room.getCurrentTenant()-1);
+            roomrepository.save(room);
+        }
+
         tenantRepository.deleteById(tenantId);
     }
 

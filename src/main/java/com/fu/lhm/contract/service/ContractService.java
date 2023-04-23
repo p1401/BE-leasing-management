@@ -56,9 +56,24 @@ public class ContractService {
         return jwtService.getUser(httpServletRequest);
     }
 
-    public Contract getContractById(Long contractId) {
+    public ContractRequest getContractById(Long contractId) {
 
-        return contractRepository.findById(contractId).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
+        Contract  contract =  contractRepository.findById(contractId).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
+        ContractRequest contractRequest = new ContractRequest();
+        contractRequest.setId(contract.getId());
+        contractRequest.setContractCode(contract.getContractCode());
+        contractRequest.setFromDate(contract.getFromDate());
+        contractRequest.setToDate(contract.getToDate());
+        contractRequest.setRoomName(contract.getRoomName());
+        contractRequest.setHouseName(contract.getHouseName());
+        contractRequest.setFloor(contract.getTenant().getRoom().getFloor());
+        contractRequest.setArea(contract.getTenant().getRoom().getArea());
+        contractRequest.setIsActive(contract.getIsActive());
+        contractRequest.setDeposit(contract.getDeposit());
+        contractRequest.setAutoBillDate(contract.getAutoBillDate());
+        contractRequest.setTenantName(contract.getTenantName());
+
+        return  contractRequest;
     }
 
     public Contract getContractByRoomId(Long roomId) {
@@ -179,7 +194,7 @@ public class ContractService {
     }
 
     public void replaceTextsInWordDocument(Long contractId, String inputFilePath, String outputFilePath) throws Exception {
-        Contract contract = this.getContractById(contractId);
+        Contract contract = contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         LocalDate date1 = contract.getFromDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         String day1 = String.valueOf(date1.getDayOfMonth());

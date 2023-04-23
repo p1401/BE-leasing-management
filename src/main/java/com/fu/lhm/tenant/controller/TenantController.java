@@ -4,6 +4,7 @@ package com.fu.lhm.tenant.controller;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.tenant.entity.Tenant;
 import com.fu.lhm.tenant.model.TenantRequest;
+import com.fu.lhm.tenant.repository.TenantRepository;
 import com.fu.lhm.tenant.service.TenantService;
 import com.fu.lhm.tenant.validate.TenantValidate;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class TenantController {
     private final TenantService tenantService;
 
     private final TenantValidate tenantValidate;
+    private final TenantRepository tenantRepository;
 
     @PostMapping("")
     public ResponseEntity<Tenant> createTenant(@RequestParam(name = "roomId") Long roomId, @RequestBody Tenant tenant) throws BadRequestException {
@@ -43,6 +45,12 @@ public class TenantController {
     public void deleteTenant(@PathVariable("tenantId") Long id) {
 
         tenantService.deleteTenant(id);
+    }
+
+    @PutMapping("/leave/{tenantId}")
+    public Tenant leaveRoom(@PathVariable("tenantId") Long id) {
+
+        return tenantService.leaveRoom(id);
     }
 
     @GetMapping("/rooms/{roomId}")

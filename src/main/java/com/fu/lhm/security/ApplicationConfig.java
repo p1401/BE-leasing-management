@@ -1,4 +1,4 @@
-package com.fu.lhm.config;
+package com.fu.lhm.security;
 
 
 import com.fu.lhm.user.repository.UserRepository;

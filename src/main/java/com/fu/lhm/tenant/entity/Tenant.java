@@ -3,6 +3,7 @@ package com.fu.lhm.tenant.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fu.lhm.contract.entity.Contract;
+import com.fu.lhm.house.entity.House;
 import com.fu.lhm.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,12 +36,14 @@ public class Tenant {
     private String roomName;
     private String houseName;
 
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Room.class, cascade = CascadeType.ALL)
+
+
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "roomId")
     @JsonBackReference
     Room room;
 
-    @OneToMany(mappedBy = "tenant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "tenant",cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonManagedReference
     List<Contract> contracts;
 }

@@ -41,6 +41,11 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    //Công dụng Nhận HttpServletRequest trả về user
+    //token lấy từ header("Authorization")
+    //Lưu toen trong đối tượng Claims
+    //Sau đố lấy userId từ claims
+    //return user nếu tồn tại hoặc báo lỗi nếu không tồn tại
     public User getUser(HttpServletRequest httpServletRequest) throws BadRequestException {
         String token = httpServletRequest.getHeader("Authorization").substring(7);
 
@@ -92,6 +97,7 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    //truyền thông tin của user vào jwt token
     private Claims buildClaims(User user) {
         Claims claims = new DefaultClaims();
 
@@ -107,6 +113,8 @@ public class JwtService {
         return claims;
     }
 
+
+
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
@@ -116,6 +124,7 @@ public class JwtService {
                 .getBody();
     }
 
+    //Lấy mã key
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);

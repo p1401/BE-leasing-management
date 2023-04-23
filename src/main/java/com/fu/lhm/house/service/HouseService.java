@@ -22,7 +22,7 @@ public class HouseService {
     private final RoomRepository roomRepository;
     private final HouseValidate houseValidate;
     public House createHouse(House house, User user) throws BadRequestException {
-        houseValidate.validateCreateHouse(house, user);
+//        houseValidate.validateCreateHouse(house,user);
         house.setRoomNumber(0);
         house.setEmptyRoom(0);
         return houseRepository.save(house);

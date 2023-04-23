@@ -1,4 +1,4 @@
-package com.fu.lhm.jwt;
+package com.fu.lhm.security;
 
 import com.fu.lhm.jwt.repository.TokenRepository;
 import com.fu.lhm.jwt.service.JwtService;
