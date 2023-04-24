@@ -127,7 +127,7 @@ public class BillService {
     }
 
     public void deleteBill(Long billId) {
-        billRepository.delete(billRepository.findById(billId).get());
+        billRepository.deleteById(billId);
     }
 
     public Bill getBillById(Long billId) throws BadRequestException {

@@ -35,8 +35,8 @@ public class Tenant {
     private Boolean isContractHolder;
     private String roomName;
     private String houseName;
-
-
+    private Long rID;
+    private Long hID;
 
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "roomId")

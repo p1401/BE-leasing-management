@@ -29,6 +29,8 @@ public class TenantService {
 
         room.setCurrentTenant(room.getCurrentTenant() + 1);
         tenant.setRoom(room);
+        tenant.setRID(room.getId());
+        tenant.setHID(room.getHouse().getId());
         tenant.setRoomName(room.getName());
         tenant.setHouseName(room.getHouse().getName());
         tenant.setIsContractHolder(false);

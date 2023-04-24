@@ -101,6 +101,8 @@ public class ContractService {
         tenant.setRoomName(room.getName());
         tenant.setHouseName(room.getHouse().getName());
         tenant.setRoom(room);
+        tenant.setRID(room.getId());
+        tenant.setHID(room.getHouse().getId());
         tenant.setIsStay(true);
 
         //create contract
