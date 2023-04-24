@@ -59,7 +59,7 @@ public class UserController {
     public ResponseEntity<String> changePassword(@RequestParam("password") String password,@RequestParam("newPassword") String newPassword,@RequestParam("repeat") String repeat) throws BadRequestException {
         userValidate.validateChangePassword(password,newPassword,repeat);
         service.changePassword(newPassword);
-        return ResponseEntity.ok("Password changed successfully.");
+        return ResponseEntity.ok("Đổi mật khẩu thành công");
     }
 
 }
