@@ -8,20 +8,11 @@ import com.fu.lhm.tenant.repository.TenantRepository;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import lombok.RequiredArgsConstructor;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 import static org.mockito.Mockito.*;
 
@@ -107,8 +98,6 @@ public class TenantServiceTest {
         // When
         when(roomRepository.findById(roomId)).thenReturn(Optional.of(room));
         when(tenantRepository.save(any(Tenant.class))).thenReturn(tenant);
-
-
         Tenant result = tenantService.createTenant(roomId, tenant);
 
         // Assert
@@ -153,7 +142,6 @@ public class TenantServiceTest {
         when(roomRepository.findById(roomId)).thenReturn(Optional.of(room));
         when(tenantRepository.save(any(Tenant.class))).thenReturn(tenant);
 
-
         Tenant result = tenantService.createTenant(roomId, tenant);
 
         // Assert
@@ -189,7 +177,6 @@ public class TenantServiceTest {
         when(tenantRepository.findById(1L)).thenReturn(Optional.of(oldTenant));
         when(tenantRepository.save(oldTenant)).thenReturn(oldTenant);
         Tenant updatedTenant = tenantService.updateTenant(1L, newTenant);
-
 
         // assert
         Assert.assertEquals(newTenant.getName(), updatedTenant.getName());

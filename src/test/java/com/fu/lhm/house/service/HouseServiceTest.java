@@ -3,6 +3,7 @@ package com.fu.lhm.house.service;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
+import com.fu.lhm.house.validate.HouseValidate;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.user.entity.User;
@@ -36,6 +37,10 @@ public class HouseServiceTest {
     @Mock
     private RoomRepository roomRepository;
 
+    @InjectMocks
+    private HouseValidate houseValidate;
+
+    @InjectMocks
     private House house;
 
     private final User user = User.builder()
@@ -155,7 +160,132 @@ public class HouseServiceTest {
         Assert.assertEquals(houseTest.getWaterPrice(), createdHouse.getWaterPrice());
         Assert.assertEquals(houseTest.getElectricPrice(), createdHouse.getElectricPrice());
         Assert.assertEquals(houseTest.getUser(), createdHouse.getUser());
+    }
 
+    @Test()
+    public void testCreateHouse_InvalidData_Name() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House houseTest = new House();
+        houseTest.setName("");
+        houseTest.setCity("Test c");
+        houseTest.setDistrict("Test 1");
+        houseTest.setAddress("Test x");
+        houseTest.setElectricPrice(100);
+        houseTest.setWaterPrice(50);
+        houseTest.setFloor(2);
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            houseValidate.validateCreateHouse(houseTest, user);
+        });
+        Assert.assertEquals("Vui lòng nhập tên nhà", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateHouse_InvalidData_City() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House houseTest = new House();
+        houseTest.setName("Nhà trọ 1");
+        houseTest.setCity("");
+        houseTest.setDistrict("Test 1");
+        houseTest.setAddress("Test x");
+        houseTest.setElectricPrice(100);
+        houseTest.setWaterPrice(50);
+        houseTest.setFloor(2);
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            houseValidate.validateCreateHouse(houseTest, user);
+        });
+        Assert.assertEquals("Vui lòng nhập tên Thành Phố", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateHouse_InvalidData_Address() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House houseTest = new House();
+        houseTest.setName("Nhà trọ 1");
+        houseTest.setCity("Hà Nội");
+        houseTest.setDistrict("Test 1");
+        houseTest.setAddress("");
+        houseTest.setElectricPrice(100);
+        houseTest.setWaterPrice(50);
+        houseTest.setFloor(2);
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            houseValidate.validateCreateHouse(houseTest, user);
+        });
+        Assert.assertEquals("Vui lòng nhập địa chỉ", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateHouse_InvalidData_Floor() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House houseTest = new House();
+        houseTest.setName("Nhà trọ 1");
+        houseTest.setCity("Hà Nội");
+        houseTest.setDistrict("Test 1");
+        houseTest.setAddress("Test");
+        houseTest.setElectricPrice(100);
+        houseTest.setWaterPrice(50);
+        houseTest.setFloor(0);
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            houseValidate.validateCreateHouse(houseTest, user);
+        });
+        Assert.assertEquals("Tầng phải lớn hơn 0", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateHouse_InvalidData_waterPrice() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House houseTest = new House();
+        houseTest.setName("Nhà trọ 1");
+        houseTest.setCity("Hà Nội");
+        houseTest.setDistrict("Test 1");
+        houseTest.setAddress("Test");
+        houseTest.setElectricPrice(100);
+        houseTest.setWaterPrice(-1);
+        houseTest.setFloor(1);
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            houseValidate.validateCreateHouse(houseTest, user);
+        });
+        Assert.assertEquals("Tiền nước phải lớn hơn hoặc bằng 0", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateHouse_InvalidData_ElectricPrice() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House houseTest = new House();
+        houseTest.setName("Nhà trọ 1");
+        houseTest.setCity("Hà Nội");
+        houseTest.setDistrict("Test 1");
+        houseTest.setAddress("Test");
+        houseTest.setElectricPrice(-1);
+        houseTest.setWaterPrice(1);
+        houseTest.setFloor(1);
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            houseValidate.validateCreateHouse(houseTest, user);
+        });
+        Assert.assertEquals("Tiền điện phải lớn hơn hoặc bằng 0", exception.getMessage());
     }
 
     @Test()
@@ -264,6 +394,106 @@ public class HouseServiceTest {
         Assert.assertEquals(existingHouse.getWaterPrice(), updateHouseTest.getWaterPrice());
         Assert.assertEquals(existingHouse.getElectricPrice(), updateHouseTest.getElectricPrice());
         Assert.assertEquals(existingHouse.getUser(), updateHouseTest.getUser());
+    }
+
+    @Test()
+    public void testUpdateHouse_InvalidData_Name() {
+        House updatedHouse = new House();
+        updatedHouse.setName("");
+        updatedHouse.setCity("Test City");
+        updatedHouse.setDistrict("Test District 2");
+        updatedHouse.setAddress("Test Address 2");
+        updatedHouse.setElectricPrice(1);
+        updatedHouse.setWaterPrice(2);
+        updatedHouse.setFloor(1);
+
+        // Kiểm tra xem hàm có ném ra exception với message phù hợp hay không
+        //when
+        when(houseRepository.findById(1L)).thenReturn(Optional.of(Optional.of(house).get()));
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            houseValidate.validateUpdateHouse(1L,updatedHouse, user);
+        });
+        Assert.assertEquals("Vui lòng nhập tên nhà", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdateHouse_InvalidData_City(){
+        House updatedHouse = new House();
+        updatedHouse.setName("Test 1");
+        updatedHouse.setCity("");
+        updatedHouse.setDistrict("Test District 2");
+        updatedHouse.setAddress("Test Address 2");
+        updatedHouse.setElectricPrice(1);
+        updatedHouse.setWaterPrice(2);
+        updatedHouse.setFloor(1);
+
+        // Kiểm tra xem hàm có ném ra exception với message phù hợp hay không
+        //when
+        when(houseRepository.findById(1L)).thenReturn(Optional.of(Optional.of(house).get()));
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            houseValidate.validateUpdateHouse(1L,updatedHouse, user);
+        });
+        Assert.assertEquals("Vui lòng nhập tên Thành Phố", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdateHouse_InvalidData_Adderss(){
+        House updatedHouse = new House();
+        updatedHouse.setName("Test 1");
+        updatedHouse.setCity("test");
+        updatedHouse.setDistrict("Test District 2");
+        updatedHouse.setAddress("");
+        updatedHouse.setElectricPrice(1);
+        updatedHouse.setWaterPrice(2);
+        updatedHouse.setFloor(1);
+
+        // Kiểm tra xem hàm có ném ra exception với message phù hợp hay không
+        //when
+        when(houseRepository.findById(1L)).thenReturn(Optional.of(Optional.of(house).get()));
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            houseValidate.validateUpdateHouse(1L,updatedHouse, user);
+        });
+        Assert.assertEquals("Vui lòng nhập địa chỉ", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdateHouse_InvalidData_WaterPrice(){
+        House updatedHouse = new House();
+        updatedHouse.setName("Test 1");
+        updatedHouse.setCity("test");
+        updatedHouse.setDistrict("Test District 2");
+        updatedHouse.setAddress("test");
+        updatedHouse.setElectricPrice(1);
+        updatedHouse.setWaterPrice(-12);
+        updatedHouse.setFloor(1);
+
+        // Kiểm tra xem hàm có ném ra exception với message phù hợp hay không
+        //when
+        when(houseRepository.findById(1L)).thenReturn(Optional.of(Optional.of(house).get()));
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            houseValidate.validateUpdateHouse(1L,updatedHouse, user);
+        });
+        Assert.assertEquals("Tiền nước phải lớn hơn hoặc bằng 0", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdateHouse_InvalidData_Floor(){
+        House updatedHouse = new House();
+        updatedHouse.setName("Test 1");
+        updatedHouse.setCity("test");
+        updatedHouse.setDistrict("Test District 2");
+        updatedHouse.setAddress("test");
+        updatedHouse.setElectricPrice(1);
+        updatedHouse.setWaterPrice(2);
+        updatedHouse.setFloor(-1);
+
+        // Kiểm tra xem hàm có ném ra exception với message phù hợp hay không
+        //when
+        when(houseRepository.findById(1L)).thenReturn(Optional.of(Optional.of(house).get()));
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            houseValidate.validateUpdateHouse(1L,updatedHouse, user);
+        });
+        Assert.assertEquals("Tầng phải lớn hơn 0", exception.getMessage());
     }
 
     @Test()
