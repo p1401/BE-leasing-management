@@ -55,7 +55,7 @@ public class UserController {
     }
 
 
-    @PutMapping ("/changePassword")
+    @PutMapping ("/change-password")
     public ResponseEntity<String> changePassword(@RequestParam("password") String password,@RequestParam("newPassword") String newPassword,@RequestParam("repeat") String repeat) throws BadRequestException {
         userValidate.validateChangePassword(password,newPassword,repeat);
         service.changePassword(newPassword);
