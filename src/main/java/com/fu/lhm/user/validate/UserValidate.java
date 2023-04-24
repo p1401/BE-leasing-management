@@ -44,12 +44,19 @@ public class UserValidate {
         validateForValidPhone(user.getPhone());
     }
 
-    public void validateChangePassword(String oldpass, String newpass) throws BadRequestException {
+    public void validateChangePassword(String oldpass, String newpass, String repeatPassword) throws BadRequestException {
         checkOldPassword(oldpass);
+        checkRepeatPassword(newpass,repeatPassword);
         isNotPopulated(oldpass, "Nhập password cũ");
         isNotPopulated(newpass, "Nhập password mới");
 
 
+    }
+
+    public void checkRepeatPassword(String newPassword, String repeat)throws BadRequestException{
+        if(newPassword.equals(repeat)==false){
+            throw new BadRequestException("Password nhập lại không trùng Password mới");
+        }
     }
 
     public void checkOldPassword(String password) throws BadRequestException {

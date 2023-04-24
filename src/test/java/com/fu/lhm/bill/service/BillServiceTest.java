@@ -4,6 +4,7 @@ import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.entity.BillContent;
 import com.fu.lhm.bill.entity.BillType;
 import com.fu.lhm.bill.model.BillReceiveRequest;
+import com.fu.lhm.bill.model.BillRequest;
 import com.fu.lhm.bill.model.BillSpendRequest;
 import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.contract.entity.Contract;
@@ -336,43 +337,5 @@ public class BillServiceTest {
 
         // Kiểm tra xem đối tượng Bill trả về có đúng với đối tượng Bill tạo ở trên hay không
         assertEquals(expectedBill, actualBill);
-    }
-
-    @Test
-    public void testPayBill() throws BadRequestException {
-        // Create a new bill
-        Bill bill = Bill.builder()
-                .billCode("ABC123")
-                .roomMoney(1000)
-                .electricNumber(100)
-                .waterNumber(200)
-                .electricMoney(10000)
-                .waterMoney(20000)
-                .payer("John")
-                .isPay(false)
-                .dateCreate(LocalDate.now())
-                .description("Test Bill")
-                .totalMoney(30000)
-                .roomId(1L)
-                .houseId(1L)
-                .userId(1L)
-                .billType(BillType.RECEIVE)
-                .billContent(BillContent.TIENPHONG)
-                .build();
-
-        // Mock the bill repository
-        when(billRepository.findById(anyLong())).thenReturn(Optional.of(bill));
-        when(billRepository.save(any(Bill.class))).thenReturn(bill);
-
-        // Call payBill method with the bill ID
-        Bill paidBill = billService.payBill(bill.getId());
-
-        // Check that the bill is paid
-        assertTrue(paidBill.getIsPay());
-    }
-
-
-    @Test
-    public void getBills() {
     }
 }

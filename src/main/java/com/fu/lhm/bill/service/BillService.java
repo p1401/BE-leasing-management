@@ -135,7 +135,7 @@ public class BillService {
     }
 
     public Bill payBill(Long billId) throws BadRequestException {
-        Bill bill = billRepository.findById(billId).orElseThrow(() -> new BadRequestException("Hóa đơn không tồn tại!"));
+        Bill bill = billRepository.findById(billId).get();
         bill.setIsPay(true);
 
         return billRepository.save(bill);
