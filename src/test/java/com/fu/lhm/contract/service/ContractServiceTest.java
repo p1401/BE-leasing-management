@@ -25,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
@@ -182,10 +183,62 @@ public class ContractServiceTest {
     }
 
     @Test
-    public void liquidationContract() {
+    public void liquidationContract() throws BadRequestException {
+        // create a sample contract and tenant
+        Contract contract = new Contract();
+        contract.setId(1L);
+        contract.setIsActive(true);
+        Tenant tenant = new Tenant();
+        tenant.setId(1L);
+        Room room = new Room();
+        room.setId(1L);
+        room.setCurrentTenant(1);
+        tenant.setRoom(room);
+        contract.setTenant(tenant);
+
+        // mock the contract and room repositories to return the sample data
+        when(contractRepository.findById(contract.getId())).thenReturn(Optional.of(contract));
+        when(roomRepository.findById(room.getId())).thenReturn(Optional.of(room));
+
+        // call the service method
+        Contract result = contractService.liquidationContract(contract.getId());
+
+        // verify that the contract is deactivated and the room has no tenant
+        Assert.assertFalse(result.getIsActive());
+        Assert.assertEquals(0, room.getCurrentTenant());
+
     }
 
     @Test
     public void getContracts() {
+        // create test data
+        Long houseId = 1L;
+        Long roomId = 2L;
+        Boolean isActive = true;
+        Pageable page = PageRequest.of(0, 10);
+        List<Contract> contracts = new ArrayList<>();
+        contracts.add(new Contract());
+        contracts.add(new Contract());
+
+        // set up mock behavior
+        when(contractRepository.findAllByTenant_Room_IdAndIsActive(eq(roomId), eq(isActive), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(contracts));
+        when(contractRepository.findAllByTenant_Room_House_IdAndIsActive(eq(houseId), eq(isActive), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(contracts));
+
+        // test with roomId
+        Page<Contract> result = contractService.getContracts(null, roomId, isActive, page);
+        Assert.assertEquals(2, result.getContent().size());
+
+
+        // test with houseId
+        result = contractService.getContracts(houseId, null, isActive, page);
+        Assert.assertEquals(2, result.getContent().size());
+
+
+        // test with null parameters
+        result = contractService.getContracts(null, null, isActive, page);
+        Assert.assertEquals(0, result.getContent().size());
+
     }
 }
