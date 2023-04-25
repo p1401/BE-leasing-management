@@ -163,6 +163,7 @@ public class BillServiceTest {
         assertEquals(bill.getUserId(), result.getUserId());
     }
 
+
     @Test
     public void createBillSpend() throws BadRequestException {
         // Mock data
@@ -265,12 +266,6 @@ public class BillServiceTest {
         assertEquals(result.getContent().get(1).getRoomId(), bill2.getRoomId());
     }
 
-    @InjectMocks
-    private BillService billServiceDelete;
-
-    @Mock
-    private BillRepository billRepositoryDelete;
-
     @Test
     public void deleteBill() {
         // Tạo mới một Bill
@@ -293,15 +288,15 @@ public class BillServiceTest {
                 .billContent(BillContent.TIENPHONG)
                 .build();
 
-        when(billRepositoryDelete.save(any(Bill.class))).thenReturn(bill);
+        when(billRepository.save(any(Bill.class))).thenReturn(bill);
 
-        Bill savedBill = billRepositoryDelete.save(bill);
+        Bill savedBill = billRepository.save(bill);
 
         // Gọi hàm deleteBill() với billId của bill vừa tạo
-        billServiceDelete.deleteBill(savedBill.getId());
+        billService.deleteBill(savedBill.getId());
 
         // Kiểm tra xem bill còn tồn tại trong database hay không
-        Optional<Bill> deletedBill = billRepositoryDelete.findById(savedBill.getId());
+        Optional<Bill> deletedBill = billRepository.findById(savedBill.getId());
         assertFalse(deletedBill.isPresent());
     }
 

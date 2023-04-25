@@ -27,29 +27,31 @@ public class RoomValidate {
 
         validateForNameExistInFloor(room.getName(), room.getFloor(), house.getId());
         validateFloor(room.getFloor(), house.getFloor());
+        validateArea(room.getArea());
         validateRoomMoney(room.getRoomMoney());
         validateMaxTenant(room.getMaxTenant());
         validateCurrentTenant(room.getMaxTenant(), room.getCurrentTenant());
     }
 
     public void validateUpdateRoom(Room room, Long roomId) throws BadRequestException {
-        Room oldRoom = roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Nha không tồn tại!"));
+        Room oldRoom = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
         isNotPopulated(room.getName(),"Vui lòng nhập tên phòng");
         isNotPopulated(room.getRoomMoney()+"","Vui lòng nhập giá thuê phòng");
         isNotPopulated(room.getMaxTenant()+"","Vui lòng nhập số lượng người ở tối đa");
         isNotPopulated(room.getArea()+"","Vui lòng nhập diện tích");
         isNotPopulated(room.getFloor()+"","Vui lòng nhập tầng");
-
+        validateFloor(room.getFloor(), oldRoom.getHouse().getFloor());
+        validateRoomMoney(room.getRoomMoney());
+        validateArea(room.getArea());
+        validateMaxTenant(room.getMaxTenant());
+        validateCurrentTenant(room.getMaxTenant(), room.getCurrentTenant());
         if(oldRoom.getName().equals(room.getName())){
 
         }else{
             validateForNameExistInFloor(room.getName(), room.getFloor(), oldRoom.getHouse().getId());
 
         }
-        validateFloor(room.getFloor(), oldRoom.getHouse().getFloor());
-        validateRoomMoney(room.getRoomMoney());
-        validateMaxTenant(room.getMaxTenant());
-        validateCurrentTenant(room.getMaxTenant(), room.getCurrentTenant());
+
     }
 
 
@@ -71,6 +73,13 @@ public class RoomValidate {
             throw new BadRequestException("Tầng phòng không được lớn hơn tầng tối đa của nhà");
         }else if(roomFloor<=0){
             throw new BadRequestException("Tầng phòng không được nhỏ hơn hoặc bằng 0");
+        }
+    }
+
+
+    private void validateArea(int area) throws BadRequestException {
+        if (area<0 ) {
+            throw new BadRequestException("Diện tích phải > 0");
         }
     }
 

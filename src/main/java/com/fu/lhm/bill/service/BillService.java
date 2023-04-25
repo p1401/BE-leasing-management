@@ -113,7 +113,6 @@ public class BillService {
     public static Bill mapToBillSpend(BillSpendRequest billRE) {
         Bill bill = new Bill();
         bill.setId(billRE.getId());
-//        bill.setDateCreate(billRE.getDateCreate());
         bill.setDateCreate(billRE.getDateCreate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         bill.setDescription(billRE.getDescription());
         bill.setTotalMoney(billRE.getTotalMoney());

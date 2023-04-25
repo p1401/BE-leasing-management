@@ -9,6 +9,8 @@ import com.fu.lhm.house.repository.HouseRepository;
 import com.fu.lhm.house.service.HouseService;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
+import com.fu.lhm.room.validate.RoomValidate;
+import com.fu.lhm.user.entity.User;
 import com.fu.lhm.waterElectric.entity.WaterElectric;
 import com.fu.lhm.waterElectric.repository.WaterElectricRepositoy;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +48,9 @@ public class RoomServiceTest {
 
     @Mock
     private BillRepository billRepository;
+
+    @InjectMocks
+    private RoomValidate roomValidate;
 
     @Test
     public void testCreateRoom_1() throws BadRequestException {
@@ -92,7 +97,139 @@ public class RoomServiceTest {
         Assert.assertEquals(2, createdRoom.getMaxTenant());
         Assert.assertEquals(1, createdRoom.getFloor());
         Assert.assertEquals(mockHouse, createdRoom.getHouse());
+    }
 
+    @Test()
+    public void testCreateRoom_InvalidData_Name() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House house = new House();
+        house.setId(1L);
+
+        Room mockRoom = new Room();
+        mockRoom.setId(1L);
+        mockRoom.setName("");
+        mockRoom.setArea(10);
+        mockRoom.setRoomMoney(2000000);
+        mockRoom.setMaxTenant(2);
+        mockRoom.setFloor(1);
+        mockRoom.setHouse(new House());
+        //when
+        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            roomValidate.validateCreateRoom(mockRoom,house.getId());
+        });
+        Assert.assertEquals("Vui lòng nhập tên phòng", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateRoom_InvalidData_Area() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House house = new House();
+        house.setId(1L);
+        house.setFloor(2);
+
+        Room mockRoom = new Room();
+        mockRoom.setId(1L);
+        mockRoom.setName("test");
+        mockRoom.setArea(-10);
+        mockRoom.setRoomMoney(2000000);
+        mockRoom.setMaxTenant(2);
+        mockRoom.setFloor(1);
+        mockRoom.setHouse(new House());
+        //when
+        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            roomValidate.validateCreateRoom(mockRoom,house.getId());
+        });
+        Assert.assertEquals("Diện tích phải > 0", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateRoom_InvalidData_RoomMoney() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House house = new House();
+        house.setId(1L);
+        house.setFloor(2);
+
+        Room mockRoom = new Room();
+        mockRoom.setId(1L);
+        mockRoom.setName("test");
+        mockRoom.setArea(10);
+        mockRoom.setRoomMoney(-2000000);
+        mockRoom.setMaxTenant(2);
+        mockRoom.setFloor(1);
+        mockRoom.setHouse(new House());
+        //when
+        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            roomValidate.validateCreateRoom(mockRoom,house.getId());
+        });
+        Assert.assertEquals("Giá thuê phải lớn hơn 0", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateRoom_InvalidData_MaxTenant() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House house = new House();
+        house.setId(1L);
+        house.setFloor(2);
+
+        Room mockRoom = new Room();
+        mockRoom.setId(1L);
+        mockRoom.setName("test");
+        mockRoom.setArea(10);
+        mockRoom.setRoomMoney(2000000);
+        mockRoom.setMaxTenant(-2);
+        mockRoom.setFloor(1);
+        mockRoom.setHouse(new House());
+        //when
+        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            roomValidate.validateCreateRoom(mockRoom,house.getId());
+        });
+        Assert.assertEquals("Số người tối đa 1 phòng phải lớn hơn 0", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateRoom_InvalidData_Floor() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House house = new House();
+        house.setId(1L);
+
+        Room mockRoom = new Room();
+        mockRoom.setId(1L);
+        mockRoom.setName("test");
+        mockRoom.setArea(10);
+        mockRoom.setRoomMoney(2000000);
+        mockRoom.setMaxTenant(2);
+        mockRoom.setFloor(-1);
+        mockRoom.setHouse(new House());
+        //when
+        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            roomValidate.validateCreateRoom(mockRoom,house.getId());
+        });
+        Assert.assertEquals("Tầng phòng không được nhỏ hơn hoặc bằng 0", exception.getMessage());
     }
 
     @Test
@@ -225,6 +362,174 @@ public class RoomServiceTest {
         Assert.assertEquals(3, result.getMaxTenant());
         Assert.assertEquals(2, result.getCurrentTenant());
         Assert.assertEquals(2, result.getFloor());
+    }
+
+    @Test()
+    public void testUpdateRoom_InvalidData_Name() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House house = new House();
+        house.setId(1L);
+
+        Room existRoom = new Room();
+        existRoom.setId(1L);
+
+        Room mockRoom = new Room();
+        mockRoom.setName("");
+        mockRoom.setArea(10);
+        mockRoom.setRoomMoney(2000000);
+        mockRoom.setMaxTenant(2);
+        mockRoom.setFloor(1);
+        mockRoom.setHouse(new House());
+        //when
+        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+        when(roomRepository.findById(1L)).thenReturn(java.util.Optional.of(existRoom));
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            roomValidate.validateUpdateRoom(mockRoom,existRoom.getId());
+        });
+        Assert.assertEquals("Vui lòng nhập tên phòng", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdateRoom_InvalidData_Area() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House house = new House();
+        house.setId(1L);
+        house.setFloor(2);
+
+        Room existRoom = new Room();
+        existRoom.setId(1L);
+        existRoom.setName("test");
+        existRoom.setArea(-1);
+        existRoom.setRoomMoney(2000000);
+        existRoom.setMaxTenant(2);
+        existRoom.setFloor(1);
+        existRoom.setHouse(house);
+
+        Room mockRoom = new Room();
+        mockRoom.setName("test");
+        mockRoom.setArea(-1);
+        mockRoom.setRoomMoney(2000000);
+        mockRoom.setMaxTenant(2);
+        mockRoom.setFloor(1);
+        mockRoom.setHouse(house);
+        //when
+        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+        when(roomRepository.findById(1L)).thenReturn(java.util.Optional.of(existRoom));
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            roomValidate.validateUpdateRoom(mockRoom,existRoom.getId());
+        });
+        Assert.assertEquals("Diện tích phải > 0", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdateRoom_InvalidData_RoomMoney() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House house = new House();
+        house.setId(1L);
+        house.setFloor(2);
+
+        Room existRoom = new Room();
+        existRoom.setId(1L);
+        existRoom.setName("test");
+        existRoom.setArea(1);
+        existRoom.setRoomMoney(2000000);
+        existRoom.setMaxTenant(2);
+        existRoom.setFloor(1);
+        existRoom.setHouse(house);
+
+        Room mockRoom = new Room();
+        mockRoom.setName("test");
+        mockRoom.setArea(1);
+        mockRoom.setRoomMoney(-2000000);
+        mockRoom.setMaxTenant(2);
+        mockRoom.setFloor(1);
+        mockRoom.setHouse(house);
+        //when
+        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+        when(roomRepository.findById(1L)).thenReturn(java.util.Optional.of(existRoom));
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            roomValidate.validateUpdateRoom(mockRoom,existRoom.getId());
+        });
+        Assert.assertEquals("Giá thuê phải lớn hơn 0", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdateRoom_InvalidData_MaxTenant() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House house = new House();
+        house.setId(1L);
+        house.setFloor(2);
+
+        Room existRoom = new Room();
+        existRoom.setId(1L);
+        existRoom.setName("test");
+        existRoom.setArea(1);
+        existRoom.setRoomMoney(2000000);
+        existRoom.setMaxTenant(2);
+        existRoom.setFloor(1);
+        existRoom.setHouse(house);
+
+        Room mockRoom = new Room();
+        mockRoom.setName("test");
+        mockRoom.setArea(1);
+        mockRoom.setRoomMoney(2000000);
+        mockRoom.setMaxTenant(0);
+        mockRoom.setFloor(1);
+        mockRoom.setHouse(house);
+        //when
+        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+        when(roomRepository.findById(1L)).thenReturn(java.util.Optional.of(existRoom));
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            roomValidate.validateUpdateRoom(mockRoom,existRoom.getId());
+        });
+        Assert.assertEquals("Số người tối đa 1 phòng phải lớn hơn 0", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdateRoom_InvalidData_Floor() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House house = new House();
+        house.setId(1L);
+        house.setFloor(2);
+
+        Room existRoom = new Room();
+        existRoom.setId(1L);
+        existRoom.setName("test");
+        existRoom.setArea(1);
+        existRoom.setRoomMoney(2000000);
+        existRoom.setMaxTenant(2);
+        existRoom.setFloor(1);
+        existRoom.setHouse(house);
+
+        Room mockRoom = new Room();
+        mockRoom.setName("test");
+        mockRoom.setArea(1);
+        mockRoom.setRoomMoney(2000000);
+        mockRoom.setMaxTenant(0);
+        mockRoom.setFloor(-1);
+        mockRoom.setHouse(house);
+        //when
+        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+        when(roomRepository.findById(1L)).thenReturn(java.util.Optional.of(existRoom));
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            roomValidate.validateUpdateRoom(mockRoom,existRoom.getId());
+        });
+        Assert.assertEquals("Tầng phòng không được nhỏ hơn hoặc bằng 0", exception.getMessage());
     }
 
     @Test
