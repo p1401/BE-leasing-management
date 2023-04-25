@@ -1,4 +1,4 @@
-package com.fu.lhm.user.service.service;
+package com.fu.lhm.waterElectric.service;
 
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
