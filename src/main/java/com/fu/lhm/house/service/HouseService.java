@@ -40,27 +40,27 @@ public class HouseService {
         return houseRepository.save(oldHouse);
     }
 
-        public Page<House> getListHouse(User user, Pageable pageable) {
+    public Page<House> getListHouse(User user, Pageable pageable) {
 
-            Page<House> listHouse = houseRepository.findAllByUser(user, pageable);
+        Page<House> listHouse = houseRepository.findAllByUser(user, pageable);
 
-            for(House house : listHouse){
-                int emptyRoom = 0;
-                int roomNumber = 0;
-                List<Room> listRoom = roomRepository.findAllByHouse_Id(house.getId());
-                for(Room room : listRoom){
-                    if(room.getCurrentTenant()==0){
-                        emptyRoom=emptyRoom+1;
-                    }
-                    roomNumber=roomNumber+1;
+        for(House house : listHouse){
+            int emptyRoom = 0;
+            int roomNumber = 0;
+            List<Room> listRoom = roomRepository.findAllByHouse_Id(house.getId());
+            for(Room room : listRoom){
+                if(room.getCurrentTenant()==0){
+                    emptyRoom=emptyRoom+1;
                 }
-                house.setEmptyRoom(emptyRoom);
-                house.setRoomNumber(roomNumber);
-
+                roomNumber=roomNumber+1;
             }
+            house.setEmptyRoom(emptyRoom);
+            house.setRoomNumber(roomNumber);
 
-            return listHouse;
         }
+
+        return listHouse;
+    }
 
     public House getHouseById(Long houseId) throws BadRequestException {
 

@@ -384,7 +384,7 @@ public class RoomServiceTest {
         mockRoom.setFloor(1);
         mockRoom.setHouse(new House());
         //when
-        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+        lenient().when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
         when(roomRepository.findById(1L)).thenReturn(java.util.Optional.of(existRoom));
         BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
             roomValidate.validateUpdateRoom(mockRoom,existRoom.getId());
@@ -419,7 +419,7 @@ public class RoomServiceTest {
         mockRoom.setFloor(1);
         mockRoom.setHouse(house);
         //when
-        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+        lenient().when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
         when(roomRepository.findById(1L)).thenReturn(java.util.Optional.of(existRoom));
         BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
             roomValidate.validateUpdateRoom(mockRoom,existRoom.getId());
@@ -454,7 +454,7 @@ public class RoomServiceTest {
         mockRoom.setFloor(1);
         mockRoom.setHouse(house);
         //when
-        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+        lenient().when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
         when(roomRepository.findById(1L)).thenReturn(java.util.Optional.of(existRoom));
         BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
             roomValidate.validateUpdateRoom(mockRoom,existRoom.getId());
@@ -489,7 +489,7 @@ public class RoomServiceTest {
         mockRoom.setFloor(1);
         mockRoom.setHouse(house);
         //when
-        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+        lenient().when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
         when(roomRepository.findById(1L)).thenReturn(java.util.Optional.of(existRoom));
         BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
             roomValidate.validateUpdateRoom(mockRoom,existRoom.getId());
@@ -524,7 +524,7 @@ public class RoomServiceTest {
         mockRoom.setFloor(-1);
         mockRoom.setHouse(house);
         //when
-        when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
+        lenient().when(houseRepository.findById(1L)).thenReturn(java.util.Optional.of(house));
         when(roomRepository.findById(1L)).thenReturn(java.util.Optional.of(existRoom));
         BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
             roomValidate.validateUpdateRoom(mockRoom,existRoom.getId());
