@@ -24,7 +24,6 @@ public class WaterElectricSerice {
         oldWaterElectric.setDateUpdate(newWaterElectric.getDateUpdate());
 
         return waterElectricRepositoy.save(oldWaterElectric);
-
     }
 
     public WaterElectric getWaterElectrictByRoomId(Long roomId){

@@ -1,5 +1,8 @@
 package com.fu.lhm.house.service;
 
+import com.fu.lhm.bill.entity.Bill;
+import com.fu.lhm.bill.entity.BillContent;
+import com.fu.lhm.bill.entity.BillType;
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
@@ -20,9 +23,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 
 @RequiredArgsConstructor
@@ -92,7 +98,6 @@ public class HouseServiceTest {
         Assert.assertEquals(houseTest.getWaterPrice(), createdHouse.getWaterPrice());
         Assert.assertEquals(houseTest.getElectricPrice(), createdHouse.getElectricPrice());
         Assert.assertEquals(houseTest.getUser(), createdHouse.getUser());
-
     }
 
     @Test
@@ -670,9 +675,7 @@ public class HouseServiceTest {
 
     @Test
     public void testGetListHouse_2() {
-
         // given
-
         User user = new User();
         user.setId(1L);
 
@@ -724,6 +727,36 @@ public class HouseServiceTest {
             Assert.assertEquals(houseList.get(i).getRoomNumber(), result.get(i).getRoomNumber());
             Assert.assertEquals(houseList.get(i).getEmptyRoom(), result.get(i).getEmptyRoom());
         }
+    }
+
+    @Test
+    public void testDeleteHouse() {
+
+        House house = House.builder()
+                .id(1L)
+                .name("Test house 1")
+                .city("Hanoi")
+                .district("Ba Dinh")
+                .address("123 Test street")
+                .electricPrice(3000)
+                .waterPrice(20000)
+                .floor(4)
+                .roomNumber(0)
+                .emptyRoom(0)
+                .description("Test description")
+                .user(user)
+                .build();
+
+        when(houseRepository.save(any(House.class))).thenReturn(house);
+
+        House savedHouse = houseRepository.save(house);
+
+
+        houseService.deleteHouse(savedHouse.getId());
+
+
+        Optional<House> deletedHouse = houseRepository.findById(savedHouse.getId());
+        assertFalse(deletedHouse.isPresent());
     }
 
 }

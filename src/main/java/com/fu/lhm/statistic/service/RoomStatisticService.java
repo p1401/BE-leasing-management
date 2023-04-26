@@ -37,7 +37,7 @@ public class RoomStatisticService {
             roomStatistic.setRoomHaveSlot(haveSlot);
             roomStatistic.setRoomEmpty(empty);
 
-            System.out.println("xxxxxxxxxxxxxxxxxxxxxxx "+full+haveSlot+empty);
+
             return roomStatistic;
         }
 

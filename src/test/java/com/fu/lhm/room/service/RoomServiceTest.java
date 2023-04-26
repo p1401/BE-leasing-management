@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 
 @RequiredArgsConstructor
@@ -913,5 +915,29 @@ public class RoomServiceTest {
         Assert.assertEquals(3, result.get(1).getMaxTenant());
         Assert.assertEquals(2, result.get(1).getCurrentTenant());
         Assert.assertEquals(1, result.get(1).getFloor());
+    }
+
+    @Test
+    public void testDeleteRoom() {
+        // Tạo mới một Bill
+        Room mockRoom = new Room();
+        mockRoom.setId(1L);
+        mockRoom.setName("Test Room 3");
+        mockRoom.setArea(100);
+        mockRoom.setRoomMoney(100);
+        mockRoom.setMaxTenant(200);
+        mockRoom.setCurrentTenant(1);
+        mockRoom.setFloor(1);
+
+        when(roomRepository.save(any(Room.class))).thenReturn(mockRoom);
+
+        Room savedRoom = roomRepository.save(mockRoom);
+
+        // Gọi hàm deleteBill() với billId của bill vừa tạo
+        roomService.deleteRoom(savedRoom.getId());
+
+        // Kiểm tra xem bill còn tồn tại trong database hay không
+        Optional<Room> deletedRoom = roomRepository.findById(savedRoom.getId());
+        assertFalse(deletedRoom.isPresent());
     }
 }
