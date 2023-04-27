@@ -38,16 +38,17 @@ public class BillSchedule {
     }
 
     //Run every day at 12h
-    @Scheduled(cron = "0 0 6 * * *")
+    @Scheduled(cron = "*/1 * * * * *")
     public void checkDurationBill() {
         LocalDate today = LocalDate.now();
         List<Bill> listBill = billRepository.findAllByIsPayFalse();
         for (Bill bill : listBill) {
             long days = today.until(bill.getDateCreate(), ChronoUnit.DAYS);
-
+            System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"+-days);
             //neu qua 15 ngay chưa thanh toán
-                if (days>=15) {
-                    checkIfBill15days(bill, days);
+                if (days<=-15) {
+                    System.out.println("Quá hạn 15 ngày");
+                    checkIfBill15days(bill, -days);
             }
         }
     }
@@ -77,13 +78,14 @@ public class BillSchedule {
             billType="tiền phụ trội";
         }
         Notification notification = new Notification();
-        notification.setMessage("Hóa đơn "+billType+" ở phòng " + bill.getContract().getTenant().getRoom().getName()+" đã "+days+" chưa thanh toán");
+        notification.setMessage("Hóa đơn "+billType+" ở phòng " + bill.getContract().getTenant().getRoom().getName()+" đã "+days+" ngày chưa thanh toán");
         notification.setDateCreate(new Date());
         notification.setIsRead(false);
         notification.setRoomId(bill.getRoomId());
         notification.setHouseId(bill.getHouseId());
         notification.setUser(bill.getContract().getTenant().getRoom().getHouse().getUser());
-        notificationRepository.save(notification);
+
+       notificationRepository.save(notification);
     }
 
     public void createBill(Contract contract){

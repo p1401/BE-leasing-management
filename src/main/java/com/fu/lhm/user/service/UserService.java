@@ -29,7 +29,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
     private final HttpServletRequest httpServletRequest;
-    private User getUserToken() throws BadRequestException {
+    public User getUserToken() throws BadRequestException {
         return jwtService.getUser(httpServletRequest);
     }
 
