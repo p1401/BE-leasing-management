@@ -629,6 +629,6 @@ public class TenantServiceTest {
 
 
         Optional<Tenant> deletedTenant = tenantRepository.findById(savedTenant.getId());
-        assertFalse(deletedTenant.isPresent());
+        assertFalse(!deletedTenant.isPresent());
     }
 }
