@@ -43,7 +43,7 @@ public class Room {
     private int moneyNotPay;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "houseId")
     @JsonBackReference
     House house;

@@ -14,6 +14,4 @@ public class LhmApplication {
     public static void main(String[] args) {
         SpringApplication.run(LhmApplication.class, args);
     }
-
-
 }
