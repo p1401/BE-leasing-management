@@ -11,6 +11,7 @@ import com.fu.lhm.user.model.AuthenticationResponse;
 import com.fu.lhm.user.model.RegisterRequest;
 import com.fu.lhm.user.model.UserRequest;
 import com.fu.lhm.user.repository.UserRepository;
+import com.fu.lhm.user.service.UserService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

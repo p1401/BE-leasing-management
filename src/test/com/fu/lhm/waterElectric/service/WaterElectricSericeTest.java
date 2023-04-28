@@ -55,7 +55,6 @@ public class WaterElectricSericeTest {
         room.setId(1L);
 
         // Mock the dependencies
-        when(roomRepository.findById(room.getId())).thenReturn(Optional.of(room));
         when(waterElectricRepository.findByRoom_Id(room.getId())).thenReturn(new WaterElectric());
         when(waterElectricRepository.save(any(WaterElectric.class))).thenReturn(newWaterElectric);
 
