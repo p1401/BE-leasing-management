@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,11 +40,13 @@ public class BillController {
 
         return ResponseEntity.ok(billService.createAllBill());
     }
+
     @GetMapping("/detail/{billId}")
     public ResponseEntity<Bill> getBillById(@PathVariable("billId") Long billId) throws BadRequestException {
 
         return ResponseEntity.ok(billService.getBillById(billId));
     }
+    
     @PostMapping("")
     public ResponseEntity<Bill> createBill(@RequestParam(name = "houseId") Long houseId,
                                                    @RequestParam(name = "roomId", required = false) Long roomId,
@@ -51,6 +54,7 @@ public class BillController {
         billValidate.validateForCreateBill(houseId,bill);
         return ResponseEntity.ok(billService.createBillReceive2(getUserToken(),houseId,roomId, bill));
     }
+
     @PostMapping("/{roomId}")
     public ResponseEntity<Bill> createReceiveBill(@PathVariable("roomId") Long roomId, @RequestBody BillReceiveRequest bill) throws BadRequestException {
         if (bill.getBillContent().name().equalsIgnoreCase("TIENPHONG") && bill.getBillType().name().equalsIgnoreCase("RECEIVE")) {
@@ -78,7 +82,7 @@ public class BillController {
                                                           @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        return ResponseEntity.ok(billService.getListBillByRoomId(roomId, PageRequest.of(page, pageSize)));
+        return ResponseEntity.ok(billService.getListBillByRoomId(roomId, PageRequest.of(page, pageSize, Sort.by("dateCreate").descending())));
     }
 
     @DeleteMapping ("/{billId}")

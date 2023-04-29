@@ -44,7 +44,6 @@ public class BillSchedule {
         List<Bill> listBill = billRepository.findAllByIsPayFalse();
         for (Bill bill : listBill) {
             long days = today.until(bill.getDateCreate(), ChronoUnit.DAYS);
-            System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"+-days);
             //neu qua 15 ngay chưa thanh toán
                 if (days<=-15) {
                     System.out.println("Quá hạn 15 ngày");
@@ -52,13 +51,18 @@ public class BillSchedule {
             }
         }
     }
+
     //Tự động tạo hóa đơn theo ngày nhập ở hợp đồng
     @Scheduled(cron = "0 0 6 * * *")
     public void checkAutoCreateBill() {
         LocalDate today = LocalDate.now();
         List<Contract> listContract = contractRepository.findAllByIsActiveTrue();
         for (Contract contract : listContract) {
-            if(contract.getAutoBillDate()==today.getDayOfMonth()){
+            int autoBillDate = contract.getAutoBillDate();
+            if (autoBillDate > today.lengthOfMonth()) {
+                autoBillDate = today.lengthOfMonth();
+            }
+            if(autoBillDate==today.getDayOfMonth()){
                 long roomId = contract.getTenant().getRoom().getId();
                 int month = today.getMonthValue();
                 int year = today.getYear();

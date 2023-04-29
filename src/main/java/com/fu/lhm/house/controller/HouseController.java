@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +49,7 @@ public class HouseController {
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
     ) throws BadRequestException {
-        Page<House> listHouse = houseService.getListHouse(getUserToken(), PageRequest.of(page, pageSize));
+        Page<House> listHouse = houseService.getListHouse(getUserToken(),houseName, PageRequest.of(page, pageSize, Sort.by("name")));
 
         return ResponseEntity.ok(listHouse);
     }

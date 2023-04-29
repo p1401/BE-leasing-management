@@ -9,6 +9,7 @@ import com.fu.lhm.tenant.validate.TenantValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,7 +58,7 @@ public class TenantController {
                                                               @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                               @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        Page<Tenant> listTenant = tenantService.getListTenantByRoomId(id, PageRequest.of(page, pageSize));
+        Page<Tenant> listTenant = tenantService.getListTenantByRoomId(id, PageRequest.of(page, pageSize, Sort.by("name")));
 
         return ResponseEntity.ok(listTenant);
     }
@@ -69,7 +70,7 @@ public class TenantController {
                                                    @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        Page<Tenant> listTenant = tenantService.getListTenants(houseId, roomId, isStay, PageRequest.of(page, pageSize));
+        Page<Tenant> listTenant = tenantService.getListTenants(houseId, roomId, isStay, PageRequest.of(page, pageSize,Sort.by("name")));
 
         return ResponseEntity.ok(listTenant);
     }

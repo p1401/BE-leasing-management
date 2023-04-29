@@ -13,6 +13,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.WritableResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -86,7 +87,7 @@ public class ContractController {
                                                    @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        Page<Contract> listContract = contractService.getContracts(houseId, roomId, isActive,PageRequest.of(page, pageSize));
+        Page<Contract> listContract = contractService.getContracts(houseId, roomId, isActive,PageRequest.of(page, pageSize, Sort.by("toDate").descending()));
 
         return ResponseEntity.ok(listContract);
     }

@@ -44,7 +44,16 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
             + "AND (:fromDate IS NULL OR b.date_create >= :fromDate) "
             + "AND (:toDate IS NULL OR b.date_create <= :toDate) "
             + "AND (:billType IS NULL OR b.bill_type = :billType) "
-            + "AND (:isPay IS NULL OR b.is_pay = :isPay) ",
+            + "AND (:isPay IS NULL OR b.is_pay = :isPay) "
+            + "ORDER BY b.date_create DESC",
+            countQuery = "SELECT count(*) FROM bills b "
+                    + "WHERE (:userId IS NULL OR b.user_id = :userId) "
+                    + "AND (:houseId IS NULL OR b.house_id = :houseId) "
+                    + "AND (:roomId IS NULL OR b.room_id = :roomId) "
+                    + "AND (:fromDate IS NULL OR b.date_create >= :fromDate) "
+                    + "AND (:toDate IS NULL OR b.date_create <= :toDate) "
+                    + "AND (:billType IS NULL OR b.bill_type = :billType) "
+                    + "AND (:isPay IS NULL OR b.is_pay = :isPay) ",
             nativeQuery = true)
     Page<Bill> findBills(
             @Param("userId") Long userId,
