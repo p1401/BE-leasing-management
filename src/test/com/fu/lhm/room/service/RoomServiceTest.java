@@ -741,8 +741,8 @@ public class RoomServiceTest {
 
         Page<Room> mockPage = new PageImpl<>(mockRooms);
         // When
-        when(roomRepository.findAllByHouse_IdAndFloor(1L, 1, Pageable.ofSize(10))).thenReturn(mockPage);
-        Page<Room> page = roomService.getListRoomByHouseIdAndFloor(1L, 1,Pageable.ofSize(10));
+        when(roomRepository.findAllByHouse_IdAndFloorAndNameContainingIgnoreCase(1L, 1,"", Pageable.ofSize(10))).thenReturn(mockPage);
+        Page<Room> page = roomService.getListRoomByHouseIdAndFloor(1L, 1,"",Pageable.ofSize(10));
         List<Room> result = page.toList();
 
         //Assert
@@ -817,8 +817,8 @@ public class RoomServiceTest {
 
         Page<Room> mockPage = new PageImpl<>(mockRooms);
         // When
-        when(roomRepository.findAllByHouse_IdAndFloor(1L, 1, Pageable.ofSize(10))).thenReturn(mockPage);
-        Page<Room> page = roomService.getListRoomByHouseIdAndFloor(1L, 1,Pageable.ofSize(10));
+        when(roomRepository.findAllByHouse_IdAndFloorAndNameContainingIgnoreCase(1L, 1,"", Pageable.ofSize(10))).thenReturn(mockPage);
+        Page<Room> page = roomService.getListRoomByHouseIdAndFloor(1L, 1,"",Pageable.ofSize(10));
         List<Room> result = page.toList();
 
         //Assert
@@ -893,8 +893,8 @@ public class RoomServiceTest {
 
         Page<Room> mockPage = new PageImpl<>(mockRooms);
         // When
-        when(roomRepository.findAllByHouse_IdAndFloor(1L, 1, Pageable.ofSize(10))).thenReturn(mockPage);
-        Page<Room> page = roomService.getListRoomByHouseIdAndFloor(1L, 1,Pageable.ofSize(10));
+        when(roomRepository.findAllByHouse_IdAndFloorAndNameContainingIgnoreCase(1L, 1,"", Pageable.ofSize(10))).thenReturn(mockPage);
+        Page<Room> page = roomService.getListRoomByHouseIdAndFloor(1L, 1,"",Pageable.ofSize(10));
         List<Room> result = page.toList();
 
         //Assert

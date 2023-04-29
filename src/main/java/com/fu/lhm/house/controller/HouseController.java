@@ -44,10 +44,11 @@ public class HouseController {
 
     @GetMapping({""})
     public ResponseEntity<Page<House>> getListHouse(
+            @RequestParam(name = "name", defaultValue = "") String houseName,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
     ) throws BadRequestException {
-        Page<House> listHouse = houseService.getListHouse(getUserToken(), PageRequest.of(page, pageSize));
+        Page<House> listHouse = houseService.getListHouse(getUserToken(),houseName, PageRequest.of(page, pageSize));
 
         return ResponseEntity.ok(listHouse);
     }
