@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
-    Page<Room> findAllByHouse_IdAndFloor(Long houseId, int floor, Pageable pageable);
+    Page<Room> findAllByHouse_IdAndFloorAndNameContainingIgnoreCase(Long houseId, int floor,String roomName, Pageable pageable);
 
     List<Room> findAllByHouse_Id(Long id);
 

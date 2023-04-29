@@ -28,6 +28,6 @@ public interface HouseRepository extends JpaRepository<House, Long> {
             @Param("userId") Long userId,
             @Param("houseId") Long houseId);
 
-    Page<House> findAllByUser(User user, Pageable pageable);
+    Page<House> findByUserAndNameContaining(User user,String houseName, Pageable pageable);
 
 }

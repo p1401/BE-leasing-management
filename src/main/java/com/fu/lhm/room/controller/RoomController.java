@@ -23,10 +23,11 @@ public class RoomController {
     public ResponseEntity<Page<Room>> getListRoom(
             @RequestParam(name = "houseId") Long houseId,
             @RequestParam(name = "floor", defaultValue = "0") int floor,
+            @RequestParam(name = "name", defaultValue = "") String roomName,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        Page<Room> listRoom = roomService.getListRoomByHouseIdAndFloor(houseId, floor, PageRequest.of(page, pageSize));
+        Page<Room> listRoom = roomService.getListRoomByHouseIdAndFloor(houseId, floor,roomName, PageRequest.of(page, pageSize));
         return ResponseEntity.ok(listRoom);
     }
 

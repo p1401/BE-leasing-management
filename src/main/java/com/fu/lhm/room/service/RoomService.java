@@ -32,9 +32,9 @@ public class RoomService {
 
     private final BillRepository billRepository;
 
-    public Page<Room> getListRoomByHouseIdAndFloor(Long houseId, int floor, Pageable page) {
+    public Page<Room> getListRoomByHouseIdAndFloor(Long houseId, int floor,String roomName, Pageable page) {
 
-            Page<Room> listRoom = roomRepository.findAllByHouse_IdAndFloor(houseId, floor, page);
+            Page<Room> listRoom = roomRepository.findAllByHouse_IdAndFloorAndNameContainingIgnoreCase(houseId, floor,roomName, page);
 
             for(Room room : listRoom){
                 List<Bill> listBill = billRepository.findAllByRoomIdAndBillType(room.getId(), BillType.RECEIVE);

@@ -44,6 +44,7 @@ public class HouseController {
 
     @GetMapping({""})
     public ResponseEntity<Page<House>> getListHouse(
+            @RequestParam(name = "name", defaultValue = "") String houseName,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
     ) throws BadRequestException {
