@@ -38,7 +38,7 @@ public class BillSchedule {
     }
 
     //Run every day at 12h
-    @Scheduled(cron = "*/1 * * * * *")
+    @Scheduled(cron = "0 0 6 * * *")
     public void checkDurationBill() {
         LocalDate today = LocalDate.now();
         List<Bill> listBill = billRepository.findAllByIsPayFalse();

@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/v1/rooms")
 @RequiredArgsConstructor
-public class
-RoomController {
+public class RoomController {
 
     private final RoomService roomService;
 
@@ -50,8 +49,7 @@ RoomController {
     }
 
     @GetMapping({"/{roomId}"})
-    public ResponseEntity<Room> getRoomById(@PathVariable("roomId") Long id) {
-//        houseValidate.validateCreateUpdateHouse(house);
+    public ResponseEntity<Room> getRoomById(@PathVariable("roomId") Long id) throws BadRequestException {
         return ResponseEntity.ok(roomService.getRoom(id));
     }
 

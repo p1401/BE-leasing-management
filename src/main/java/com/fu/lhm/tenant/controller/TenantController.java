@@ -3,7 +3,6 @@ package com.fu.lhm.tenant.controller;
 
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.tenant.entity.Tenant;
-import com.fu.lhm.tenant.model.TenantRequest;
 import com.fu.lhm.tenant.repository.TenantRepository;
 import com.fu.lhm.tenant.service.TenantService;
 import com.fu.lhm.tenant.validate.TenantValidate;
@@ -36,19 +35,19 @@ public class TenantController {
     }
 
     @GetMapping("/{tenantId}")
-    public ResponseEntity<Tenant> getTenantById(@PathVariable("tenantId") Long id) {
+    public ResponseEntity<Tenant> getTenantById(@PathVariable("tenantId") Long id) throws BadRequestException {
 
         return ResponseEntity.ok(tenantService.getTenantById(id));
     }
 
     @DeleteMapping("/{tenantId}")
-    public void deleteTenant(@PathVariable("tenantId") Long id) {
+    public void deleteTenant(@PathVariable("tenantId") Long id) throws BadRequestException {
 
         tenantService.deleteTenant(id);
     }
 
     @PutMapping("/leave/{tenantId}")
-    public Tenant leaveRoom(@PathVariable("tenantId") Long id) {
+    public Tenant leaveRoom(@PathVariable("tenantId") Long id) throws BadRequestException {
 
         return tenantService.leaveRoom(id);
     }

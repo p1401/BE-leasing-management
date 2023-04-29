@@ -1,9 +1,9 @@
 package com.fu.lhm.tenant.service;
 
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.tenant.entity.Tenant;
-import com.fu.lhm.tenant.model.TenantRequest;
 import com.fu.lhm.tenant.repository.TenantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -73,13 +73,13 @@ public class TenantService {
         return Page.empty(page);
     }
 
-    public Tenant getTenantById(Long id) {
+    public Tenant getTenantById(Long id) throws BadRequestException {
 
-        return tenantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Người thuê không tồn tại!"));
+        return tenantRepository.findById(id).orElseThrow(() -> new BadRequestException("Người thuê không tồn tại!"));
     }
 
-    public Tenant leaveRoom(Long tenantId) {
-        Tenant tenant = tenantRepository.findById(tenantId).orElseThrow(() -> new EntityNotFoundException("Người thuê không tồn tại!"));
+    public Tenant leaveRoom(Long tenantId) throws BadRequestException {
+        Tenant tenant = tenantRepository.findById(tenantId).orElseThrow(() -> new BadRequestException("Người thuê không tồn tại!"));
         tenant.setIsStay(false);
         Room room = roomrepository.findById(tenant.getRoom().getId()).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
         room.setCurrentTenant(room.getCurrentTenant()-1);
@@ -87,8 +87,8 @@ public class TenantService {
         return tenantRepository.save(tenant);
     }
 
-    public void deleteTenant(Long tenantId) {
-        Tenant tenant = tenantRepository.findById(tenantId).orElseThrow(() -> new EntityNotFoundException("Người thuê không tồn tại!"));
+    public void deleteTenant(Long tenantId) throws BadRequestException {
+        Tenant tenant = tenantRepository.findById(tenantId).orElseThrow(() -> new BadRequestException("Người thuê không tồn tại!"));
         if(tenant.getIsStay()==true){
             Room room = tenant.getRoom();
             room.setCurrentTenant(room.getCurrentTenant()-1);

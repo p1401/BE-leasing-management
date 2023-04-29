@@ -85,9 +85,8 @@ public class RoomService {
         return roomRepository.save(oldRoom);
     }
 
-    public Room getRoom(Long roomId) {
-
-        return roomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("Phòng không tồn tại!"));
+    public Room getRoom(Long roomId) throws BadRequestException {
+        return roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
     }
 
 
