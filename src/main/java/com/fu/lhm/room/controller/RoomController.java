@@ -7,6 +7,7 @@ import com.fu.lhm.room.validate.RoomValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ RoomController {
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        Page<Room> listRoom = roomService.getListRoomByHouseIdAndFloor(houseId, floor,roomName, PageRequest.of(page, pageSize));
+        Page<Room> listRoom = roomService.getListRoomByHouseIdAndFloor(houseId, floor,roomName, PageRequest.of(page, pageSize, Sort.by("name")));
         return ResponseEntity.ok(listRoom);
     }
 
@@ -52,7 +53,6 @@ RoomController {
 
     @GetMapping({"/{roomId}"})
     public ResponseEntity<Room> getRoomById(@PathVariable("roomId") Long id) {
-//        houseValidate.validateCreateUpdateHouse(house);
         return ResponseEntity.ok(roomService.getRoom(id));
     }
 
