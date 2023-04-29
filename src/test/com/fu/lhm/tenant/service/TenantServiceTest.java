@@ -622,7 +622,6 @@ public class TenantServiceTest {
 
 
         when(tenantRepository.findById(anyLong())).thenReturn(Optional.of(savedTenant));
-        when(roomRepository.findById(anyLong())).thenReturn(Optional.of(room));
 
 
         tenantService.deleteTenant(savedTenant.getId());

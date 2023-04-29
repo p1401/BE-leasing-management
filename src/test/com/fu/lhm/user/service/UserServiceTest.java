@@ -1,6 +1,7 @@
 package com.fu.lhm.user.service;
 
 import com.fu.lhm.exception.BadRequestException;
+import com.fu.lhm.house.entity.House;
 import com.fu.lhm.jwt.entity.Token;
 import com.fu.lhm.jwt.entity.TokenType;
 import com.fu.lhm.jwt.repository.TokenRepository;
@@ -12,6 +13,7 @@ import com.fu.lhm.user.model.RegisterRequest;
 import com.fu.lhm.user.model.UserRequest;
 import com.fu.lhm.user.repository.UserRepository;
 import com.fu.lhm.user.service.UserService;
+import com.fu.lhm.user.validate.UserValidate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +30,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
+
+    @InjectMocks
+    private UserValidate userValidate;
 
     @Mock
     private TokenRepository tokenRepository;
@@ -78,9 +83,214 @@ public class UserServiceTest {
         // Call the register method with the test RegisterRequest object
         AuthenticationResponse response = userService.register(request);
 
-
         // Verify that the AuthenticationResponse object contains the correct JWT token
         Assert.assertEquals(jwtToken, response.getToken());
+    }
+
+    @Test()
+    public void testCreateHouse_InvalidData_Name() {
+        // given
+        RegisterRequest request = new RegisterRequest();
+        request.setName("");
+        request.setEmail("john.doe@example.com");
+        request.setPassword("password123");
+        request.setAddress("123 Main St.");
+        request.setPhone("555-1234");
+        request.setIdentityNumber("123456789");
+        request.setBirth(new Date());
+
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .role(Role.USER)
+                .address(request.getAddress())
+                .phone(request.getPhone())
+                .identityNumber(request.getIdentityNumber())
+                .birth(request.getBirth())
+                .build();
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateCreateUser(request);
+        });
+        Assert.assertEquals("Nhập họ tên đầy đủ", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateHouse_InvalidData_Email() {
+        // given
+        RegisterRequest request = new RegisterRequest();
+        request.setName("xxx");
+        request.setEmail("");
+        request.setPassword("password123");
+        request.setAddress("123 Main St.");
+        request.setPhone("555-1234");
+        request.setIdentityNumber("123456789");
+        request.setBirth(new Date());
+
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .role(Role.USER)
+                .address(request.getAddress())
+                .phone(request.getPhone())
+                .identityNumber(request.getIdentityNumber())
+                .birth(request.getBirth())
+                .build();
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateCreateUser(request);
+        });
+        Assert.assertEquals("Nhập Email", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateHouse_InvalidData_Email2() {
+        // given
+        RegisterRequest request = new RegisterRequest();
+        request.setName("xxx");
+        request.setEmail("xxx");
+        request.setPassword("password123");
+        request.setAddress("123 Main St.");
+        request.setPhone("555-1234");
+        request.setIdentityNumber("123456789");
+        request.setBirth(new Date());
+
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .role(Role.USER)
+                .address(request.getAddress())
+                .phone(request.getPhone())
+                .identityNumber(request.getIdentityNumber())
+                .birth(request.getBirth())
+                .build();
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateCreateUser(request);
+        });
+        Assert.assertEquals("Email không đúng định dạng!", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateHouse_InvalidData_Password() {
+        // given
+        RegisterRequest request = new RegisterRequest();
+        request.setName("xxx");
+        request.setEmail("john.doe@example.com");
+        request.setPassword("");
+        request.setAddress("123 Main St.");
+        request.setPhone("555-1234");
+        request.setIdentityNumber("123456789");
+        request.setBirth(new Date());
+
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .role(Role.USER)
+                .address(request.getAddress())
+                .phone(request.getPhone())
+                .identityNumber(request.getIdentityNumber())
+                .birth(request.getBirth())
+                .build();
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateCreateUser(request);
+        });
+        Assert.assertEquals("Nhập password", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateHouse_InvalidData_Address() {
+        // given
+        RegisterRequest request = new RegisterRequest();
+        request.setName("xxx");
+        request.setEmail("john.doe@example.com");
+        request.setPassword("xxx");
+        request.setAddress("");
+        request.setPhone("555-1234");
+        request.setIdentityNumber("123456789");
+        request.setBirth(new Date());
+
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .role(Role.USER)
+                .address(request.getAddress())
+                .phone(request.getPhone())
+                .identityNumber(request.getIdentityNumber())
+                .birth(request.getBirth())
+                .build();
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateCreateUser(request);
+        });
+        Assert.assertEquals("Nhập địa chỉ", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateHouse_InvalidData_Phone() {
+        // given
+        RegisterRequest request = new RegisterRequest();
+        request.setName("xxx");
+        request.setEmail("john.doe@example.com");
+        request.setPassword("xxx");
+        request.setAddress("xcxxxx");
+        request.setPhone("");
+        request.setIdentityNumber("123456789");
+        request.setBirth(new Date());
+
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .role(Role.USER)
+                .address(request.getAddress())
+                .phone(request.getPhone())
+                .identityNumber(request.getIdentityNumber())
+                .birth(request.getBirth())
+                .build();
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateCreateUser(request);
+        });
+        Assert.assertEquals("Nhập số điện thoại", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateHouse_InvalidData_Phone2() {
+        // given
+        RegisterRequest request = new RegisterRequest();
+        request.setName("xxx");
+        request.setEmail("john.doe@example.com");
+        request.setPassword("xxx");
+        request.setAddress("xcxxxx");
+        request.setPhone("cz");
+        request.setIdentityNumber("123456789");
+        request.setBirth(new Date());
+
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateCreateUser(request);
+        });
+        Assert.assertEquals("Số điện thoại không đúng định dạng!", exception.getMessage());
+    }
+
+    @Test()
+    public void testCreateHouse_InvalidData_IdentityNumber() {
+        // given
+        RegisterRequest request = new RegisterRequest();
+        request.setName("xxx");
+        request.setEmail("john.doe@example.com");
+        request.setPassword("xxx");
+        request.setAddress("xcxxxx");
+        request.setPhone("0904270666");
+        request.setIdentityNumber("");
+        request.setBirth(new Date());
+
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateCreateUser(request);
+        });
+        Assert.assertEquals("Nhập CMND", exception.getMessage());
     }
 
     @Test
@@ -118,6 +328,141 @@ public class UserServiceTest {
         assertEquals(userRequest.getBirth(), oldUser.getBirth());
         assertEquals(userRequest.getPhone(), oldUser.getPhone());
         assertEquals(userRequest.getIdentityNumber(), oldUser.getIdentityNumber());
+    }
+
+    @Test()
+    public void testUpdateHouse_InvalidData_Name() {
+        // given
+        UserRequest request = new UserRequest();
+        request.setName("");
+        request.setEmail("john.doe@example.com");
+        request.setPassword("password123");
+        request.setAddress("123 Main St.");
+        request.setPhone("555-1234");
+        request.setIdentityNumber("123456789");
+        request.setBirth(new Date());
+
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateUpdateUser(request);
+        });
+        Assert.assertEquals("Nhập họ tên đầy đủ", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdateUser_InvalidData_Email() {
+        // given
+        UserRequest request = new UserRequest();
+        request.setName("xxx");
+        request.setEmail("");
+        request.setPassword("password123");
+        request.setAddress("123 Main St.");
+        request.setPhone("555-1234");
+        request.setIdentityNumber("123456789");
+        request.setBirth(new Date());
+
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateUpdateUser(request);
+        });
+
+        Assert.assertEquals("Email không đúng định dạng!", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdateUser_InvalidData_Email2() {
+        // given
+        UserRequest request = new UserRequest();
+        request.setName("xxx");
+        request.setEmail("xxx");
+        request.setPassword("password123");
+        request.setAddress("123 Main St.");
+        request.setPhone("555-1234");
+        request.setIdentityNumber("123456789");
+        request.setBirth(new Date());
+
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateUpdateUser(request);
+        });
+        Assert.assertEquals("Email không đúng định dạng!", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdate_InvalidData_Address() {
+        // given
+        UserRequest request = new UserRequest();
+        request.setName("xxx");
+        request.setEmail("john.doe@example.com");
+        request.setPassword("xxxx");
+        request.setAddress("");
+        request.setPhone("555-1234");
+        request.setIdentityNumber("123456789");
+        request.setBirth(new Date());
+
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateUpdateUser(request);
+        });
+        //when
+
+        Assert.assertEquals("Nhập địa chỉ", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdateUser_InvalidData_Phone() {
+        UserRequest request = new UserRequest();
+        request.setName("xxx");
+        request.setEmail("john.doe@example.com");
+        request.setPassword("xxxx");
+        request.setAddress("asdasd");
+        request.setPhone("");
+        request.setIdentityNumber("123456789");
+        request.setBirth(new Date());
+
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateUpdateUser(request);
+        });
+        Assert.assertEquals("Nhập số điện thoại", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdateUser_InvalidData_Phone2() {
+        // given
+        UserRequest request = new UserRequest();
+        request.setName("xxx");
+        request.setEmail("john.doe@example.com");
+        request.setPassword("xxxx");
+        request.setAddress("asdasd");
+        request.setPhone("xxx");
+        request.setIdentityNumber("123456789");
+        request.setBirth(new Date());
+
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateUpdateUser(request);
+        });
+        Assert.assertEquals("Số điện thoại không đúng định dạng!", exception.getMessage());
+    }
+
+    @Test()
+    public void testUpdate_InvalidData_IdentityNumber() {
+        // given
+        UserRequest request = new UserRequest();
+        request.setName("xxx");
+        request.setEmail("john.doe@example.com");
+        request.setPassword("xxxx");
+        request.setAddress("asdasd");
+        request.setPhone("xxx");
+        request.setIdentityNumber("");
+        request.setBirth(new Date());
+
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            userValidate.validateUpdateUser(request);
+        });
+        Assert.assertEquals("Nhập CMND", exception.getMessage());
     }
 
     @Test
