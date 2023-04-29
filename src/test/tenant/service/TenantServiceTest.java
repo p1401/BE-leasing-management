@@ -1,4 +1,4 @@
-package com.fu.lhm.tenant.service;
+package tenant.service;
 
 import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.house.entity.House;
@@ -551,7 +551,7 @@ public class TenantServiceTest {
     }
 
     @Test
-    public void testGetTenantById() {
+    public void testGetTenantById() throws BadRequestException {
         // Create a new tenant
         Tenant tenant = new Tenant();
         tenant.setName("John Doe");
@@ -577,7 +577,7 @@ public class TenantServiceTest {
     }
 
     @Test
-    public void leaveRoom() {
+    public void leaveRoom() throws BadRequestException {
         // Arrange
         Tenant tenant = new Tenant();
         tenant.setId(1L);
@@ -603,7 +603,7 @@ public class TenantServiceTest {
     }
 
     @Test
-    public void deleteTenant() {
+    public void deleteTenant() throws BadRequestException {
         Room room = new Room();
         room.setId(1L);
 
