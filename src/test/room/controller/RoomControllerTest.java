@@ -229,11 +229,12 @@ public class RoomControllerTest {
         int floor = 5;
 
         Page<Room> rooms = new PageImpl<>(Collections.singletonList(new Room()));
-        when(roomService.getListRoomByHouseIdAndFloor(houseID, floor, PageRequest.of(0, 10))).thenReturn(rooms);
+        when(roomService.getListRoomByHouseIdAndFloor(houseID, floor, "", PageRequest.of(0, 10))).thenReturn(rooms);
 
         mockMvc.perform(get("/api/v1/rooms")
                         .param("houseId", houseID.toString())
                         .param("floor", String.valueOf(floor))
+                        .param("name", "")
                         .param("page", "0")
                         .param("pageSize", "10"))
                         .andExpect(status().isOk())
@@ -245,11 +246,12 @@ public class RoomControllerTest {
         Long houseID = 1L;
         int floor = 5;
 
-        when(roomService.getListRoomByHouseIdAndFloor(houseID, floor, PageRequest.of(0, 10))).thenReturn(null);
+        when(roomService.getListRoomByHouseIdAndFloor(houseID, floor, "", PageRequest.of(0, 10))).thenReturn(null);
 
         String responseContent = mockMvc.perform(get("/api/v1/rooms")
                         .param("houseId", houseID.toString())
                         .param("floor", String.valueOf(floor))
+                        .param("name", "")
                         .param("page", "0")
                         .param("pageSize", "10"))
                 .andExpect(status().isOk())

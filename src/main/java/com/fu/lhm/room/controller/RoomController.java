@@ -52,7 +52,7 @@ RoomController {
     }
 
     @GetMapping({"/{roomId}"})
-    public ResponseEntity<Room> getRoomById(@PathVariable("roomId") Long id) {
+    public ResponseEntity<Room> getRoomById(@PathVariable("roomId") Long id) throws BadRequestException {
         return ResponseEntity.ok(roomService.getRoom(id));
     }
 

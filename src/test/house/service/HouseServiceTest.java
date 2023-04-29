@@ -658,7 +658,7 @@ public class HouseServiceTest {
 
         Page<House> mockPage = new PageImpl<>(houseList);
         // When
-        when(houseRepository.findAllByUser(user,Pageable.ofSize(10))).thenReturn(mockPage);
+        when(houseRepository.findByUserAndNameContaining(user, "", Pageable.ofSize(10))).thenReturn(mockPage);
         when(roomRepository.findAllByHouse_Id(anyLong()))
                 .thenReturn(new ArrayList<>());
         Page<House> page = houseService.getListHouse(user, Pageable.ofSize(10));
@@ -714,7 +714,7 @@ public class HouseServiceTest {
 
         Page<House> mockPage = new PageImpl<>(houseList);
         // When
-        when(houseRepository.findAllByUser(user, Pageable.ofSize(10))).thenReturn(mockPage);
+        when(houseRepository.findByUserAndNameContaining(user, "", Pageable.ofSize(10))).thenReturn(mockPage);
         when(roomRepository.findAllByHouse_Id(anyLong()))
                 .thenReturn(new ArrayList<>());
         Page<House> page = houseService.getListHouse(user, Pageable.ofSize(10));

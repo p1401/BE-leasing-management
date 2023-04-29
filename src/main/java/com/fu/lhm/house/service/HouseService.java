@@ -42,7 +42,7 @@ public class HouseService {
 
     public Page<House> getListHouse(User user, Pageable pageable) {
 
-        Page<House> listHouse = houseRepository.findAllByUser(user);
+        Page<House> listHouse = houseRepository.findByUserAndNameContaining(user, "", pageable);
 
         for(House house : listHouse){
             int emptyRoom = 0;
