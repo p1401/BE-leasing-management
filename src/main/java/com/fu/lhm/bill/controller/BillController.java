@@ -40,11 +40,13 @@ public class BillController {
 
         return ResponseEntity.ok(billService.createAllBill());
     }
+
     @GetMapping("/detail/{billId}")
     public ResponseEntity<Bill> getBillById(@PathVariable("billId") Long billId) throws BadRequestException {
 
         return ResponseEntity.ok(billService.getBillById(billId));
     }
+    
     @PostMapping("")
     public ResponseEntity<Bill> createBill(@RequestParam(name = "houseId") Long houseId,
                                                    @RequestParam(name = "roomId", required = false) Long roomId,
@@ -52,6 +54,7 @@ public class BillController {
         billValidate.validateForCreateBill(houseId,bill);
         return ResponseEntity.ok(billService.createBillReceive2(getUserToken(),houseId,roomId, bill));
     }
+
     @PostMapping("/{roomId}")
     public ResponseEntity<Bill> createReceiveBill(@PathVariable("roomId") Long roomId, @RequestBody BillReceiveRequest bill) throws BadRequestException {
         if (bill.getBillContent().name().equalsIgnoreCase("TIENPHONG") && bill.getBillType().name().equalsIgnoreCase("RECEIVE")) {
