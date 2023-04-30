@@ -29,10 +29,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -196,7 +198,7 @@ public class ContractControllerTest {
         createContractRequest.setRoomId(roomId);
 
         // When
-        doThrow(new BadRequestException("Phòng không tồn tại!")).when(contractValidate).validateForCreateContract(any(CreateContractRequest.class));
+        doThrow(new BadRequestException("Phòng không tồn tại!")).when(contractValidate).validateForCreateContract(any());
 
 
         // Then
@@ -349,7 +351,7 @@ public class ContractControllerTest {
         contract.setTenantName(contractRequest.getTenantName());
 
         // Then
-        doThrow(new BadRequestException("Hợp đồng không tồn tại!")).when(contractValidate).validateForUpdateContract(anyLong(), any(ContractRequest.class));
+        doThrow(new BadRequestException("Hợp đồng không tồn tại!")).when(contractValidate).validateForUpdateContract(anyLong(), any());
 
         // Perform
         mockMvc.perform(put("/api/v1/contracts/" + contractId)
@@ -415,23 +417,29 @@ public class ContractControllerTest {
         verify(contractService, times(1)).liquidationContract(contractId);
     }
 
-//    @Test
-//    public void testGetContracts() throws Exception {
-//        Long roomID = 1L;
-//        Long houseID = 2L;
-//
-//        Page<Contract> contracts = new PageImpl<>(Collections.singletonList(new Contract()));
-//        when(contractService.getContracts(houseID, roomID, true, PageRequest.of(0, 10, Sort.by("toDate")))).thenReturn(contracts);
-//
-//        mockMvc.perform(get("/api/v1/contracts")
-//                        .param("houseId", houseID.toString())
-//                        .param("roomId", roomID.toString())
-//                        .param("isActive", "1")
-//                        .param("page", "0")
-//                        .param("pageSize", "10"))
-//                        .andExpect(status().isOk())
-//                        .andExpect(jsonPath("$.content.length()").value(1));
-//    }
+    @Test
+    public void testGetContracts() throws Exception {
+        // prepare test data
+        List<Contract> contracts = new ArrayList<>();
+        contracts.add(new Contract());
+        contracts.add(new Contract());
+        contracts.add(new Contract());
+
+        Page<Contract> pageContracts = new PageImpl<>(contracts);
+        when(contractService.getContracts(null, null, true, PageRequest.of(0, 10, Sort.by("toDate").descending())))
+                .thenReturn(pageContracts);
+
+        // perform the test
+        mockMvc.perform(get("/api/v1/contracts")
+                        .param("isActive", "true")
+                        .param("page", "0")
+                        .param("pageSize", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(3)))
+                .andExpect(jsonPath("$.content[0]", is(notNullValue())))
+                .andExpect(jsonPath("$.content[1]", is(notNullValue())))
+                .andExpect(jsonPath("$.content[2]", is(notNullValue())));
+    }
 
 //    @Test
 //    public void testGenerateDocContract() throws Exception {
