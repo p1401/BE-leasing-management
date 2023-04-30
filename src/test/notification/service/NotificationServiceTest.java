@@ -43,6 +43,7 @@ public class NotificationServiceTest {
         user.setId(1L);
         Long houseId = 2L;
         Long roomId = 3L;
+        Boolean isRead=true;
         Date fromDate = Date.from(LocalDate.of(2023, 4, 1).atStartOfDay().toInstant(ZoneOffset.UTC));
         Date toDate = Date.from(LocalDate.of(2023, 4, 30).atStartOfDay().toInstant(ZoneOffset.UTC));
         Pageable pageable = PageRequest.of(0, 10);
@@ -70,10 +71,10 @@ public class NotificationServiceTest {
 
         PageImpl<Notification> page = new PageImpl<>(notifications, pageable, notifications.size());
 
-        when(notificationRepository.findNotifications(eq(user.getId()), eq(houseId), eq(roomId), eq(fromDate), eq(toDate), eq(pageable)))
+        when(notificationRepository.findNotifications(eq(user.getId()), eq(houseId), eq(roomId), eq(fromDate), eq(toDate),eq(isRead),eq(pageable)))
                 .thenReturn(page);
 
-        Page<Notification> result = notificationService.getNotifications(user, houseId, roomId, fromDate, toDate, pageable);
+        Page<Notification> result = notificationService.getNotifications(user, houseId, roomId, fromDate, toDate,isRead, pageable);
 
         Assert.assertEquals(2, result.getContent().size());
         Assert.assertEquals(notification1, result.getContent().get(0));

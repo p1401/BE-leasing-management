@@ -33,9 +33,10 @@ public class NotificationController {
                                                                @RequestParam(name = "roomId", required = false) Long roomId,
                                                                @RequestParam(name = "fromDate", required = false) Date fromDate,
                                                                @RequestParam(name = "toDate", required = false) Date toDate,
+                                                               @RequestParam(name = "isRead", required = false) Boolean isRead,
                                                                @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                                @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) throws BadRequestException {
-        return ResponseEntity.ok(notificationService.getNotifications(getUserToken(),houseId,roomId,fromDate,toDate, PageRequest.of(page, pageSize)));
+        return ResponseEntity.ok(notificationService.getNotifications(getUserToken(),houseId,roomId,fromDate,toDate,isRead, PageRequest.of(page, pageSize)));
     }
 
     @GetMapping({"/unread"})

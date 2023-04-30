@@ -21,8 +21,8 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    public Page<Notification> getNotifications(User user, Long houseId, Long roomId, Date fromDate, Date toDate, Pageable page) {
-        return notificationRepository.findNotifications(user.getId(),houseId,roomId,fromDate,toDate, page);
+    public Page<Notification> getNotifications(User user, Long houseId, Long roomId, Date fromDate, Date toDate,Boolean isRead, Pageable page) {
+        return notificationRepository.findNotifications(user.getId(),houseId,roomId,fromDate,toDate,isRead, page);
     }
 
     public Page<Notification> getUnreadNotification(User user, Pageable page) {
