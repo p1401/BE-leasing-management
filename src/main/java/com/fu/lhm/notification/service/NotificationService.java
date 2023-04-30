@@ -29,10 +29,10 @@ public class NotificationService {
         return notificationRepository.findAllByIsReadFalseAndUser(user, page);
     }
 
-    public Notification markAsRead(Long id) throws BadRequestException {
+    public Notification updateNotification(Long id, Boolean isRead) throws BadRequestException {
         Notification oldNotification = notificationRepository.findById(id).orElseThrow(() -> new BadRequestException("Thông báo không tồn tại!"));
 
-        oldNotification.setIsRead(true);
+        oldNotification.setIsRead(isRead);
 
         return notificationRepository.save(oldNotification);
     }

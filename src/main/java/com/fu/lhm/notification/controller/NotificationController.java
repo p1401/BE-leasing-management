@@ -47,9 +47,9 @@ public class NotificationController {
     }
 
     @PutMapping({"/mark-as-read/{id}"})
-    public ResponseEntity<Notification> markAsRead(@PathVariable("id") Long id) throws BadRequestException {
+    public ResponseEntity<Notification> updateNotification(@PathVariable("id") Long id, @RequestParam(name = "isRead", required = false) Boolean isRead) throws BadRequestException {
 
-        return ResponseEntity.ok(notificationService.markAsRead(id));
+        return ResponseEntity.ok(notificationService.updateNotification(id,isRead));
     }
 
     @DeleteMapping({"/{id}"})
