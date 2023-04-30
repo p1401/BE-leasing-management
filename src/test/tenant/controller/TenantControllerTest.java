@@ -19,6 +19,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -316,7 +317,7 @@ public class TenantControllerTest {
         Long roomID = 1L;
 
         Page<Tenant> tenants = new PageImpl<>(Collections.singletonList(new Tenant()));
-        when(tenantService.getListTenantByRoomId(roomID, PageRequest.of(0, 10))).thenReturn(tenants);
+        when(tenantService.getListTenantByRoomId(roomID, PageRequest.of(0, 10, Sort.by("name")))).thenReturn(tenants);
 
         mockMvc.perform(get("/api/v1/tenants/rooms/" + roomID)
                         .param("page", "0")
@@ -329,7 +330,7 @@ public class TenantControllerTest {
     public void testGetListTenantByRoomId_InvalidRoomID() throws Exception {
         Long roomID = 100L;
 
-        when(tenantService.getListTenantByRoomId(roomID, PageRequest.of(0, 10))).thenReturn(null);
+        when(tenantService.getListTenantByRoomId(roomID, PageRequest.of(0, 10, Sort.by("name")))).thenReturn(null);
 
         String responseContent = mockMvc.perform(get("/api/v1/tenants/rooms/" + roomID)
                         .param("page", "0")
@@ -349,7 +350,7 @@ public class TenantControllerTest {
         Long houseID = 2L;
 
         Page<Tenant> tenants = new PageImpl<>(Collections.singletonList(new Tenant()));
-        when(tenantService.getListTenants(houseID, roomID, true, PageRequest.of(0, 10))).thenReturn(tenants);
+        when(tenantService.getListTenants(houseID, roomID, true, PageRequest.of(0, 10, Sort.by("name")))).thenReturn(tenants);
 
         mockMvc.perform(get("/api/v1/tenants")
                         .param("houseId", houseID.toString())
@@ -366,7 +367,7 @@ public class TenantControllerTest {
         Long roomID = 1L;
         Long houseID = 2L;
 
-        when(tenantService.getListTenants(houseID, roomID, true, PageRequest.of(0, 10))).thenReturn(null);
+        when(tenantService.getListTenants(houseID, roomID, true, PageRequest.of(0, 10, Sort.by("name")))).thenReturn(null);
 
         String responseContent = mockMvc.perform(get("/api/v1/tenants")
                         .param("houseId", houseID.toString())

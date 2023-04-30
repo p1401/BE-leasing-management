@@ -41,7 +41,7 @@ public class ContractValidate {
 
     public void validateForUpdateContract(Long contractId, ContractRequest contract) throws BadRequestException {
 
-        Contract oldContract = contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
+        contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
 
         Date fromDate = contract.getFromDate();
         Date toDate = contract.getToDate();
@@ -75,13 +75,5 @@ public class ContractValidate {
             throw new BadRequestException("Ngày kết thúc phải lớn hơn ngày ký");
         }
     }
-
-    private void checkInputToDateUpdate(Date oldToDate, Date newToDate) throws BadRequestException {
-
-        if (oldToDate.compareTo(newToDate) > 0) {
-            throw new BadRequestException("Ngày gia hạn phải lớn hơn hạn ngày cũ");
-        }
-    }
-
 
 }

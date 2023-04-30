@@ -56,9 +56,9 @@ public class ContractService {
         return jwtService.getUser(httpServletRequest);
     }
 
-    public ContractRequest getContractById(Long contractId) {
+    public ContractRequest getContractById(Long contractId) throws BadRequestException {
 
-        Contract  contract =  contractRepository.findById(contractId).orElseThrow(() -> new EntityNotFoundException("Hợp đồng không tồn tại!"));
+        Contract  contract =  contractRepository.findById(contractId).orElseThrow(() -> new BadRequestException("Hợp đồng không tồn tại!"));
         ContractRequest contractRequest = new ContractRequest();
         contractRequest.setId(contract.getId());
         contractRequest.setContractCode(contract.getContractCode());

@@ -142,11 +142,6 @@ public class BillService {
         return billRepository.save(bill);
     }
 
-    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
-        return dateToConvert.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-    }
     public List<Bill> createAllBill() {
 
         List<Contract> listContract = contractRepository.findAll();

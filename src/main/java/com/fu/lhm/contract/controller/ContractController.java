@@ -40,7 +40,7 @@ public class ContractController {
 
     private final ResourceLoader resourceLoader;
     @GetMapping("/{contractId}")
-    public ResponseEntity<ContractRequest> getContractById(@PathVariable("contractId") Long contractId) {
+    public ResponseEntity<ContractRequest> getContractById(@PathVariable("contractId") Long contractId) throws BadRequestException {
 
         return ResponseEntity.ok(contractService.getContractById(contractId));
     }
@@ -95,14 +95,6 @@ public class ContractController {
     @GetMapping("/generateDoc/{contractId}")
     public ResponseEntity<byte[]> generateDocContract(@PathVariable("contractId") Long contractId) throws Exception {
         // Set the paths for the template and output documents
-//        Resource resource = resourceLoader.getResource("src/main/resources/contract_template.docx");
-//        InputStream templatePath = resource.getInputStream();
-//
-//        WritableResource writableResource = (WritableResource) resourceLoader.getResource("src/main/resources/output.docx");
-//        File file = writableResource.getFile();
-
-// Ghi dữ liệu vào tệp
-//        OutputStream outputPath = new FileOutputStream(file);
         String templatePath = "src/main/resources/contract_template.docx";
         String outputPath = "src/main/resources/output.docx";
         try {

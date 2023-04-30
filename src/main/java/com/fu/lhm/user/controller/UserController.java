@@ -20,11 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService service;
     private final UserValidate userValidate;
-    private final HttpServletRequest httpServletRequest;
-    private final JwtService jwtService;
-    private User getUserToken() throws BadRequestException {
-        return jwtService.getUser(httpServletRequest);
-    }
+
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request

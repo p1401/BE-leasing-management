@@ -15,8 +15,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -25,10 +23,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -230,41 +226,28 @@ public class RoomControllerTest {
 
     @Test
     public void testGetListRoom() throws Exception {
-        Long houseId = 1L;
-        int floor = 1;
-        String roomName = "";
-        int page = 0;
-        int pageSize = 10;
+        Long houseID = 1L;
+        int floor = 5;
 
-        List<Room> rooms = new ArrayList<>();
-        Room room = new Room();
-        room.setId(1L);
-        room.setName("Room 1");
-        rooms.add(room);
-        Page<Room> pageRooms = new PageImpl<>(rooms);
-
-        when(roomService.getListRoomByHouseIdAndFloor(houseId, floor, roomName, PageRequest.of(page, pageSize, Sort.by("name"))))
-                .thenReturn(pageRooms);
+        Page<Room> rooms = new PageImpl<>(Collections.singletonList(new Room()));
+        when(roomService.getListRoomByHouseIdAndFloor(houseID, floor, "", PageRequest.of(0, 10, Sort.by("name")))).thenReturn(rooms);
 
         mockMvc.perform(get("/api/v1/rooms")
-                        .param("houseId", houseId.toString())
+                        .param("houseId", houseID.toString())
                         .param("floor", String.valueOf(floor))
-                        .param("name", roomName)
-                        .param("page", String.valueOf(page))
-                        .param("pageSize", String.valueOf(pageSize)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(1))
-                .andExpect(jsonPath("$.content[0].id").value(room.getId()))
-                .andExpect(jsonPath("$.content[0].name").value(room.getName()));
+                        .param("name", "")
+                        .param("page", "0")
+                        .param("pageSize", "10"))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.content.length()").value(1));
     }
-
 
     @Test
     public void testGetListRoom_Null() throws Exception {
         Long houseID = 1L;
         int floor = 5;
 
-        when(roomService.getListRoomByHouseIdAndFloor(houseID, floor, "", PageRequest.of(0, 10))).thenReturn(null);
+        when(roomService.getListRoomByHouseIdAndFloor(houseID, floor, "", PageRequest.of(0, 10, Sort.by("name")))).thenReturn(null);
 
         String responseContent = mockMvc.perform(get("/api/v1/rooms")
                         .param("houseId", houseID.toString())

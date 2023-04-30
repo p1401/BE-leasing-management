@@ -67,6 +67,7 @@ public class BillServiceTest {
         Long roomId = 1L;
 
         BillReceiveRequest billRequest = BillReceiveRequest.builder()
+                .billCode("Test code")
                 .roomMoney(1000)
                 .chiSoDauDien(50)
                 .chiSoDauNuoc(20)
@@ -179,6 +180,7 @@ public class BillServiceTest {
 
         BillSpendRequest billRequest = BillSpendRequest.builder()
                 .roomMoney(100000)
+                .billCode("Test code")
                 .totalMoney(50000)
                 .description("Test Bill Spend")
                 .billType(BillType.SPEND)
