@@ -490,7 +490,7 @@ public class TenantServiceTest {
         List<Tenant> tenants = new ArrayList<>();
         tenants.add(new Tenant());
         Page<Tenant> expectedPage = new PageImpl<>(tenants, page, tenants.size());
-        when(tenantRepository.findAllByRoom_IdAndIsStay(roomId, true, page)).thenReturn(expectedPage);
+        when(tenantRepository.findAllByRoom_IdAndIsStayAndNameContainingIgnoreCase(roomId, true,"", page)).thenReturn(expectedPage);
 
         // Execution
         Page<Tenant> actualPage = tenantService.getListTenantByRoomId(roomId, page);
@@ -535,17 +535,17 @@ public class TenantServiceTest {
 
         // Mock the tenantRepository
         Pageable pageable = PageRequest.of(0, 10);
-        when(tenantRepository.findAllByRoom_IdAndIsStay(eq(1L), eq(true), eq(pageable)))
+        when(tenantRepository.findAllByRoom_IdAndIsStayAndNameContainingIgnoreCase(eq(1L), eq(true),"", eq(pageable)))
                 .thenReturn(new PageImpl<>(Arrays.asList(tenant1, tenant2), pageable, 2));
 
-        when(tenantRepository.findAllByRoom_House_IdAndIsStay(eq(2L), eq(false), eq(pageable)))
+        when(tenantRepository.findAllByRoom_House_IdAndIsStayAndNameContainingIgnoreCase(eq(2L), eq(false),"", eq(pageable)))
                 .thenReturn(new PageImpl<>(Collections.singletonList(tenant3), pageable, 1));
 
         // Call the getListTenants method and verify the result
-        Page<Tenant> tenants1 = tenantService.getListTenants(null, 1L, true, pageable);
+        Page<Tenant> tenants1 = tenantService.getListTenants(null, 1L, true,"", pageable);
         assertEquals(2, tenants1.getTotalElements());
 
-        Page<Tenant> tenants2 = tenantService.getListTenants(2L, null, false, pageable);
+        Page<Tenant> tenants2 = tenantService.getListTenants(2L, null, false,"", pageable);
         assertEquals(1, tenants2.getTotalElements());
         assertEquals("Bob", tenants2.getContent().get(0).getName());
     }

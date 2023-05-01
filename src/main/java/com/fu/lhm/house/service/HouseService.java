@@ -40,9 +40,9 @@ public class HouseService {
         return houseRepository.save(oldHouse);
     }
 
-    public Page<House> getListHouse(User user, Pageable pageable) {
+    public Page<House> getListHouse(User user,String houseName, Pageable pageable) {
 
-        Page<House> listHouse = houseRepository.findByUserAndNameContaining(user, "", pageable);
+        Page<House> listHouse = houseRepository.findByUserAndNameContaining(user, houseName, pageable);
 
         for(House house : listHouse){
             int emptyRoom = 0;

@@ -61,13 +61,14 @@ public class TenantService {
     public Page<Tenant> getListTenants(Long houseId,
                                    Long roomId,
                                    Boolean isStay,
+                                   String tenantName,
                                    Pageable page) {
         if (roomId != null) {
-            return tenantRepository.findAllByRoom_IdAndIsStay(roomId,isStay, page);
+            return tenantRepository.findAllByRoom_IdAndIsStayAndNameContainingIgnoreCase(roomId,isStay,tenantName, page);
         }
 
         if (houseId != null) {
-            return tenantRepository.findAllByRoom_House_IdAndIsStay(houseId,isStay, page);
+            return tenantRepository.findAllByRoom_House_IdAndIsStayAndNameContainingIgnoreCase(houseId,isStay,tenantName, page);
         }
 
         return Page.empty(page);

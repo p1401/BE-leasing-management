@@ -350,7 +350,7 @@ public class TenantControllerTest {
         Long houseID = 2L;
 
         Page<Tenant> tenants = new PageImpl<>(Collections.singletonList(new Tenant()));
-        when(tenantService.getListTenants(houseID, roomID, true, PageRequest.of(0, 10, Sort.by("name")))).thenReturn(tenants);
+        when(tenantService.getListTenants(houseID, roomID, true,"", PageRequest.of(0, 10, Sort.by("name")))).thenReturn(tenants);
 
         mockMvc.perform(get("/api/v1/tenants")
                         .param("houseId", houseID.toString())
@@ -367,7 +367,7 @@ public class TenantControllerTest {
         Long roomID = 1L;
         Long houseID = 2L;
 
-        when(tenantService.getListTenants(houseID, roomID, true, PageRequest.of(0, 10, Sort.by("name")))).thenReturn(null);
+        when(tenantService.getListTenants(houseID, roomID, true,"", PageRequest.of(0, 10, Sort.by("name")))).thenReturn(null);
 
         String responseContent = mockMvc.perform(get("/api/v1/tenants")
                         .param("houseId", houseID.toString())
