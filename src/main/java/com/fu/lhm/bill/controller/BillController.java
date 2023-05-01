@@ -110,7 +110,7 @@ public class BillController {
     }
 
     @GetMapping(value = "/generateExcel")
-    public ResponseEntity<InputStreamResource> excelCustomersReport() throws BadRequestException, IOException {
+    public ResponseEntity<InputStreamResource> generateBillsExcel() throws BadRequestException, IOException {
         Long userId = getUserToken().getId();
 
         List<Bill> bills = billService.getAllBill(userId);
@@ -118,7 +118,7 @@ public class BillController {
         // return IO ByteArray(in);
         HttpHeaders headers = new HttpHeaders();
         // set filename in header
-        headers.add("Content-Disposition", "attachment; filename=Bills-" + LocalDateTime.now() + ".xlsx");
+        headers.add("Content-Disposition", "attachment; filename=Bills.xlsx");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(in));
     }
 }

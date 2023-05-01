@@ -262,9 +262,6 @@ public class BillService {
                 "Chỉ số đầu", "Chỉ số cuối", "Số lượng", "Đơn giá", null, null, null, null, null};
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
             Sheet sheet = workbook.createSheet("Bills");
-            //Add filter to header
-//            sheet.setAutoFilter(new CellRangeAddress(0, 0, 0, COLUMNs.length - 1));
-//            sheet.createFreezePane(0, 1);
 
             // Font and style for the main header
             Font headerFont = workbook.createFont();
@@ -348,24 +345,30 @@ public class BillService {
                 row.createCell(3).setCellValue(bill.getContract().getHouseName());
                 row.createCell(4).setCellValue(bill.getContract().getRoomName());
                 row.createCell(5).setCellValue(bill.getContract().getTenantName());
-                row.createCell(6).setCellValue(bill.getChiSoDauDien());
-                row.createCell(7).setCellValue(bill.getChiSoCuoiDien());
-                row.createCell(8).setCellValue(bill.getElectricNumber());
-                row.createCell(9).setCellValue(bill.getElectricMoney());
-                row.createCell(10).setCellValue(bill.getChiSoDauNuoc());
-                row.createCell(11).setCellValue(bill.getChiSoCuoiNuoc());
-                row.createCell(12).setCellValue(bill.getWaterNumber());
-                row.createCell(13).setCellValue(bill.getWaterMoney());
-                row.createCell(14).setCellValue(bill.getTotalMoney());
+                row.createCell(6).setCellValue(String.format("%,d", bill.getChiSoDauDien()));
+                row.createCell(7).setCellValue(String.format("%,d", bill.getChiSoCuoiDien()));
+                row.createCell(8).setCellValue(String.format("%,d", bill.getElectricNumber()));
+                row.createCell(9).setCellValue(String.format("%,d", bill.getElectricMoney()));
+                row.createCell(10).setCellValue(String.format("%,d", bill.getChiSoDauNuoc()));
+                row.createCell(11).setCellValue(String.format("%,d", bill.getChiSoCuoiNuoc()));
+                row.createCell(12).setCellValue(String.format("%,d", bill.getWaterNumber()));
+                row.createCell(13).setCellValue(String.format("%,d", bill.getWaterMoney()));
+                row.createCell(14).setCellValue(String.format("%,d", bill.getTotalMoney()));
                 row.createCell(15).setCellValue(bill.getPayer());
                 row.createCell(16).setCellValue(bill.getDescription());
-                row.createCell(17).setCellValue(bill.getDateCreate());
+                row.createCell(17).setCellValue(String.valueOf(bill.getDateCreate()));
                 row.createCell(18).setCellValue(getStatus(bill));
 
                 for (int i = 0; i < headerMain.length; i++) {
                     row.getCell(i).setCellStyle(style);
                 }
             }
+
+            //Auto-size all columns below
+            sheet.autoSizeColumn(2);
+            sheet.autoSizeColumn(3);
+            sheet.autoSizeColumn(5);
+            sheet.autoSizeColumn(18);
 
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());

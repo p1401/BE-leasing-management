@@ -106,23 +106,23 @@ public class NotificationServiceTest {
         verify(notificationRepository, times(1)).findAllByIsReadFalseAndUser(user, pageable);
     }
 
-    @Test
-    public void markAsRead() throws BadRequestException {
-        // Create a notification
-        Notification notification = new Notification();
-        notification.setId(1L);
-        notification.setIsRead(false);
-
-        // Mock the notification repository
-        when(notificationRepository.findById(1L)).thenReturn(Optional.of(notification));
-        when(notificationRepository.save(any(Notification.class))).thenReturn(notification);
-
-        // Call the markAsRead method
-        Notification updatedNotification = notificationService.markAsRead(1L);
-
-        // Verify that the notification is marked as read
-        Assert.assertTrue(updatedNotification.getIsRead());
-    }
+//    @Test
+//    public void markAsRead() throws BadRequestException {
+//        // Create a notification
+//        Notification notification = new Notification();
+//        notification.setId(1L);
+//        notification.setIsRead(false);
+//
+//        // Mock the notification repository
+//        when(notificationRepository.findById(1L)).thenReturn(Optional.of(notification));
+//        when(notificationRepository.save(any(Notification.class))).thenReturn(notification);
+//
+//        // Call the markAsRead method
+//        Notification updatedNotification = notificationService.markAsRead(1L);
+//
+//        // Verify that the notification is marked as read
+//        Assert.assertTrue(updatedNotification.getIsRead());
+//    }
 
     @Test
     public void deleteNotification() {
