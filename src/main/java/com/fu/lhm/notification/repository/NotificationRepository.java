@@ -17,6 +17,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     Page<Notification> findAllByIsReadFalseAndUser(User user, Pageable page);
 
+    Integer countByUserAndIsReadFalse(User user);
+
     @Query(value = "SELECT * FROM notifications b "
             + "WHERE (:userId IS NULL OR b.user_id = :userId) "
             + "AND (:houseId IS NULL OR b.house_id = :houseId) "

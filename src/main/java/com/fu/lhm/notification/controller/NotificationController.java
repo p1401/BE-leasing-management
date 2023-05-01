@@ -39,6 +39,11 @@ public class NotificationController {
         return ResponseEntity.ok(notificationService.getNotifications(getUserToken(),houseId,roomId,fromDate,toDate,isRead, PageRequest.of(page, pageSize)));
     }
 
+    @GetMapping({"/count"})
+    public ResponseEntity<Integer> countUnread() throws BadRequestException {
+        return ResponseEntity.ok(notificationService.countNotification(getUserToken()));
+    }
+
     @GetMapping({"/unread"})
     public ResponseEntity<Page<Notification>> getUnreadNotification(
             @RequestParam(name = "page", defaultValue = "0") Integer page,

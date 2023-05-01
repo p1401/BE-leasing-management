@@ -16,13 +16,15 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class NotificationService {
 
-    private final ContractRepository contractRepository;
-
 
     private final NotificationRepository notificationRepository;
 
     public Page<Notification> getNotifications(User user, Long houseId, Long roomId, Date fromDate, Date toDate,Boolean isRead, Pageable page) {
         return notificationRepository.findNotifications(user.getId(),houseId,roomId,fromDate,toDate,isRead, page);
+    }
+
+    public Integer countNotification(User user) {
+        return notificationRepository.countByUserAndIsReadFalse(user);
     }
 
     public Page<Notification> getUnreadNotification(User user, Pageable page) {

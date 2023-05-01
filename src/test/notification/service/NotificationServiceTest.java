@@ -118,7 +118,7 @@ public class NotificationServiceTest {
         when(notificationRepository.save(any(Notification.class))).thenReturn(notification);
 
         // Call the markAsRead method
-        Notification updatedNotification = notificationService.markAsRead(1L);
+        Notification updatedNotification = notificationService.updateNotification(1L, true);
 
         // Verify that the notification is marked as read
         Assert.assertTrue(updatedNotification.getIsRead());
