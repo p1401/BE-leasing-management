@@ -24,7 +24,7 @@ public class ContractRequest {
     private Boolean isActive;
     private Long deposit;
     private Integer autoBillDate;
-
+    private Long roomId;
     private String tenantName;
 
 }
