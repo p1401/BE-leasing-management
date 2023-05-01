@@ -72,8 +72,8 @@ public class ContractService {
         contractRequest.setDeposit(contract.getDeposit());
         contractRequest.setAutoBillDate(contract.getAutoBillDate());
         contractRequest.setTenantName(contract.getTenantName());
-
-        return  contractRequest;
+        contractRequest.setRoomId(contract.getRoomId());
+        return contractRequest;
     }
 
     public Contract getContractByRoomId(Long roomId) {
@@ -87,7 +87,7 @@ public class ContractService {
 
     public Contract createContract(CreateContractRequest contractRequest) throws BadRequestException {
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
-        long roomId = contractRequest.getRoomId();
+        Long roomId = contractRequest.getRoomId();
         Date fromDate = contractRequest.getFromDate();
         Date toDate = contractRequest.getToDate();
 
@@ -112,7 +112,7 @@ public class ContractService {
         contract.setDeposit(contractRequest.getDeposit());
         contract.setFromDate(fromDate);
         contract.setToDate(toDate);
-
+        contract.setRoomId(roomId);
         contract.setRoomName(room.getName());
         contract.setHouseName(room.getHouse().getName());
         contract.setTenantName(tenant.getName());
@@ -120,6 +120,7 @@ public class ContractService {
         contract.setTenant(tenantRepository.save(tenant));
         contractRepository.save(contract);
         //Create bill TIENCOC
+
         BillReceiveRequest bill = new BillReceiveRequest();
         bill.setBillType(BillType.RECEIVE);
         bill.setBillContent(BillContent.TIENCOC);

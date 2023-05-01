@@ -34,7 +34,7 @@ public class NotificationService {
     public Notification updateNotification(Long id, Boolean isRead) throws BadRequestException {
         Notification oldNotification = notificationRepository.findById(id).orElseThrow(() -> new BadRequestException("Thông báo không tồn tại!"));
 
-        oldNotification.setIsRead(isRead);
+        oldNotification.setIsRead(!oldNotification.getIsRead());
 
         return notificationRepository.save(oldNotification);
     }

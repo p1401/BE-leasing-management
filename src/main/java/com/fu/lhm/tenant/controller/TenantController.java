@@ -21,7 +21,6 @@ public class TenantController {
     private final TenantService tenantService;
 
     private final TenantValidate tenantValidate;
-    private final TenantRepository tenantRepository;
 
     @PostMapping("")
     public ResponseEntity<Tenant> createTenant(@RequestParam(name = "roomId") Long roomId, @RequestBody Tenant tenant) throws BadRequestException {
