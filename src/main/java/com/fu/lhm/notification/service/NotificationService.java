@@ -21,18 +21,18 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    public Page<Notification> getNotifications(User user, Long houseId, Long roomId, Date fromDate, Date toDate, Pageable page) {
-        return notificationRepository.findNotifications(user.getId(),houseId,roomId,fromDate,toDate, page);
+    public Page<Notification> getNotifications(User user, Long houseId, Long roomId, Date fromDate, Date toDate,Boolean isRead, Pageable page) {
+        return notificationRepository.findNotifications(user.getId(),houseId,roomId,fromDate,toDate,isRead, page);
     }
 
     public Page<Notification> getUnreadNotification(User user, Pageable page) {
         return notificationRepository.findAllByIsReadFalseAndUser(user, page);
     }
 
-    public Notification markAsRead(Long id) throws BadRequestException {
+    public Notification updateNotification(Long id, Boolean isRead) throws BadRequestException {
         Notification oldNotification = notificationRepository.findById(id).orElseThrow(() -> new BadRequestException("Thông báo không tồn tại!"));
 
-        oldNotification.setIsRead(true);
+        oldNotification.setIsRead(isRead);
 
         return notificationRepository.save(oldNotification);
     }
