@@ -112,7 +112,7 @@ public class ContractService {
         contract.setDeposit(contractRequest.getDeposit());
         contract.setFromDate(fromDate);
         contract.setToDate(toDate);
-
+        contract.setRoomId(roomId);
         contract.setRoomName(room.getName());
         contract.setHouseName(room.getHouse().getName());
         contract.setTenantName(tenant.getName());
