@@ -488,7 +488,10 @@ public class TenantServiceTest {
         Long roomId = 1L;
         Pageable page = PageRequest.of(0, 10);
         List<Tenant> tenants = new ArrayList<>();
-        tenants.add(new Tenant());
+        Tenant tenant = new Tenant();
+        tenant.setName("x");
+        tenant.setIsStay(true);
+        tenants.add(tenant);
         Page<Tenant> expectedPage = new PageImpl<>(tenants, page, tenants.size());
         when(tenantRepository.findAllByRoom_IdAndIsStayAndNameContainingIgnoreCase(roomId, true,"", page)).thenReturn(expectedPage);
 
