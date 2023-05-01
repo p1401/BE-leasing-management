@@ -11,12 +11,17 @@ import com.fu.lhm.jwt.service.JwtService;
 import com.fu.lhm.user.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -102,6 +107,19 @@ public class BillController {
                                                       @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) throws BadRequestException {
         BillRequest billRequest =  billService.getBills(getUserToken().getId(),houseId, roomId,fromDate,toDate,billType,isPay, PageRequest.of(page, pageSize));
         return ResponseEntity.ok(billRequest);
+    }
+
+    @GetMapping(value = "/generateExcel")
+    public ResponseEntity<InputStreamResource> excelCustomersReport() throws BadRequestException, IOException {
+        Long userId = getUserToken().getId();
+
+        List<Bill> bills = billService.getAllBill(userId);
+        ByteArrayInputStream in = billService.generateExcel(userId, bills);
+        // return IO ByteArray(in);
+        HttpHeaders headers = new HttpHeaders();
+        // set filename in header
+        headers.add("Content-Disposition", "attachment; filename=Bills-" + LocalDateTime.now() + ".xlsx");
+        return ResponseEntity.ok().headers(headers).body(new InputStreamResource(in));
     }
 }
 
