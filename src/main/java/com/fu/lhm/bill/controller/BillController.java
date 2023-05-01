@@ -40,11 +40,6 @@ public class BillController {
         return jwtService.getUser(httpServletRequest);
     }
 
-    @PostMapping("/createAllbill")
-    public ResponseEntity<List<Bill>> createAllTienPhong() {
-
-        return ResponseEntity.ok(billService.createAllBill());
-    }
 
     @GetMapping("/detail/{billId}")
     public ResponseEntity<Bill> getBillById(@PathVariable("billId") Long billId) throws BadRequestException {

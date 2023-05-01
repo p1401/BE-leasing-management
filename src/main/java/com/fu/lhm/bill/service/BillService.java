@@ -159,60 +159,6 @@ public class BillService {
         return billRepository.save(bill);
     }
 
-    public List<Bill> createAllBill() {
-
-        List<Contract> listContract = contractRepository.findAll();
-
-        List<Bill> listBill = billRepository.findAll();
-
-        List<Bill> newListBill = new ArrayList<>();
-        //Lay thang hien tai
-        LocalDate today = LocalDate.now();
-        int month = today.getMonthValue();
-
-        //check xem từng hợp đồng đã tạo hóa đơn tháng này chưa
-        for (Contract contract : listContract) {
-
-            Room room = contract.getTenant().getRoom();
-            House house = contract.getTenant().getRoom().getHouse();
-            //check bill tien phong da tao thang nay chua
-            boolean isCreate = false;
-            for (Bill bill : listBill) {
-//                LocalDate dateCreate = convertToLocalDateViaInstant(bill.getDateCreate());
-                if (bill.getDateCreate().getMonthValue() == month
-                        && bill.getBillContent().name().equalsIgnoreCase("TIENPHONG")
-                        && bill.getBillType().name().equalsIgnoreCase("RECEIVE")
-                        && bill.getContract().getTenant().getRoom() == contract.getTenant().getRoom()) {
-                    isCreate = true;
-                }
-            }
-
-            //Neu isCreate==false thi tao tien phong thang nay cho tung hop dong
-            if (contract.getIsActive() && !isCreate) {
-                int randomNumber = (int) (Math.random() * (99999 - 10000 + 1) + 10000);
-                Bill bill = new Bill();
-                bill.setBillCode("PT" + randomNumber);
-                bill.setRoomMoney(room.getRoomMoney());
-                bill.setElectricNumber(room.getWaterElectric().getNumberElectric());
-                bill.setWaterNumber(room.getWaterElectric().getNumberWater());
-                bill.setElectricMoney(room.getWaterElectric().getNumberElectric() * house.getElectricPrice());
-                bill.setWaterMoney(room.getWaterElectric().getNumberWater() * house.getWaterPrice());
-                bill.setPayer(contract.getTenant().getName());
-                bill.setIsPay(false);
-                bill.setDateCreate(LocalDate.now());
-                bill.setDescription("Tiền phòng " + contract.getTenant().getRoom().getName() + " tháng " + month);
-                bill.setTotalMoney(room.getRoomMoney() + room.getWaterElectric().getNumberElectric() * house.getElectricPrice() + room.getWaterElectric().getNumberWater() * house.getWaterPrice());
-                bill.setBillContent(BillContent.TIENPHONG);
-                bill.setBillType(BillType.RECEIVE);
-                bill.setContract(contract);
-
-                billRepository.save(bill);
-                newListBill.add(bill);
-            }
-        }
-
-        return newListBill;
-    }
     public BillRequest getBills(Long userId,
                             Long houseId,
                             Long roomId,

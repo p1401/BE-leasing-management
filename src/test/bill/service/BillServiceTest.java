@@ -1,5 +1,6 @@
 package bill.service;
 
+import com.fu.lhm.bill.controller.BillController;
 import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.entity.BillContent;
 import com.fu.lhm.bill.entity.BillType;
@@ -43,6 +44,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class BillServiceTest {
 
+    @Mock
+    private BillController billController;
     @Mock
     private BillRepository billRepository;
 
