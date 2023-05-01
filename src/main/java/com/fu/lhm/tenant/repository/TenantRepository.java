@@ -12,10 +12,12 @@ import java.util.List;
 @Repository
 public interface TenantRepository extends JpaRepository<Tenant, Long> {
 
-    Page<Tenant> findAllByRoom_IdAndIsStay(Long roomId,Boolean isStay, Pageable page);
+    Page<Tenant> findAllByRoom_IdAndIsStay(Long RoomId,Boolean isStay, Pageable pageable);
+
+    Page<Tenant> findAllByRoom_IdAndIsStayAndNameContainingIgnoreCase(Long roomId,Boolean isStay,String name, Pageable page);
 
 
-    Page<Tenant> findAllByRoom_House_IdAndIsStay(Long houseId,Boolean isStay, Pageable pagee);
+    Page<Tenant> findAllByRoom_House_IdAndIsStayAndNameContainingIgnoreCase(Long houseId,Boolean isStay,String name, Pageable pagee);
 
 
     List<Tenant> findAllByRoom_IdAndIsStayTrue(Long id);

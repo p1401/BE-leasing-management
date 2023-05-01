@@ -49,7 +49,7 @@ public class HouseController {
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
     ) throws BadRequestException {
-        Page<House> listHouse = houseService.getListHouse(getUserToken(), PageRequest.of(page, pageSize, Sort.by("name")));
+        Page<House> listHouse = houseService.getListHouse(getUserToken(),houseName, PageRequest.of(page, pageSize, Sort.by("name")));
 
         return ResponseEntity.ok(listHouse);
     }

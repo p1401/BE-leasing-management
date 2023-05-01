@@ -66,6 +66,8 @@ public class BillService {
         Contract contract = contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
         Bill bill = mapToBillReceive(billRequest);
         bill.setBillCode("PT"+randomNumber);
+        bill.setElectricMoney(room.getHouse().getElectricPrice()*billRequest.getElectricNumber());
+        bill.setWaterMoney(room.getHouse().getWaterPrice()*billRequest.getWaterNumber());
         bill.setPayer(contract.getTenantName());
         bill.setContract(contract);
         bill.setRoomId(roomId);
@@ -99,8 +101,7 @@ public class BillService {
         bill.setChiSoCuoiNuoc(billRE.getChiSoCuoiNuoc());
         bill.setElectricNumber(billRE.getElectricNumber());
         bill.setWaterNumber(billRE.getWaterNumber());
-        bill.setElectricMoney(billRE.getElectricMoney());
-        bill.setWaterMoney(billRE.getWaterMoney());
+
         bill.setPayer(billRE.getPayer());
         bill.setIsPay(billRE.getIsPay());
         bill.setDateCreate(billRE.getDateCreate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());

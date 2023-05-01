@@ -25,7 +25,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
             + "AND (:roomId IS NULL OR b.room_id = :roomId) "
             + "AND (:fromDate IS NULL OR b.date_create >= :fromDate) "
             + "AND (:toDate IS NULL OR b.date_create <= :toDate) "
-            + "AND (:isRead IS NULL OR b.is_read = :isRead) ",
+            + "AND (:isRead IS NULL OR b.is_read = :isRead) "
+            + "ORDER BY b.date_create DESC",
             nativeQuery = true)
     Page<Notification> findNotifications(
             @Param("userId") Long userId,
