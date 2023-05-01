@@ -203,9 +203,9 @@ public class BillService {
 
     public ByteArrayInputStream generateExcel(Long id, List<Bill> bills) throws IOException {
         String[] headerMain = {"TT", "Hóa đơn", null, "Nhà", "Phòng", "Khách hàng", "Chỉ số điện", null, "Tiền điện", null,
-                "Chỉ số nước", null, "Tiền nước", null, "Tổng tiền", "Người nộp/nhận", "Nội dung", "Ngày tạo", "Trạng thái"};
+                "Chỉ số nước", null, "Tiền nước", null, "Tiền phòng", "Tổng tiền", "Người nộp/nhận", "Nội dung", "Ngày tạo", "Trạng thái"};
         String[] headerSub = {null, "Thể loại", "Chi tiết", null, null, null, "Chỉ số đầu", "Chỉ số cuối", "Số lượng", "Đơn giá",
-                "Chỉ số đầu", "Chỉ số cuối", "Số lượng", "Đơn giá", null, null, null, null, null};
+                "Chỉ số đầu", "Chỉ số cuối", "Số lượng", "Đơn giá", null, null, null, null, null, null};
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
             Sheet sheet = workbook.createSheet("Bills");
 
@@ -258,6 +258,7 @@ public class BillService {
             sheet.addMergedRegion(new CellRangeAddress(0, 1, 16, 16));
             sheet.addMergedRegion(new CellRangeAddress(0, 1, 17, 17));
             sheet.addMergedRegion(new CellRangeAddress(0, 1, 18, 18));
+            sheet.addMergedRegion(new CellRangeAddress(0, 1, 19, 19));
 
             // create sub-header row
             Row subHeaderRow = sheet.createRow(1);
@@ -299,11 +300,12 @@ public class BillService {
                 row.createCell(11).setCellValue(String.format("%,d", bill.getChiSoCuoiNuoc()));
                 row.createCell(12).setCellValue(String.format("%,d", bill.getWaterNumber()));
                 row.createCell(13).setCellValue(String.format("%,d", bill.getWaterMoney()));
-                row.createCell(14).setCellValue(String.format("%,d", bill.getTotalMoney()));
-                row.createCell(15).setCellValue(bill.getPayer());
-                row.createCell(16).setCellValue(bill.getDescription());
-                row.createCell(17).setCellValue(String.valueOf(bill.getDateCreate()));
-                row.createCell(18).setCellValue(getStatus(bill));
+                row.createCell(14).setCellValue(String.format("%,d", bill.getRoomMoney()));
+                row.createCell(15).setCellValue(String.format("%,d", bill.getTotalMoney()));
+                row.createCell(16).setCellValue(bill.getPayer());
+                row.createCell(17).setCellValue(bill.getDescription());
+                row.createCell(18).setCellValue(String.valueOf(bill.getDateCreate()));
+                row.createCell(19).setCellValue(getStatus(bill));
 
                 for (int i = 0; i < headerMain.length; i++) {
                     row.getCell(i).setCellStyle(style);
@@ -314,7 +316,7 @@ public class BillService {
             sheet.autoSizeColumn(2);
             sheet.autoSizeColumn(3);
             sheet.autoSizeColumn(5);
-            sheet.autoSizeColumn(18);
+            sheet.autoSizeColumn(19);
 
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
