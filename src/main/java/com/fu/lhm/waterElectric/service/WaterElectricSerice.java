@@ -5,6 +5,8 @@ import com.fu.lhm.waterElectric.repository.WaterElectricRepositoy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 @RequiredArgsConstructor
 public class WaterElectricSerice {
@@ -21,7 +23,7 @@ public class WaterElectricSerice {
         oldWaterElectric.setChiSoCuoiDien(newWaterElectric.getChiSoCuoiDien());
         oldWaterElectric.setNumberElectric(newWaterElectric.getNumberElectric());
         oldWaterElectric.setNumberWater(newWaterElectric.getNumberWater());
-        oldWaterElectric.setDateUpdate(newWaterElectric.getDateUpdate());
+        oldWaterElectric.setDateUpdate(new Date());
 
         return waterElectricRepositoy.save(oldWaterElectric);
     }
