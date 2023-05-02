@@ -48,11 +48,11 @@ public class Room {
     @JsonBackReference
     House house;
 
-    @OneToMany(mappedBy = "room",fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     List<Tenant> tenants;
 
-    @OneToOne(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     WaterElectric waterElectric;
 }
