@@ -422,7 +422,12 @@ public class BillService {
         LocalDate localDate = bill.getDateCreate();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = localDate.format(dateTimeFormatter);
-        String room = getRoomById(bill.getRoomId()).getName();
+        String room = "";
+        if(getRoomById(bill.getRoomId()).getName() == null){
+            room = "";
+        } else {
+            room = getRoomById(bill.getRoomId()).getName();
+        }
 
         String roommoney = String.format("%,d", bill.getRoomMoney());
         String start1 = String.format("%,d", bill.getChiSoDauDien());
