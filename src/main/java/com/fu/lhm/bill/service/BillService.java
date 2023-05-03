@@ -223,17 +223,22 @@ public class BillService {
         List<Bill> list =  billRepository.findBills2(userId,houseId,roomId,fromDate,toDate,billType,billContent);
 
         for(Bill bill : list){
-            Long roomID = bill.getRoomId()==null?null:bill.getRoomId();
-            Long contractID = bill.getContract()==null?null:bill.getContract().getId();
-
             House house = houseRepository.findById(bill.getHouseId()).orElseThrow();
             Optional<Room> room = null;
-            Optional<Contract> contract = null;
-            if(contractID!=null){
-                contract = contractRepository.findById(contractID);
+            Optional<Contract> contract =null;
+            if(bill.getRoomId()!=null){
+                if(roomRepository.existsById(bill.getRoomId())==true){
+                    room = roomRepository.findById(bill.getRoomId());
+
+                }
             }
-            if(roomID!=null){
-                room = roomRepository.findById(roomID);
+
+            if(bill.getContract()!=null){
+                if(contractRepository.existsById(bill.getContract().getId())==true){
+                    contract = contractRepository.findById(bill.getContract().getId());
+
+                }
+
             }
 
             Bill2 bill2 = new Bill2();
@@ -243,10 +248,22 @@ public class BillService {
             bill2.setBillContent(bill.getBillContent());
             bill2.setDescription(bill.getDescription());
             bill2.setHouseName(house.getName());
-            bill2.setRoomName(room.get().getName()!=null?room.get().getName():null);
-            bill2.setContractCode(contract.get().getContractCode()!=null?contract.get().getContractCode():null);
+
             bill2.setDateCreate(bill.getDateCreate());
             bill2.setTotalMoney(bill.getTotalMoney());
+
+            if(contract==null){
+                bill2.setContractCode(null);
+            }else{
+                bill2.setContractCode(contract.get().getContractCode());
+            }
+
+            if(room==null){
+                bill2.setRoomName(null);
+            }else{
+                bill2.setRoomName(room.get().getName());
+
+            }
 
             listBills2.add(bill2);
         }
