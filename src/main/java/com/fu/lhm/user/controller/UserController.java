@@ -10,10 +10,12 @@ import com.fu.lhm.user.model.LoginRequest;
 import com.fu.lhm.user.model.RegisterRequest;
 import com.fu.lhm.user.validate.UserValidate;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Generated
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor

@@ -1,42 +1,37 @@
 package com.fu.lhm.bill.service;
 
-import com.fu.lhm.bill.model.BillReceiveRequest;
-import com.fu.lhm.bill.model.BillRequest;
-import com.fu.lhm.bill.model.BillSpendRequest;
-import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.entity.BillContent;
 import com.fu.lhm.bill.entity.BillType;
+import com.fu.lhm.bill.model.BillReceiveRequest;
+import com.fu.lhm.bill.model.BillRequest;
+import com.fu.lhm.bill.model.BillSpendRequest;
 import com.fu.lhm.bill.repository.BillRepository;
-import com.fu.lhm.house.entity.House;
-import com.fu.lhm.room.entity.Room;
-import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.contract.entity.Contract;
 import com.fu.lhm.contract.repository.ContractRepository;
+import com.fu.lhm.exception.BadRequestException;
+import com.fu.lhm.house.entity.House;
+import com.fu.lhm.house.repository.HouseRepository;
+import com.fu.lhm.room.entity.Room;
+import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.user.entity.User;
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -48,6 +43,9 @@ public class BillService {
     private final BillRepository billRepository;
 
     private final RoomRepository roomRepository;
+
+    private final HouseRepository houseRepository;
+
 
 
     public Bill createBillReceive2(User user,Long houseId, Long roomId, BillReceiveRequest billRequest) throws BadRequestException {
@@ -296,11 +294,11 @@ public class BillService {
                 row.createCell(6).setCellValue(String.format("%,d", bill.getChiSoDauDien()));
                 row.createCell(7).setCellValue(String.format("%,d", bill.getChiSoCuoiDien()));
                 row.createCell(8).setCellValue(String.format("%,d", bill.getElectricNumber()));
-                row.createCell(9).setCellValue(String.format("%,d", bill.getElectricMoney()));
+                row.createCell(9).setCellValue(String.format("%,d", getHouseById(bill.getHouseId()).getElectricPrice()));
                 row.createCell(10).setCellValue(String.format("%,d", bill.getChiSoDauNuoc()));
                 row.createCell(11).setCellValue(String.format("%,d", bill.getChiSoCuoiNuoc()));
                 row.createCell(12).setCellValue(String.format("%,d", bill.getWaterNumber()));
-                row.createCell(13).setCellValue(String.format("%,d", bill.getWaterMoney()));
+                row.createCell(13).setCellValue(String.format("%,d", getHouseById(bill.getHouseId()).getWaterPrice()));
                 row.createCell(14).setCellValue(String.format("%,d", bill.getRoomMoney()));
                 row.createCell(15).setCellValue(String.format("%,d", bill.getTotalMoney()));
                 row.createCell(16).setCellValue(bill.getPayer());
@@ -321,7 +319,137 @@ public class BillService {
 
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
+        } catch (BadRequestException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    public void replaceTextsInWordDocument(Long billId, String inputFilePath, String outputFilePath) throws Exception {
+        Bill bill = billRepository.findById(billId).orElseThrow(() -> new BadRequestException("Hóa đơn không tồn tại!"));
+
+        String house = bill.getContract().getHouseName();
+        String address = bill.getContract().getTenant().getRoom().getHouse().getAddress() +
+                ", " + bill.getContract().getTenant().getRoom().getHouse().getDistrict() +
+                ", " + bill.getContract().getTenant().getRoom().getHouse().getCity();
+        String phone = bill.getContract().getTenant().getRoom().getHouse().getUser().getPhone();
+        LocalDate localDate = bill.getDateCreate();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String date = localDate.format(dateTimeFormatter);
+        String room = bill.getContract().getRoomName();
+
+        String roommoney = String.format("%,d", bill.getRoomMoney());
+        String start1 = String.format("%,d", bill.getChiSoDauDien());
+        String end1 = String.format("%,d", bill.getChiSoCuoiDien());
+        String amount1 = String.format("%,d", bill.getElectricNumber());
+        String electricmoney = String.format("%,d", getHouseById(bill.getHouseId()).getElectricPrice());
+        String total1 = String.format("%,d", bill.getElectricMoney());
+        String start2 = String.format("%,d", bill.getChiSoDauNuoc());
+        String end2 = String.format("%,d", bill.getChiSoCuoiNuoc());
+        String amount2 = String.format("%,d", bill.getWaterNumber());
+        String watermoney = String.format("%,d", getHouseById(bill.getHouseId()).getWaterPrice());
+        String total2 = String.format("%,d", bill.getWaterMoney());
+        String total3 = String.format("%,d", bill.getTotalMoney());
+
+        String name1 = bill.getContract().getTenant().getName();
+        String name2 = bill.getContract().getTenant().getRoom().getHouse().getUser().getName();
+
+        // Load the Word document
+        Map<String, String> replacements1 = new HashMap<>();
+        replacements1.put("house", house);
+        replacements1.put("address", address);
+        replacements1.put("phone", phone);
+        replacements1.put("date", date);
+        replacements1.put("room", room);
+        replacements1.put("name1", name1);
+        Map<String, String> replacementsTable1 = new HashMap<>();
+        replacementsTable1.put("roommoney", roommoney);
+        replacementsTable1.put("start1", start1);
+        replacementsTable1.put("end1", end1);
+        replacementsTable1.put("amount1", amount1);
+        replacementsTable1.put("electricmoney", electricmoney);
+        replacementsTable1.put("total1", total1);
+        replacementsTable1.put("start2", start2);
+        replacementsTable1.put("end2", end2);
+        replacementsTable1.put("amount2", amount2);
+        replacementsTable1.put("watermoney", watermoney);
+        replacementsTable1.put("total2", total2);
+        Map<String, String> replacementsTable2 = new HashMap<>();
+        replacementsTable2.put("total3", total3);
+        Map<String, String> replacementsTable3 = new HashMap<>();
+        replacementsTable3.put("name1", name1);
+        replacementsTable3.put("name2", name2);
+
+        // Load the Word document
+        FileInputStream fis = new FileInputStream(inputFilePath);
+        XWPFDocument document = new XWPFDocument(fis);
+
+        List<XWPFParagraph> xwpfParagraphs = document.getParagraphs();
+        replaceInParagraphs(replacements1, xwpfParagraphs);
+
+        List<XWPFTable> tables = document.getTables();
+        for (XWPFTable xwpfTable1 : tables) {
+            List<XWPFTableRow> tableRows1 = xwpfTable1.getRows();
+            for (XWPFTableRow xwpfTableRow1 : tableRows1) {
+                List<XWPFTableCell> tableCells1 = xwpfTableRow1.getTableCells();
+                for (XWPFTableCell xwpfTableCell1 : tableCells1) {
+                    xwpfParagraphs = xwpfTableCell1.getParagraphs();
+                    replaceInParagraphs(replacementsTable1, xwpfParagraphs);
+                }
+            }
+        }
+
+        for (XWPFTable xwpfTable2 : tables) {
+            List<XWPFTableRow> tableRows2 = xwpfTable2.getRows();
+            for (XWPFTableRow xwpfTableRow2 : tableRows2) {
+                List<XWPFTableCell> tableCells2 = xwpfTableRow2.getTableCells();
+                for (XWPFTableCell xwpfTableCell2 : tableCells2) {
+                    xwpfParagraphs = xwpfTableCell2.getParagraphs();
+                    replaceInParagraphs(replacementsTable2, xwpfParagraphs);
+                }
+            }
+        }
+
+        for (XWPFTable xwpfTable3 : tables) {
+            List<XWPFTableRow> tableRows3 = xwpfTable3.getRows();
+            for (XWPFTableRow xwpfTableRow3 : tableRows3) {
+                List<XWPFTableCell> tableCells3 = xwpfTableRow3.getTableCells();
+                for (XWPFTableCell xwpfTableCell3 : tableCells3) {
+                    xwpfParagraphs = xwpfTableCell3.getParagraphs();
+                    replaceInParagraphs(replacementsTable3, xwpfParagraphs);
+                }
+            }
+        }
+
+
+        // Save the modified document
+        FileOutputStream fos = new FileOutputStream(outputFilePath);
+        document.write(fos);
+
+        // Close the document
+        fos.close();
+        document.close();
+    }
+
+    private void replaceInParagraphs(Map<String, String> replacements, List<XWPFParagraph> xwpfParagraphs) {
+        // Get all paragraphs in the document
+        for (XWPFParagraph xwpfParagraph : xwpfParagraphs) {
+            List<XWPFRun> xwpfRuns = xwpfParagraph.getRuns();
+            for (XWPFRun xwpfRun : xwpfRuns) {
+                String xwpfRunText = xwpfRun.getText(xwpfRun.getTextPosition());
+                for (Map.Entry<String, String> entry : replacements.entrySet()) {
+                    if (xwpfRunText != null && xwpfRunText.contains(entry.getKey())) {
+                        xwpfRunText = xwpfRunText.replaceAll(entry.getKey(), entry.getValue());
+                    }
+                }
+                xwpfRun.setText(xwpfRunText, 0);
+            }
+        }
+    }
+
+
+    public House getHouseById(Long houseId) throws BadRequestException {
+
+        return houseRepository.findById(houseId).orElseThrow(() -> new BadRequestException("Nhà không tồn tại!"));
     }
 
     public String getStatus(Bill bill) {

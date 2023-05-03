@@ -12,6 +12,7 @@ import com.fu.lhm.notification.entity.Notification;
 import com.fu.lhm.notification.repository.NotificationRepository;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.tenant.repository.TenantRepository;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
+@Generated
 @Component
 @RequiredArgsConstructor
 public class BillSchedule {

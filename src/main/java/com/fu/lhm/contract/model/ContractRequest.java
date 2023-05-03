@@ -1,12 +1,11 @@
 package com.fu.lhm.contract.model;
 
 import com.fu.lhm.tenant.entity.Tenant;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
+
+@Generated
 @Data
 @Builder
 @NoArgsConstructor

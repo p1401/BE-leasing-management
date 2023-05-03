@@ -96,7 +96,7 @@ public class ContractController {
     public ResponseEntity<byte[]> generateDocContract(@PathVariable("contractId") Long contractId) throws Exception {
         // Set the paths for the template and output documents
         String templatePath = "src/main/resources/contract_template.docx";
-        String outputPath = "src/main/resources/output.docx";
+        String outputPath = "src/main/resources/contract_output.docx";
         try {
             // Generate the modified document using the service method
             contractService.replaceTextsInWordDocument(contractId, templatePath, outputPath);

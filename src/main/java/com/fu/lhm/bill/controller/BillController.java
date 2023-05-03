@@ -16,11 +16,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -115,6 +119,26 @@ public class BillController {
         // set filename in header
         headers.add("Content-Disposition", "attachment; filename=Bills.xlsx");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(in));
+    }
+
+    @GetMapping("/generateDoc/{billId}")
+    public ResponseEntity<byte[]> generateDocBill(@PathVariable("billId") Long billId) throws Exception {
+        // Set the paths for the template and output documents
+        String templatePath = "src/main/resources/bill_template.docx";
+        String outputPath = "src/main/resources/bill_output.docx";
+        try {
+            // Generate the modified document using the service method
+            billService.replaceTextsInWordDocument(billId, templatePath, outputPath);
+
+            // Return the modified document as a byte array
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "Bill_#" + billId + ".docx");
+            return new ResponseEntity<>(Files.readAllBytes(Paths.get(outputPath)), headers, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
 

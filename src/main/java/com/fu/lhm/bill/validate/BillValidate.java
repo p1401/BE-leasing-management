@@ -11,6 +11,7 @@ import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.contract.entity.Contract;
 import com.fu.lhm.contract.repository.ContractRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+@Generated
 @Component
 @RequiredArgsConstructor
 public class BillValidate {

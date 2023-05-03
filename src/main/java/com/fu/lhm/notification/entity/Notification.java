@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.util.Date;
 
+@Generated
 @Entity(name = "notifications")
 @Getter
 @Setter

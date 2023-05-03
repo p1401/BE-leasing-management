@@ -8,6 +8,7 @@ import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
 import com.fu.lhm.waterElectric.entity.WaterElectric;
 import com.fu.lhm.waterElectric.repository.WaterElectricRepositoy;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
+@Generated
 @Component
 @RequiredArgsConstructor
 public class RoomSchedule {

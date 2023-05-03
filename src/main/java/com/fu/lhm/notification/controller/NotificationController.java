@@ -6,6 +6,7 @@ import com.fu.lhm.notification.entity.Notification;
 import com.fu.lhm.notification.service.NotificationService;
 import com.fu.lhm.user.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 
+@Generated
 @RestController
 @RequestMapping("api/v1/notifications")
 @RequiredArgsConstructor

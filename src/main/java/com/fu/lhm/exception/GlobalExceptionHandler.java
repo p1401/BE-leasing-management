@@ -1,10 +1,12 @@
 package com.fu.lhm.exception;
 
+import lombok.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@Generated
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

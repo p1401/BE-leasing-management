@@ -3,12 +3,14 @@ package com.fu.lhm.user.service;
 import com.fu.lhm.jwt.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 
+@Generated
 @Service
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {

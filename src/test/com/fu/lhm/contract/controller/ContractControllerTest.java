@@ -452,7 +452,7 @@ public class ContractControllerTest {
 //        // Create input and output files
 //        File inputFile = new File("src/main/resources/contract_template.docx");
 //        inputFile.createNewFile();
-//        File outputFile = new File("src/main/resources/output.docx");
+//        File outputFile = new File("src/main/resources/contract_output.docx");
 //        outputFile.createNewFile();
 //
 //        // Mock the service method to generate the output file

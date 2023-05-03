@@ -1,12 +1,10 @@
 package com.fu.lhm.user.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
+@Generated
 @Data
 @Builder
 @AllArgsConstructor

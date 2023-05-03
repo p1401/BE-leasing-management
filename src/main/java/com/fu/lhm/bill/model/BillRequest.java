@@ -4,6 +4,7 @@ import com.fu.lhm.bill.entity.Bill;
 import lombok.*;
 import org.springframework.data.domain.Page;
 
+@Generated
 @Getter
 @Setter
 @Data

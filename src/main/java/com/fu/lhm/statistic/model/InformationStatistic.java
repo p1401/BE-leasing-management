@@ -3,6 +3,7 @@ package com.fu.lhm.statistic.model;
 
 import lombok.*;
 
+@Generated
 @Getter
 @Setter
 @Data

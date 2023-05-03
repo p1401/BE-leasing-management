@@ -6,12 +6,14 @@ import com.fu.lhm.statistic.model.RevenueStatistic;
 import com.fu.lhm.statistic.service.RevenueStatisticService;
 import com.fu.lhm.user.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Generated
 @RestController
 @RequestMapping("api/v1/revenue-statistic")
 @RequiredArgsConstructor
