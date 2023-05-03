@@ -427,15 +427,15 @@ public class BillService {
     public void replaceTextsInWordDocument(Long billId, String inputFilePath, String outputFilePath) throws Exception {
         Bill bill = billRepository.findById(billId).orElseThrow(() -> new BadRequestException("Hóa đơn không tồn tại!"));
 
-        String house = bill.getContract().getHouseName();
-        String address = bill.getContract().getTenant().getRoom().getHouse().getAddress() +
-                ", " + bill.getContract().getTenant().getRoom().getHouse().getDistrict() +
-                ", " + bill.getContract().getTenant().getRoom().getHouse().getCity();
-        String phone = bill.getContract().getTenant().getRoom().getHouse().getUser().getPhone();
+        String house = getHouseById(bill.getHouseId()).getName();
+        String address = getHouseById(bill.getHouseId()).getAddress() +
+                ", " + getHouseById(bill.getHouseId()).getDistrict() +
+                ", " + getHouseById(bill.getHouseId()).getCity();
+        String phone = getHouseById(bill.getHouseId()).getUser().getPhone();
         LocalDate localDate = bill.getDateCreate();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = localDate.format(dateTimeFormatter);
-        String room = bill.getContract().getRoomName();
+        String room = getRoomById(bill.getRoomId()).getName();
 
         String roommoney = String.format("%,d", bill.getRoomMoney());
         String start1 = String.format("%,d", bill.getChiSoDauDien());
@@ -450,8 +450,8 @@ public class BillService {
         String total2 = String.format("%,d", bill.getWaterMoney());
         String total3 = String.format("%,d", bill.getTotalMoney());
 
-        String name1 = bill.getContract().getTenant().getName();
-        String name2 = bill.getContract().getTenant().getRoom().getHouse().getUser().getName();
+        String name1 = bill.getPayer();
+        String name2 = getHouseById(bill.getHouseId()).getUser().getName();
 
         // Load the Word document
         Map<String, String> replacements1 = new HashMap<>();
@@ -550,6 +550,10 @@ public class BillService {
     public House getHouseById(Long houseId) throws BadRequestException {
 
         return houseRepository.findById(houseId).orElseThrow(() -> new BadRequestException("Nhà không tồn tại!"));
+    }
+
+    public Room getRoomById(Long roomId) throws BadRequestException {
+        return roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
     }
 
     public String getStatus(Bill bill) {
