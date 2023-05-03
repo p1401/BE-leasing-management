@@ -1,34 +1,30 @@
 package com.fu.lhm.bill.service;
 
-import com.fu.lhm.bill.model.*;
-import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.bill.entity.Bill;
 import com.fu.lhm.bill.entity.BillContent;
 import com.fu.lhm.bill.entity.BillType;
+import com.fu.lhm.bill.model.*;
 import com.fu.lhm.bill.repository.BillRepository;
+import com.fu.lhm.contract.entity.Contract;
+import com.fu.lhm.contract.repository.ContractRepository;
+import com.fu.lhm.exception.BadRequestException;
 import com.fu.lhm.house.entity.House;
 import com.fu.lhm.house.repository.HouseRepository;
 import com.fu.lhm.room.entity.Room;
 import com.fu.lhm.room.repository.RoomRepository;
-import com.fu.lhm.contract.entity.Contract;
-import com.fu.lhm.contract.repository.ContractRepository;
 import com.fu.lhm.user.entity.User;
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,11 +44,11 @@ public class BillService {
     private final HouseRepository houseRepository;
 
 
-    public Bill createBillReceive2(User user,Long houseId, Long roomId, BillReceiveRequest billRequest) throws BadRequestException {
+    public Bill createBillReceive2(User user, Long houseId, Long roomId, BillReceiveRequest billRequest) throws BadRequestException {
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         Bill bill = mapToBillReceive2(billRequest);
-        bill.setBillCode("PT"+randomNumber);
-        bill.setRoomId(roomId==null?0:roomId);
+        bill.setBillCode("PT" + randomNumber);
+        bill.setRoomId(roomId == null ? 0 : roomId);
         bill.setHouseId(houseId);
         bill.setUserId(user.getId());
         return billRepository.save(bill);
@@ -63,9 +59,9 @@ public class BillService {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
         Contract contract = contractRepository.findByTenant_Room_IdAndIsActiveTrue(roomId);
         Bill bill = mapToBillReceive(billRequest);
-        bill.setBillCode("PT"+randomNumber);
-        bill.setElectricMoney(room.getHouse().getElectricPrice()*billRequest.getElectricNumber());
-        bill.setWaterMoney(room.getHouse().getWaterPrice()*billRequest.getWaterNumber());
+        bill.setBillCode("PT" + randomNumber);
+        bill.setElectricMoney(room.getHouse().getElectricPrice() * billRequest.getElectricNumber());
+        bill.setWaterMoney(room.getHouse().getWaterPrice() * billRequest.getWaterNumber());
         bill.setPayer(contract.getTenantName());
         bill.setContract(contract);
         bill.setRoomId(roomId);
@@ -74,19 +70,18 @@ public class BillService {
         return billRepository.save(bill);
     }
 
-    public Bill createBillSpend(User user,Long roomId, BillSpendRequest billRequest) throws BadRequestException {
+    public Bill createBillSpend(User user, Long roomId, BillSpendRequest billRequest) throws BadRequestException {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
         int randomNumber = (int) (Math.random() * (999999 - 100000 + 1) + 100000);
         Bill bill = mapToBillSpend(billRequest);
         bill.setBillContent(BillContent.TIENPHUTROI);
-        bill.setBillCode("PC"+randomNumber);
+        bill.setBillCode("PC" + randomNumber);
         bill.setIsPay(true);
         bill.setRoomId(roomId);
         bill.setHouseId(room.getHouse().getId());
         bill.setUserId(user.getId());
         return billRepository.save(bill);
     }
-
 
 
     public static Bill mapToBillReceive(BillReceiveRequest billRE) {
@@ -159,87 +154,75 @@ public class BillService {
     }
 
     public BillRequest getBills(Long userId,
-                            Long houseId,
-                            Long roomId,
-                            Date fromDate,
-                            Date toDate,
-                            String billType,
-                            Boolean isPay,
-                            Pageable page) {
-        BillRequest billRequest = new BillRequest();
-        Integer receive = 0;
-        Integer spend=0;
-        Integer revenue = 0;
-
-        if(billType.equalsIgnoreCase("")){
-            billType=null;
-        }
-
-            Page<Bill> listBills = billRepository.findBills(userId,houseId,roomId,fromDate,toDate,billType,isPay, page);
-            List<Bill> list =  billRepository.findBills(userId,houseId,roomId,fromDate,toDate,billType,isPay,Pageable.unpaged()).toList();
-            for(Bill bill :list){
-
-                if(bill.getBillType().equals(BillType.RECEIVE)
-                        && !bill.getBillContent().equals(BillContent.TIENCOC)
-                        && bill.getIsPay()==true){
-
-                    receive = receive+bill.getTotalMoney();
-
-                }
-                if(bill.getBillType().equals(BillType.SPEND)){
-
-                    spend = spend + bill.getTotalMoney();
-
-                }
-            }
-
-            revenue = receive-spend;
-
-            billRequest.setReceive(receive);
-            billRequest.setSpend(spend);
-            billRequest.setRevenue(revenue);
-            billRequest.setListBill(listBills);
-            return billRequest;
-    }
-
-    public BillRequest2 getBills2(Long userId,
                                 Long houseId,
                                 Long roomId,
                                 Date fromDate,
                                 Date toDate,
                                 String billType,
-                                String billContent,
+                                Boolean isPay,
                                 Pageable page) {
-        BillRequest2 billRequest = new BillRequest2();
+        BillRequest billRequest = new BillRequest();
         Integer receive = 0;
-        Integer spend=0;
+        Integer spend = 0;
         Integer revenue = 0;
 
-//        if(billType.equalsIgnoreCase("")){
-//            billType=null;
-//        }
-//
-//        if(billContent.equalsIgnoreCase("")){
-//            billContent=null;
-//        }
+        Page<Bill> listBills = billRepository.findBills(userId, houseId, roomId, fromDate, toDate, billType, isPay, page);
+        List<Bill> list = billRepository.findBills(userId, houseId, roomId, fromDate, toDate, billType, isPay, Pageable.unpaged()).toList();
+        for (Bill bill : list) {
+
+            if (bill.getBillType().equals(BillType.RECEIVE)
+                    && !bill.getBillContent().equals(BillContent.TIENCOC)
+                    && bill.getIsPay() == true) {
+
+                receive = receive + bill.getTotalMoney();
+
+            }
+            if (bill.getBillType().equals(BillType.SPEND)) {
+
+                spend = spend + bill.getTotalMoney();
+
+            }
+        }
+
+        revenue = receive - spend;
+
+        billRequest.setReceive(receive);
+        billRequest.setSpend(spend);
+        billRequest.setRevenue(revenue);
+        billRequest.setListBill(listBills);
+        return billRequest;
+    }
+
+    public BillRequest2 getBills2(Long userId,
+                                  Long houseId,
+                                  Long roomId,
+                                  Date fromDate,
+                                  Date toDate,
+                                  String billType,
+                                  String billContent,
+                                  Pageable page) {
+        BillRequest2 billRequest = new BillRequest2();
+        Integer receive = 0;
+        Integer spend = 0;
+        Integer revenue = 0;
 
         List<Bill2> listBills2 = new ArrayList<>();
 
-        List<Bill> list =  billRepository.findBills2(userId,houseId,roomId,fromDate,toDate,billType,billContent);
+        List<Bill> list = billRepository.findBills2(userId, houseId, roomId, fromDate, toDate, billType, billContent);
 
-        for(Bill bill : list){
+        for (Bill bill : list) {
             House house = houseRepository.findById(bill.getHouseId()).orElseThrow();
             Optional<Room> room = null;
-            Optional<Contract> contract =null;
-            if(bill.getRoomId()!=null){
-                if(roomRepository.existsById(bill.getRoomId())==true){
+            Optional<Contract> contract = null;
+            if (bill.getRoomId() != null) {
+                if (roomRepository.existsById(bill.getRoomId())) {
                     room = roomRepository.findById(bill.getRoomId());
 
                 }
             }
 
-            if(bill.getContract()!=null){
-                if(contractRepository.existsById(bill.getContract().getId())==true){
+            if (bill.getContract() != null) {
+                if (contractRepository.existsById(bill.getContract().getId())) {
                     contract = contractRepository.findById(bill.getContract().getId());
                 }
             }
@@ -255,15 +238,15 @@ public class BillService {
             bill2.setDateCreate(bill.getDateCreate());
             bill2.setTotalMoney(bill.getTotalMoney());
 
-            if(contract==null){
+            if (contract == null) {
                 bill2.setContractCode(null);
-            }else{
+            } else {
                 bill2.setContractCode(contract.get().getContractCode());
             }
 
-            if(room==null){
+            if (room == null) {
                 bill2.setRoomName(null);
-            }else{
+            } else {
                 bill2.setRoomName(room.get().getName());
 
             }
@@ -271,26 +254,26 @@ public class BillService {
             listBills2.add(bill2);
         }
 
-        Page<Bill2> pageBill = new PageImpl<>(listBills2, page,listBills2.size());
+        Page<Bill2> pageBill = new PageImpl<>(listBills2, page, listBills2.size());
 
 
-        for(Bill bill :list){
+        for (Bill bill : list) {
 
-            if(bill.getBillType().equals(BillType.RECEIVE)
+            if (bill.getBillType().equals(BillType.RECEIVE)
                     && !bill.getBillContent().equals(BillContent.TIENCOC)
-                    && bill.getIsPay()==true){
+                    && bill.getIsPay() == true) {
 
-                receive = receive+bill.getTotalMoney();
+                receive = receive + bill.getTotalMoney();
 
             }
-            if(bill.getBillType().equals(BillType.SPEND)){
+            if (bill.getBillType().equals(BillType.SPEND)) {
 
                 spend = spend + bill.getTotalMoney();
 
             }
         }
 
-        revenue = receive-spend;
+        revenue = receive - spend;
 
         billRequest.setReceive(receive);
         billRequest.setSpend(spend);
@@ -383,17 +366,11 @@ public class BillService {
             AtomicInteger count = new AtomicInteger(0);
 
             for (Bill bill : bills) {
-                Optional<Contract> contract =null;
-                Optional<House> house =null;
-                if(bill.getContract()!=null){
-                    if(contractRepository.existsById(bill.getContract().getId())==true){
-                        contract = contractRepository.findById(bill.getContract().getId());
-                    }
-                }
+                Optional<Contract> contract = null;
 
-                if(bill.getHouseId()!=null){
-                    if(houseRepository.existsById(bill.getHouseId())==true){
-                        house = houseRepository.findById(bill.getHouseId());
+                if (bill.getContract() != null) {
+                    if (contractRepository.existsById(bill.getContract().getId()) == true) {
+                        contract = contractRepository.findById(bill.getContract().getId());
                     }
                 }
 
@@ -401,20 +378,13 @@ public class BillService {
                 row.createCell(0).setCellValue(count.incrementAndGet());
                 row.createCell(1).setCellValue(getBillType(bill));
                 row.createCell(2).setCellValue(getBillContent(bill));
-                if(house==null){
+                if (contract == null) {
                     row.createCell(3).setCellValue("");
-
-                }else{
-                    row.createCell(3).setCellValue(house.get().getName());
-
-                }
-                if(contract==null){
                     row.createCell(4).setCellValue("");
-                }else{
+                } else {
+                    row.createCell(3).setCellValue(bill.getContract().getHouseName());
                     row.createCell(4).setCellValue(bill.getContract().getRoomName());
                 }
-
-
                 row.createCell(5).setCellValue(bill.getPayer());
                 row.createCell(6).setCellValue(String.format("%,d", bill.getChiSoDauDien()));
                 row.createCell(7).setCellValue(String.format("%,d", bill.getChiSoCuoiDien()));
@@ -451,9 +421,9 @@ public class BillService {
         return bill.getIsPay() ? "Đã thanh toán" : "Chưa thanh toán";
     }
 
-    public String getBillContent(Bill bill){
+    public String getBillContent(Bill bill) {
         String billType = bill.getBillContent().name();
-        if(billType.equals("TIENPHONG")) {
+        if (billType.equals("TIENPHONG")) {
             return "Tiền phòng";
         } else if (billType.equals("TIENPHUTROI")) {
             return "Tiền phụ trội";
@@ -462,9 +432,9 @@ public class BillService {
         }
     }
 
-    public String getBillType(Bill bill){
+    public String getBillType(Bill bill) {
         String billType = bill.getBillType().name();
-        if(billType.equals("RECEIVE")) {
+        if (billType.equals("RECEIVE")) {
             return "Thu";
         } else {
             return "Chi";
