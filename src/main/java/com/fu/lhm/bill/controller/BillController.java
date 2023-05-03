@@ -119,10 +119,20 @@ public class BillController {
     }
 
     @GetMapping(value = "/generateExcel")
-    public ResponseEntity<InputStreamResource> generateBillsExcel() throws BadRequestException, IOException {
+    public ResponseEntity<InputStreamResource> generateBillsExcel(@RequestParam(name = "houseId", required = false) Long houseId,
+                                                                  @RequestParam(name = "roomId", required = false) Long roomId,
+                                                                  @RequestParam(name = "fromDate", required = false) Date fromDate,
+                                                                  @RequestParam(name = "toDate", required = false) Date toDate,
+                                                                  @RequestParam(name = "billType", required = false) String billType,
+                                                                  @RequestParam(name = "isPay", required = false) Boolean isPay,
+                                                                  @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                                  @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) throws BadRequestException, IOException {
         Long userId = getUserToken().getId();
 
-        List<Bill> bills = billService.getAllBill(userId);
+        BillRequest billRequest =  billService.getBills(getUserToken().getId(),houseId, roomId,fromDate,toDate,billType,isPay, PageRequest.of(page, pageSize));
+
+
+        List<Bill> bills = billRequest.getListBill().toList();
         ByteArrayInputStream in = billService.generateExcel(userId, bills);
         // return IO ByteArray(in);
         HttpHeaders headers = new HttpHeaders();

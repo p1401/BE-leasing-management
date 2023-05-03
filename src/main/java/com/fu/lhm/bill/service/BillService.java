@@ -236,9 +236,7 @@ public class BillService {
             if(bill.getContract()!=null){
                 if(contractRepository.existsById(bill.getContract().getId())==true){
                     contract = contractRepository.findById(bill.getContract().getId());
-
                 }
-
             }
 
             Bill2 bill2 = new Bill2();
@@ -248,7 +246,7 @@ public class BillService {
             bill2.setBillContent(bill.getBillContent());
             bill2.setDescription(bill.getDescription());
             bill2.setHouseName(house.getName());
-
+            bill2.setPayer(bill.getPayer());
             bill2.setDateCreate(bill.getDateCreate());
             bill2.setTotalMoney(bill.getTotalMoney());
 
@@ -380,13 +378,26 @@ public class BillService {
             AtomicInteger count = new AtomicInteger(0);
 
             for (Bill bill : bills) {
+                Optional<Contract> contract =null;
+
+                if(bill.getContract()!=null){
+                    if(contractRepository.existsById(bill.getContract().getId())==true){
+                        contract = contractRepository.findById(bill.getContract().getId());
+                    }
+                }
+
                 Row row = sheet.createRow(dataRowIndex++);
                 row.createCell(0).setCellValue(count.incrementAndGet());
                 row.createCell(1).setCellValue(getBillType(bill));
                 row.createCell(2).setCellValue(getBillContent(bill));
-                row.createCell(3).setCellValue(bill.getContract().getHouseName());
-                row.createCell(4).setCellValue(bill.getContract().getRoomName());
-                row.createCell(5).setCellValue(bill.getContract().getTenantName());
+                if(contract==null){
+                    row.createCell(3).setCellValue("");
+                    row.createCell(4).setCellValue("");
+                }else{
+                    row.createCell(3).setCellValue(bill.getContract().getHouseName());
+                    row.createCell(4).setCellValue(bill.getContract().getRoomName());
+                }
+                row.createCell(5).setCellValue(bill.getPayer());
                 row.createCell(6).setCellValue(String.format("%,d", bill.getChiSoDauDien()));
                 row.createCell(7).setCellValue(String.format("%,d", bill.getChiSoCuoiDien()));
                 row.createCell(8).setCellValue(String.format("%,d", bill.getElectricNumber()));
