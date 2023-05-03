@@ -69,7 +69,11 @@ public class InformationStatisticService {
             }
 
             List<Tenant> listTenant = tenantRepository.findAllByRoom_House_IdAndIsStayTrue(house.getId());
-            for()
+            for(Tenant tenant : listTenant){
+                if(tenant.getIsStay()==true){
+                    numberTenant=numberTenant+1;
+                }
+            }
         }
 
         InformationStatistic informationStatistic = new InformationStatistic();
@@ -77,7 +81,7 @@ public class InformationStatisticService {
         informationStatistic.setNumberRoom(numberRoom);
         informationStatistic.setNumberEmptyRoom(numberRoomEmpty);
         informationStatistic.setNumberContractExpired30days(numberContractExpired30days);
-
+        informationStatistic.setNumberTenant(numberTenant);
         return informationStatistic;
     }
 
