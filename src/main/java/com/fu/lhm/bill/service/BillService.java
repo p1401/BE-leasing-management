@@ -376,7 +376,13 @@ public class BillService {
                 row.createCell(1).setCellValue(getBillType(bill));
                 row.createCell(2).setCellValue(getBillContent(bill));
                 row.createCell(3).setCellValue(getHouseById(bill.getHouseId()).getName());
-                row.createCell(4).setCellValue(getRoomById(bill.getRoomId()).getName());
+                String room;
+                if(getRoomById(bill.getRoomId()) == null){
+                    room = "";
+                } else {
+                    room = getRoomById(bill.getRoomId()).getName();
+                }
+                row.createCell(4).setCellValue(room);
                 row.createCell(5).setCellValue(bill.getPayer());
                 row.createCell(6).setCellValue(String.format("%,d", bill.getChiSoDauDien()));
                 row.createCell(7).setCellValue(String.format("%,d", bill.getChiSoCuoiDien()));
@@ -406,8 +412,6 @@ public class BillService {
 
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
-        } catch (BadRequestException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -422,8 +426,8 @@ public class BillService {
         LocalDate localDate = bill.getDateCreate();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = localDate.format(dateTimeFormatter);
-        String room = "";
-        if(getRoomById(bill.getRoomId()).getName() == null){
+        String room;
+        if(getRoomById(bill.getRoomId()) == null){
             room = "";
         } else {
             room = getRoomById(bill.getRoomId()).getName();
@@ -539,14 +543,12 @@ public class BillService {
         }
     }
 
-
-    public House getHouseById(Long houseId) throws BadRequestException {
-
-        return houseRepository.findById(houseId).orElseThrow(() -> new BadRequestException("Nhà không tồn tại!"));
+    public House getHouseById(Long houseId) {
+        return houseRepository.findAllById(houseId);
     }
 
-    public Room getRoomById(Long roomId) throws BadRequestException {
-        return roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng không tồn tại!"));
+    public Room getRoomById(Long roomId) {
+        return roomRepository.findAllById(roomId);
     }
 
     public String getStatus(Bill bill) {

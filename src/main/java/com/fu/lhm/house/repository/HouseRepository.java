@@ -30,4 +30,5 @@ public interface HouseRepository extends JpaRepository<House, Long> {
 
     Page<House> findByUserAndNameContaining(User user,String houseName, Pageable pageable);
 
+    House findAllById(Long houseId);
 }
