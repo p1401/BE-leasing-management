@@ -22,4 +22,5 @@ public interface TenantRepository extends JpaRepository<Tenant, Long> {
 
     List<Tenant> findAllByRoom_IdAndIsStayTrue(Long id);
 
+    List<Tenant> findAllByRoom_House_IdAndIsStayTrue(Long id);
 }

@@ -170,9 +170,11 @@ public class BillService {
         Integer receive = 0;
         Integer spend=0;
         Integer revenue = 0;
+
         if(billType.equalsIgnoreCase("")){
             billType=null;
         }
+
             Page<Bill> listBills = billRepository.findBills(userId,houseId,roomId,fromDate,toDate,billType,isPay, page);
             List<Bill> list =  billRepository.findBills(userId,houseId,roomId,fromDate,toDate,billType,isPay,Pageable.unpaged()).toList();
             for(Bill bill :list){
@@ -212,12 +214,15 @@ public class BillService {
         Integer receive = 0;
         Integer spend=0;
         Integer revenue = 0;
-        if(billType.equalsIgnoreCase("")){
-            billType=null;
-        }
-        if(billContent.equalsIgnoreCase("")){
-            billContent=null;
-        }
+
+//        if(billType.equalsIgnoreCase("")){
+//            billType=null;
+//        }
+//
+//        if(billContent.equalsIgnoreCase("")){
+//            billContent=null;
+//        }
+
         List<Bill2> listBills2 = new ArrayList<>();
 
         List<Bill> list =  billRepository.findBills2(userId,houseId,roomId,fromDate,toDate,billType,billContent);
@@ -379,10 +384,16 @@ public class BillService {
 
             for (Bill bill : bills) {
                 Optional<Contract> contract =null;
-
+                Optional<House> house =null;
                 if(bill.getContract()!=null){
                     if(contractRepository.existsById(bill.getContract().getId())==true){
                         contract = contractRepository.findById(bill.getContract().getId());
+                    }
+                }
+
+                if(bill.getHouseId()!=null){
+                    if(houseRepository.existsById(bill.getHouseId())==true){
+                        house = houseRepository.findById(bill.getHouseId());
                     }
                 }
 
@@ -390,13 +401,20 @@ public class BillService {
                 row.createCell(0).setCellValue(count.incrementAndGet());
                 row.createCell(1).setCellValue(getBillType(bill));
                 row.createCell(2).setCellValue(getBillContent(bill));
-                if(contract==null){
+                if(house==null){
                     row.createCell(3).setCellValue("");
+
+                }else{
+                    row.createCell(3).setCellValue(house.get().getName());
+
+                }
+                if(contract==null){
                     row.createCell(4).setCellValue("");
                 }else{
-                    row.createCell(3).setCellValue(bill.getContract().getHouseName());
                     row.createCell(4).setCellValue(bill.getContract().getRoomName());
                 }
+
+
                 row.createCell(5).setCellValue(bill.getPayer());
                 row.createCell(6).setCellValue(String.format("%,d", bill.getChiSoDauDien()));
                 row.createCell(7).setCellValue(String.format("%,d", bill.getChiSoCuoiDien()));

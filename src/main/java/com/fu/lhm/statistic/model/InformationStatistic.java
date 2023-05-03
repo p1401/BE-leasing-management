@@ -19,4 +19,5 @@ public class InformationStatistic {
 
     private int numberContractExpired30days;
 
+    private int numberTenant;
 }

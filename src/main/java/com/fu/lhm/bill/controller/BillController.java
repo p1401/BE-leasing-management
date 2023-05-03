@@ -1,10 +1,8 @@
 package com.fu.lhm.bill.controller;
 
 import com.fu.lhm.bill.entity.Bill;
-import com.fu.lhm.bill.model.BillReceiveRequest;
-import com.fu.lhm.bill.model.BillRequest;
-import com.fu.lhm.bill.model.BillRequest2;
-import com.fu.lhm.bill.model.BillSpendRequest;
+import com.fu.lhm.bill.model.*;
+import com.fu.lhm.bill.repository.BillRepository;
 import com.fu.lhm.bill.service.BillService;
 import com.fu.lhm.bill.validate.BillValidate;
 import com.fu.lhm.exception.BadRequestException;
@@ -37,6 +35,8 @@ public class BillController {
 
     private final HttpServletRequest httpServletRequest;
     private final JwtService jwtService;
+    private final BillRepository billRepository;
+
     private User getUserToken() throws BadRequestException {
         return jwtService.getUser(httpServletRequest);
     }
@@ -119,7 +119,7 @@ public class BillController {
     }
 
     @GetMapping(value = "/generateExcel")
-    public ResponseEntity<InputStreamResource> generateBillsExcel(@RequestParam(name = "houseId", required = false) Long houseId,
+    public ResponseEntity<InputStreamResource> exportBillsExcel(@RequestParam(name = "houseId", required = false) Long houseId,
                                                                   @RequestParam(name = "roomId", required = false) Long roomId,
                                                                   @RequestParam(name = "fromDate", required = false) Date fromDate,
                                                                   @RequestParam(name = "toDate", required = false) Date toDate,
@@ -133,6 +133,26 @@ public class BillController {
 
 
         List<Bill> bills = billRequest.getListBill().toList();
+        ByteArrayInputStream in = billService.generateExcel(userId, bills);
+        // return IO ByteArray(in);
+        HttpHeaders headers = new HttpHeaders();
+        // set filename in header
+        headers.add("Content-Disposition", "attachment; filename=Bills.xlsx");
+        return ResponseEntity.ok().headers(headers).body(new InputStreamResource(in));
+    }
+
+    @GetMapping(value = "/generateExcel2")
+    public ResponseEntity<InputStreamResource> exportBillsExcel2(@RequestParam(name = "houseId", required = false) Long houseId,
+                                                                 @RequestParam(name = "roomId", required = false) Long roomId,
+                                                                 @RequestParam(name = "fromDate", required = false) Date fromDate,
+                                                                 @RequestParam(name = "toDate", required = false) Date toDate,
+                                                                 @RequestParam(name = "billType", required = false) String billType,
+                                                                 @RequestParam(name = "billContent", required = false) String billContent,
+                                                                 @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                                 @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) throws BadRequestException, IOException {
+        Long userId = getUserToken().getId();
+
+        List<Bill> bills = billRepository.findBills2(getUserToken().getId(),houseId, roomId,fromDate,toDate,billType,billContent);
         ByteArrayInputStream in = billService.generateExcel(userId, bills);
         // return IO ByteArray(in);
         HttpHeaders headers = new HttpHeaders();
