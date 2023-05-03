@@ -287,7 +287,7 @@ public class BillService {
         return billRequest;
     }
 
-    public ByteArrayInputStream generateExcel(Long id, List<Bill> bills) throws IOException {
+    public ByteArrayInputStream generateExcel(List<Bill> bills) throws IOException {
         String[] headerMain = {"TT", "Hóa đơn", null, "Nhà", "Phòng", "Khách hàng", "Chỉ số điện", null, "Tiền điện", null,
                 "Chỉ số nước", null, "Tiền nước", null, "Tiền phòng", "Tổng tiền", "Người nộp/nhận", "Nội dung", "Ngày tạo", "Trạng thái"};
         String[] headerSub = {null, "Thể loại", "Chi tiết", null, null, null, "Chỉ số đầu", "Chỉ số cuối", "Số lượng", "Đơn giá",
@@ -371,25 +371,12 @@ public class BillService {
             AtomicInteger count = new AtomicInteger(0);
 
             for (Bill bill : bills) {
-                Optional<Contract> contract = null;
-
-                if (bill.getContract() != null) {
-                    if (contractRepository.existsById(bill.getContract().getId()) == true) {
-                        contract = contractRepository.findById(bill.getContract().getId());
-                    }
-                }
-
                 Row row = sheet.createRow(dataRowIndex++);
                 row.createCell(0).setCellValue(count.incrementAndGet());
                 row.createCell(1).setCellValue(getBillType(bill));
                 row.createCell(2).setCellValue(getBillContent(bill));
-                if (contract == null) {
-                    row.createCell(3).setCellValue("");
-                    row.createCell(4).setCellValue("");
-                } else {
-                    row.createCell(3).setCellValue(bill.getContract().getHouseName());
-                    row.createCell(4).setCellValue(bill.getContract().getRoomName());
-                }
+                row.createCell(3).setCellValue(getHouseById(bill.getHouseId()).getName());
+                row.createCell(4).setCellValue(getRoomById(bill.getRoomId()).getName());
                 row.createCell(5).setCellValue(bill.getPayer());
                 row.createCell(6).setCellValue(String.format("%,d", bill.getChiSoDauDien()));
                 row.createCell(7).setCellValue(String.format("%,d", bill.getChiSoCuoiDien()));
@@ -448,6 +435,7 @@ public class BillService {
         String amount2 = String.format("%,d", bill.getWaterNumber());
         String watermoney = String.format("%,d", getHouseById(bill.getHouseId()).getWaterPrice());
         String total2 = String.format("%,d", bill.getWaterMoney());
+
         String total3 = String.format("%,d", bill.getTotalMoney());
 
         String name1 = bill.getPayer();
@@ -566,6 +554,8 @@ public class BillService {
             return "Tiền phòng";
         } else if (billType.equals("TIENPHUTROI")) {
             return "Tiền phụ trội";
+        } else if (billType.equals("TIENCOC2")) {
+            return "Tiền phạt cọc";
         } else {
             return "Tiền cọc";
         }

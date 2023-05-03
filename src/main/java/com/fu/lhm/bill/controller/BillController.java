@@ -131,13 +131,12 @@ public class BillController {
                                                                   @RequestParam(name = "isPay", required = false) Boolean isPay,
                                                                   @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) throws BadRequestException, IOException {
-        Long userId = getUserToken().getId();
 
         BillRequest billRequest =  billService.getBills(getUserToken().getId(),houseId, roomId,fromDate,toDate,billType,isPay, PageRequest.of(page, pageSize));
 
 
         List<Bill> bills = billRequest.getListBill().toList();
-        ByteArrayInputStream in = billService.generateExcel(userId, bills);
+        ByteArrayInputStream in = billService.generateExcel(bills);
         // return IO ByteArray(in);
         HttpHeaders headers = new HttpHeaders();
         // set filename in header
@@ -154,10 +153,9 @@ public class BillController {
                                                                  @RequestParam(name = "billContent", required = false) String billContent,
                                                                  @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                                  @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) throws BadRequestException, IOException {
-        Long userId = getUserToken().getId();
 
         List<Bill> bills = billRepository.findBills2(getUserToken().getId(),houseId, roomId,fromDate,toDate,billType,billContent);
-        ByteArrayInputStream in = billService.generateExcel(userId, bills);
+        ByteArrayInputStream in = billService.generateExcel(bills);
         // return IO ByteArray(in);
         HttpHeaders headers = new HttpHeaders();
         // set filename in header
