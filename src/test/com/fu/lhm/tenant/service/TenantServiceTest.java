@@ -493,7 +493,7 @@ public class TenantServiceTest {
         tenant.setIsStay(true);
         tenants.add(tenant);
         Page<Tenant> expectedPage = new PageImpl<>(tenants, page, tenants.size());
-        when(tenantRepository.findAllByRoom_IdAndIsStayAndNameContainingIgnoreCase(roomId, true,"", page)).thenReturn(expectedPage);
+        when(tenantRepository.findAllByRoom_IdAndIsStay(roomId, true, page)).thenReturn(expectedPage);
 
         // Execution
         Page<Tenant> actualPage = tenantService.getListTenantByRoomId(roomId, page);
@@ -510,6 +510,9 @@ public class TenantServiceTest {
         tenant1.setName("John");
         tenant1.setIsStay(true);
 
+        House house = new House();
+        house.setId(1L);
+
         Tenant tenant2 = new Tenant();
         tenant2.setName("Mary");
         tenant2.setIsStay(true);
@@ -522,13 +525,12 @@ public class TenantServiceTest {
         Room room1 = new Room();
         room1.setName("Room1");
         room1.setCurrentTenant(2);
-        room1.setHouse(new House());
         room1.setId(1L);
-
+        room1.setHouse(house);
         Room room2 = new Room();
         room2.setName("Room2");
         room2.setCurrentTenant(1);
-        room2.setHouse(new House());
+        room2.setHouse(house);
         room2.setId(2L);
 
         // Assign rooms to tenants
@@ -538,14 +540,14 @@ public class TenantServiceTest {
 
         // Mock the tenantRepository
         Pageable pageable = PageRequest.of(0, 10);
-        when(tenantRepository.findAllByRoom_IdAndIsStayAndNameContainingIgnoreCase(eq(1L), eq(true),"", eq(pageable)))
+        when(tenantRepository.findAllByRoom_IdAndIsStayAndNameContainingIgnoreCase(eq(1L), eq(true), eq("Room"), eq(pageable)))
                 .thenReturn(new PageImpl<>(Arrays.asList(tenant1, tenant2), pageable, 2));
 
-        when(tenantRepository.findAllByRoom_House_IdAndIsStayAndNameContainingIgnoreCase(eq(2L), eq(false),"", eq(pageable)))
+        when(tenantRepository.findAllByRoom_House_IdAndIsStayAndNameContainingIgnoreCase(eq(2L), eq(false), eq("Room"), eq(pageable)))
                 .thenReturn(new PageImpl<>(Collections.singletonList(tenant3), pageable, 1));
 
         // Call the getListTenants method and verify the result
-        Page<Tenant> tenants1 = tenantService.getListTenants(null, 1L, true,"", pageable);
+        Page<Tenant> tenants1 = tenantService.getListTenants(1L, null, true,"", pageable);
         assertEquals(2, tenants1.getTotalElements());
 
         Page<Tenant> tenants2 = tenantService.getListTenants(2L, null, false,"", pageable);

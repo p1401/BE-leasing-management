@@ -65,6 +65,33 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
             @Param("isPay") Boolean isPay,
             Pageable page);
 
+    @Query(value = "SELECT * FROM bills b "
+            + "WHERE (:userId IS NULL OR b.user_id = :userId) "
+            + "AND (:houseId IS NULL OR b.house_id = :houseId) "
+            + "AND (:roomId IS NULL OR b.room_id = :roomId) "
+            + "AND (:fromDate IS NULL OR b.date_create >= :fromDate) "
+            + "AND (:toDate IS NULL OR b.date_create <= :toDate) "
+            + "AND (:billType IS NULL OR b.bill_type = :billType) "
+            + "AND (:billContent IS NULL OR b.bill_content = :billContent) "
+            + "ORDER BY b.date_create DESC",
+            countQuery = "SELECT count(*) FROM bills b "
+                    + "WHERE (:userId IS NULL OR b.user_id = :userId) "
+                    + "AND (:houseId IS NULL OR b.house_id = :houseId) "
+                    + "AND (:roomId IS NULL OR b.room_id = :roomId) "
+                    + "AND (:fromDate IS NULL OR b.date_create >= :fromDate) "
+                    + "AND (:toDate IS NULL OR b.date_create <= :toDate) "
+                    + "AND (:billType IS NULL OR b.bill_type = :billType) "
+                    + "AND (:billContent IS NULL OR b.bill_content = :billContent) ",
+            nativeQuery = true)
+    List<Bill> findBills2(
+            @Param("userId") Long userId,
+            @Param("houseId") Long houseId,
+            @Param("roomId") Long roomId,
+            @Param("fromDate") Date fromDate,
+            @Param("toDate") Date toDate,
+            @Param("billType") String billType,
+            @Param("billContent") String billContent);
+
 }
 
 
