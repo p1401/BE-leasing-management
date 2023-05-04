@@ -22,11 +22,13 @@ public class TenantValidate {
 
         this.isNotPopulated(tenant.getName(),"Vui lòng nhập họ tên");
         isNotPopulated(tenant.getPhone()+"","Vui lòng nhập số điện thoại để liên hệ");
-        isNotPopulated(tenant.getEmail(),"Vui lòng nhập email để liên hệ");
+//        isNotPopulated(tenant.getEmail(),"Vui lòng nhập email để liên hệ");
         isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
         isNotPopulated(tenant.getIdentifyNumber()+"", "Vui lòng nhập CMND");
+
         this.validateForValidEmail(tenant.getEmail());
         this.validateForValidPhone(tenant.getPhone()+"");
+        this.validateForValidIdCard(tenant.getIdentifyNumber());
         this.isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
     }
 
@@ -51,14 +53,22 @@ public class TenantValidate {
     }
 
     public void validateForValidEmail(String email) throws BadRequestException {
-        if (email != null) {
+        if (email == null || email.equalsIgnoreCase("")) {
+        }else{
             this.validatorRegexField(email, "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", "Email không đúng định dạng!");
+
         }
     }
 
     public void validateForValidPhone(String phone) throws BadRequestException {
         if (phone != null) {
             this.validatorRegexField(phone, "^[0-9]{10}$", "Số điện thoại không đúng định dạng!");
+        }
+    }
+
+    public void validateForValidIdCard(String idcard) throws BadRequestException {
+        if (idcard != null) {
+            this.validatorRegexField(idcard, "^(\\d{9}|\\d{12})$", "CMND/CCCD không đúng định dạng!");
         }
     }
 

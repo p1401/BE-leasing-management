@@ -190,6 +190,27 @@ public class HouseServiceTest {
     }
 
     @Test()
+    public void testCreateHouse_InvalidData_District() {
+        // given
+        User user = new User();
+        user.setId(1L);
+
+        House houseTest = new House();
+        houseTest.setName("Nhà trọ 1");
+        houseTest.setCity("Ha Noi");
+        houseTest.setDistrict("");
+        houseTest.setAddress("Test x");
+        houseTest.setElectricPrice(100);
+        houseTest.setWaterPrice(50);
+        houseTest.setFloor(2);
+        //when
+        BadRequestException exception = Assert.assertThrows(BadRequestException.class, () -> {
+            houseValidate.validateCreateHouse(houseTest, user);
+        });
+        Assert.assertEquals("Vui lòng nhập tên Quận", exception.getMessage());
+    }
+
+    @Test()
     public void testCreateHouse_InvalidData_City() {
         // given
         User user = new User();
