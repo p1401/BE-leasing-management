@@ -176,7 +176,7 @@ public class BillService {
         for (Bill bill : list) {
 
             if (bill.getBillType().equals(BillType.RECEIVE)
-                    && !bill.getBillContent().equals(BillContent.TIENCOC)
+
                     && bill.getIsPay() == true) {
 
                 receive = receive + bill.getTotalMoney();
@@ -265,7 +265,6 @@ public class BillService {
         for (Bill bill : list) {
 
             if (bill.getBillType().equals(BillType.RECEIVE)
-                    && !bill.getBillContent().equals(BillContent.TIENCOC)
                     && bill.getIsPay() == true) {
 
                 receive = receive + bill.getTotalMoney();
