@@ -8,6 +8,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 @Component
@@ -27,6 +29,7 @@ public class TenantValidate {
         isNotPopulated(tenant.getIdentifyNumber()+"", "Vui lòng nhập CMND");
 
         this.validateForValidEmail(tenant.getEmail());
+        this.validateForValidInputDate(tenant.getBirth());
         this.validateForValidPhone(tenant.getPhone()+"");
         this.validateForValidIdCard(tenant.getIdentifyNumber());
         this.isNotPopulated(tenant.getAddress(),"Vui lòng nhập địa chỉ");
@@ -69,6 +72,12 @@ public class TenantValidate {
     public void validateForValidIdCard(String idcard) throws BadRequestException {
         if (idcard != null) {
             this.validatorRegexField(idcard, "^(\\d{9}|\\d{12})$", "CMND/CCCD không đúng định dạng!");
+        }
+    }
+
+    public void validateForValidInputDate(Date date) throws BadRequestException {
+        if(date.toInstant().isAfter(Instant.now())){
+            throw new BadRequestException("Ngày sinh không thể lớn hơn ngày hiện tại!");
         }
     }
 
